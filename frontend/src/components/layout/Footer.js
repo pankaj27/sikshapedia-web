@@ -860,18 +860,18 @@ const Footer = () => {
 
       {/* Bottom Footer */}
       <div className="border-t border-gray-800">
-        <div className="container mx-auto px-4 py-6">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="container mx-auto px-4 py-4 sm:py-6">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4">
             {/* Logo and Copyright */}
-            <div className="flex flex-col items-center md:items-start gap-2">
-              <img src="/assets/main-logo.png" alt={footerSettings.company_name} className="h-6" />
-              <p className="text-sm text-gray-400">
+            <div className="flex flex-col items-center sm:items-start gap-1 sm:gap-2">
+              <img src="/assets/main-logo.png" alt={footerSettings.company_name} className="h-5 sm:h-6" />
+              <p className="text-xs sm:text-sm text-gray-400 text-center sm:text-left">
                 {footerSettings.copyright_text}
               </p>
             </div>
 
             {/* Social Media Links */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3 sm:gap-4">
               {footerSettings.social_links && footerSettings.social_links.length > 0 ? (
                 footerSettings.social_links
                   .filter(link => link.is_active && link.url)
@@ -886,26 +886,26 @@ const Footer = () => {
                         className="text-gray-400 hover:text-orange-500 transition-colors" 
                         aria-label={link.platform}
                       >
-                        <Icon size={20} />
+                        <Icon size={18} />
                       </a>
                     );
                   })
               ) : (
                 <>
                   <a href="#" className="text-gray-400 hover:text-orange-500 transition-colors" aria-label="Facebook">
-                    <FiFacebook size={20} />
+                    <FiFacebook size={18} />
                   </a>
                   <a href="#" className="text-gray-400 hover:text-orange-500 transition-colors" aria-label="Twitter">
-                    <FiTwitter size={20} />
+                    <FiTwitter size={18} />
                   </a>
                   <a href="#" className="text-gray-400 hover:text-orange-500 transition-colors" aria-label="Instagram">
-                    <FiInstagram size={20} />
+                    <FiInstagram size={18} />
                   </a>
                   <a href="#" className="text-gray-400 hover:text-orange-500 transition-colors" aria-label="LinkedIn">
-                    <FiLinkedin size={20} />
+                    <FiLinkedin size={18} />
                   </a>
                   <a href="#" className="text-gray-400 hover:text-orange-500 transition-colors" aria-label="YouTube">
-                    <FiYoutube size={20} />
+                    <FiYoutube size={18} />
                   </a>
                 </>
               )}
