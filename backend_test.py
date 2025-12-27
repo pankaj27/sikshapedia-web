@@ -6730,6 +6730,10 @@ class APITester:
         # **NEW: Enhanced Hero Slider with Institute Search Test (Review Request):**
         self.test_enhanced_hero_slider_institute_search()
         
+        # **NEW: Homepage Settings API Tests (Review Request):**
+        self.test_homepage_settings_api()
+        self.test_city_icon_files_exist()
+        
         # Summary
         print("=" * 80)
         print("📊 COMPREHENSIVE TEST SUMMARY")
