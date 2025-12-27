@@ -411,27 +411,45 @@ const CourseDetailPage = () => {
             )}
 
             {/* Career Section - Only show if data exists */}
-            {careerOptions.length > 0 && (
+            {(jobOpportunities.length > 0 || careerProspects) && (
               <section id="career" className="bg-white rounded-2xl shadow-sm p-6 md:p-8">
                 <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
                   <span className="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center">
                     <FiBriefcase className="text-amber-600" size={20} />
                   </span>
-                  Career Options & Salary
+                  Career Options & Jobs
                 </h2>
-                <div className="grid md:grid-cols-2 gap-4">
-                  {careerOptions.slice(0, 4).map((career, idx) => (
-                    <div key={idx} className="p-4 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl">
-                      <h4 className="font-semibold text-gray-900 mb-2">{typeof career === 'string' ? career : career.title}</h4>
-                      {typeof career !== 'string' && career.salary && (
-                        <div className="flex items-center gap-3 text-sm">
-                          <span className="text-green-600 font-medium">{career.salary}</span>
-                          {career.growth && <span className="px-2 py-0.5 bg-green-100 text-green-700 rounded-full text-xs font-bold">{career.growth}</span>}
+                
+                {/* Career Prospects Text */}
+                {careerProspects && (
+                  <div className="mb-6 p-4 bg-amber-50 rounded-xl">
+                    <p className="text-gray-700">{careerProspects}</p>
+                  </div>
+                )}
+                
+                {/* Job Opportunities */}
+                {jobOpportunities.length > 0 && (
+                  <div className="grid md:grid-cols-2 gap-4">
+                    {jobOpportunities.map((job, idx) => (
+                      <div key={idx} className="p-4 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl flex items-center gap-3">
+                        <div className="w-10 h-10 bg-amber-500 text-white rounded-lg flex items-center justify-center flex-shrink-0">
+                          <FiBriefcase size={18} />
                         </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
+                        <h4 className="font-semibold text-gray-900">{typeof job === 'string' ? job : job.title}</h4>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                
+                {/* Salary Range */}
+                {(course.salary_range?.min > 0 || course.salary_range?.max > 0) && (
+                  <div className="mt-6 p-4 bg-green-50 rounded-xl">
+                    <h4 className="font-semibold text-gray-900 mb-2">Expected Salary Range</h4>
+                    <p className="text-green-700 text-lg font-bold">
+                      ₹{course.salary_range?.min ? (course.salary_range.min/100000).toFixed(1) : '0'}L - ₹{course.salary_range?.max ? (course.salary_range.max/100000).toFixed(1) : '0'}L per annum
+                    </p>
+                  </div>
+                )}
               </section>
             )}
 
