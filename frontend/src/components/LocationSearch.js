@@ -10,6 +10,7 @@ const LocationSearch = () => {
   const [cities, setCities] = useState([]);
   const [countries, setCountries] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [title, setTitle] = useState('Find Colleges by Location');
 
   // Color palette for dynamic items
   const stateColors = [
@@ -36,66 +37,75 @@ const LocationSearch = () => {
 
   const fetchLocations = async () => {
     try {
-      // Fetch both master data and college count data
-      const [masterStatesRes, masterCitiesRes, statesWithCollegesRes, citiesWithCollegesRes, countriesRes] = await Promise.all([
-        api.get('/locations/all-states').catch(() => ({ data: [] })),
-        api.get('/locations/all-cities').catch(() => ({ data: [] })),
-        api.get('/locations/states').catch(() => ({ data: [] })),
-        api.get('/locations/cities').catch(() => ({ data: [] })),
-        api.get('/locations/countries').catch(() => ({ data: [] }))
-      ]);
+      // First try to get Homepage Settings for location data
+      const homepageSettingsRes = await api.get('/settings/homepage').catch(() => ({ data: {} }));
+      const settings = homepageSettingsRes.data || {};
       
-      // Create maps of college counts from existing data
-      const stateCollegeCounts = {};
-      if (Array.isArray(statesWithCollegesRes.data)) {
-        statesWithCollegesRes.data.forEach(s => {
-          stateCollegeCounts[s.state || s.name] = s.college_count || s.count || 0;
-        });
+      // Set title from settings
+      if (settings.location_search_title) {
+        setTitle(settings.location_search_title);
       }
       
-      const cityCollegeCounts = {};
-      if (Array.isArray(citiesWithCollegesRes.data)) {
-        citiesWithCollegesRes.data.forEach(c => {
-          cityCollegeCounts[c.city || c.name] = c.college_count || c.count || 0;
-        });
-      }
+      // Check if location data is configured in Homepage Settings
+      const hasConfiguredStates = settings.location_states && settings.location_states.length > 0;
+      const hasConfiguredCities = settings.location_cities && settings.location_cities.length > 0;
       
-      // Process master states - merge with college counts and sort by popularity
-      if (Array.isArray(masterStatesRes.data) && masterStatesRes.data.length > 0) {
-        const statesWithCounts = masterStatesRes.data
-          .filter(s => s.status === 'active')
-          .map(s => ({
-            name: s.name,
-            count: stateCollegeCounts[s.name] || 0
-          }))
-          .sort((a, b) => b.count - a.count) // Sort by college count (most first)
-          .slice(0, 12);
-        setStates(statesWithCounts);
+      if (hasConfiguredStates) {
+        // Use states from Homepage Settings
+        const configuredStates = settings.location_states
+          .filter(s => s.is_active !== false)
+          .map(s => ({ name: s.name, count: 0 }));
+        setStates(configuredStates);
       } else {
-        setStates(defaultStates);
+        // Fallback to API data
+        const [statesWithCollegesRes] = await Promise.all([
+          api.get('/locations/states').catch(() => ({ data: [] }))
+        ]);
+        
+        if (Array.isArray(statesWithCollegesRes.data) && statesWithCollegesRes.data.length > 0) {
+          const statesData = statesWithCollegesRes.data
+            .filter(s => (s.college_count || s.count || 0) > 0)
+            .map(s => ({ 
+              name: s.state || s.name, 
+              count: s.college_count || s.count || 0 
+            }))
+            .sort((a, b) => b.count - a.count)
+            .slice(0, 12);
+          setStates(statesData.length > 0 ? statesData : defaultStates);
+        } else {
+          setStates(defaultStates);
+        }
       }
       
-      // Process master cities - merge with college counts and sort by popularity
-      if (Array.isArray(masterCitiesRes.data) && masterCitiesRes.data.length > 0) {
-        const citiesWithCounts = masterCitiesRes.data
-          .filter(c => c.status === 'active')
-          .map(c => ({
-            name: c.name,
-            state: c.state,
-            count: cityCollegeCounts[c.name] || 0
-          }))
-          .sort((a, b) => b.count - a.count) // Sort by college count (most first)
-          .slice(0, 16);
-        setCities(citiesWithCounts);
+      if (hasConfiguredCities) {
+        // Use cities from Homepage Settings
+        const configuredCities = settings.location_cities
+          .filter(c => c.is_active !== false)
+          .map(c => ({ name: c.name, state: c.state || '' }));
+        setCities(configuredCities);
       } else {
-        setCities(defaultCities);
+        // Fallback to API data or defaults
+        const [citiesWithCollegesRes] = await Promise.all([
+          api.get('/locations/cities').catch(() => ({ data: [] }))
+        ]);
+        
+        if (Array.isArray(citiesWithCollegesRes.data) && citiesWithCollegesRes.data.length > 0) {
+          const citiesData = citiesWithCollegesRes.data
+            .map(c => ({ 
+              name: c.city || c.name, 
+              state: c.state || '',
+              count: c.college_count || c.count || 0 
+            }))
+            .sort((a, b) => b.count - a.count)
+            .slice(0, 16);
+          setCities(citiesData.length > 0 ? citiesData : defaultCities);
+        } else {
+          setCities(defaultCities);
+        }
       }
       
-      // Process countries - use API data or fallback
-      const countriesData = Array.isArray(countriesRes.data) && countriesRes.data.length > 0 
-        ? countriesRes.data.slice(0, 12) 
-        : defaultCountries;
-      setCountries(countriesData);
+      // Countries - use defaults for now
+      setCountries(defaultCountries);
     } catch (error) {
       console.error('Error fetching locations:', error);
       setStates(defaultStates);
