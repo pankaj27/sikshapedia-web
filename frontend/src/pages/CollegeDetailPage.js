@@ -1178,16 +1178,16 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
                     <div key={tableIdx}>
                       {/* Quick Facts Table */}
                       {table.title?.toLowerCase().includes('quick facts') && (
-                        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-5">
-                          <h3 className="font-bold text-lg mb-4 text-blue-800 flex items-center gap-2">
-                            <span className="text-2xl">📋</span>
+                        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-4 sm:p-5">
+                          <h3 className="font-bold text-base sm:text-lg mb-4 text-blue-800 flex items-center gap-2">
+                            <span className="text-xl sm:text-2xl">📋</span>
                             {table.title || `${college.name} Quick Facts`}
                           </h3>
-                          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
                             {table.rows?.map((row, ri) => (
                               <div key={ri} className="bg-white rounded-lg p-3 shadow-sm">
                                 <div className="text-xs text-gray-500 uppercase tracking-wide">{row[0]}</div>
-                                <div className="font-bold text-gray-900 mt-1">{row[1]}</div>
+                                <div className="font-bold text-gray-900 mt-1 break-words">{row[1]}</div>
                               </div>
                             ))}
                           </div>
@@ -1196,15 +1196,15 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
                       
                       {/* Key Statistics Table */}
                       {table.title?.toLowerCase().includes('key statistics') && (
-                        <div className="bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200 rounded-lg p-5">
-                          <h3 className="font-bold text-lg mb-4 text-purple-800 flex items-center gap-2">
-                            <span className="text-2xl">📈</span>
+                        <div className="bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200 rounded-lg p-4 sm:p-5">
+                          <h3 className="font-bold text-base sm:text-lg mb-4 text-purple-800 flex items-center gap-2">
+                            <span className="text-xl sm:text-2xl">📈</span>
                             {table.title || `${college.name} Key Statistics`}
                           </h3>
-                          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
                             {table.rows?.map((row, ri) => (
-                              <div key={ri} className="bg-white rounded-lg p-4 text-center shadow-sm border border-purple-100">
-                                <div className="text-2xl font-bold text-gray-900">{row[1]}</div>
+                              <div key={ri} className="bg-white rounded-lg p-3 sm:p-4 text-center shadow-sm border border-purple-100">
+                                <div className="text-xl sm:text-2xl font-bold text-gray-900">{row[1]}</div>
                                 <div className="text-sm text-gray-600 mt-1">{row[0]}</div>
                               </div>
                             ))}
