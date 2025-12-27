@@ -858,20 +858,20 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
       )}
 
       {/* MAIN CONTENT */}
-      <div className="max-w-7xl mx-auto px-4 py-6">
+      <div className="max-w-7xl mx-auto px-4 py-6 overflow-hidden">
         {/* Sponsor Ad - Content Top */}
         <AdBanner pageName="college-detail" position="content-top" />
         
         <div className="flex gap-6">
           {/* LEFT CONTENT */}
-          <div className="flex-1">
+          <div className="flex-1 min-w-0">
             {/* SEO CONTENT SECTION (Collapsible) - 100% DYNAMIC */}
             <div className="mb-6 pb-6 border-b">
               {/* SEO INTRO PREVIEW */}
               <div className="mb-3">
                 {college.seo_intro ? (
                   <div 
-                    className={`text-gray-800 leading-relaxed prose max-w-none ${!showContent ? 'line-clamp-3' : ''}`}
+                    className={`text-gray-800 leading-relaxed prose max-w-none break-words ${!showContent ? 'line-clamp-3' : ''}`}
                     dangerouslySetInnerHTML={{ __html: college.seo_intro }}
                   />
                 ) : (
