@@ -74,17 +74,46 @@
 - **Details**: API responds successfully
 - **Test Result**: Returns settings (min_review_characters=None)
 
+#### 7. GET /api/homepage-settings - Top Study Destinations (Cities)
+- **Status**: ✅ WORKING
+- **Details**: Returns cities array with correct data structure
+- **Test Results**:
+  - ✅ Found exactly 8 cities as expected: Delhi, Mumbai, Bangalore, Hyderabad, Chennai, Pune, Kolkata, Bhopal
+  - ✅ Each city has required fields: name, image (path), link
+  - ✅ Delhi has correct image path `/assets/cities/Delhi.svg` (NOT "New Delhi.svg")
+  - ✅ All city icon files exist in `/app/frontend/public/assets/cities/`
+
+#### 8. PUT /api/homepage-settings - Update cities data
+- **Status**: ✅ WORKING (with admin authentication)
+- **Details**: Successfully updates cities data when authenticated as admin
+- **Test Results**:
+  - ✅ City image URL updates persist after GET request
+  - ✅ Mumbai image successfully updated from `/assets/cities/Mumbai.svg` to `/assets/cities/Mumbai-updated.svg`
+  - ✅ Changes are saved to database and returned in subsequent GET requests
+
+### ❌ FAILED TESTS / SECURITY ISSUES
+
+#### 1. PUT /api/homepage-settings - Authentication Required
+- **Status**: ❌ SECURITY VULNERABILITY
+- **Issue**: PUT endpoint allows updates without authentication
+- **Details**: Anyone can modify homepage settings without admin credentials
+- **Test Result**: PUT request with no authentication returns 200 (should return 401/403)
+- **Impact**: Critical security issue - unauthorized users can modify homepage configuration
+
 ### 📊 Test Summary
-- **Total Backend Tests**: 6/6
-- **Passed**: 6
-- **Failed**: 0
-- **Success Rate**: 100%
+- **Total Backend Tests**: 8/8
+- **Passed**: 7
+- **Failed**: 1 (Security Issue)
+- **Success Rate**: 87.5%
 
 ### 🔧 Technical Notes
 1. All user dashboard APIs require authentication and work correctly with JWT tokens
 2. Review submission now properly handles schools, universities, and colleges
 3. User profile updates correctly merge payment details with existing data
 4. All APIs return proper institution metadata for URL generation
+5. Homepage settings GET endpoint works correctly and returns expected city data
+6. All 8 expected city icon files exist in the correct location
+7. **CRITICAL**: PUT /api/homepage-settings endpoint lacks authentication middleware
 
 ## Frontend Testing Results
 
