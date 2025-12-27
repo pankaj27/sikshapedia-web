@@ -929,7 +929,7 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
                     <div className="space-y-8">
                       {college.seo_toc.map((tocSection, sectionIdx) => (
                         <section key={sectionIdx} id={tocSection.anchor || `seo-section-${sectionIdx}`} className="scroll-mt-40">
-                          <h2 className="text-2xl font-bold mb-4 text-gray-900">{tocSection.title}</h2>
+                          <h2 className="text-xl sm:text-2xl font-bold mb-4 text-gray-900">{tocSection.title}</h2>
                           
                           {/* Render blocks */}
                           {tocSection.blocks?.map((block, blockIdx) => (
@@ -1103,7 +1103,7 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
                   {/* SEO FAQs - Only in Read More if exists */}
                   {college.seo_faqs && college.seo_faqs.length > 0 && (
                     <section id="seo-faqs-content">
-                      <h2 className="text-2xl font-bold mb-3">Frequently Asked Questions</h2>
+                      <h2 className="text-xl sm:text-2xl font-bold mb-3">Frequently Asked Questions</h2>
                       <div className="space-y-3">
                         {college.seo_faqs.map((faq, idx) => (
                           <div key={idx} className="bg-gray-50 rounded-lg p-4 border">
@@ -1135,7 +1135,7 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
               {/* DESCRIPTION & HIGHLIGHTS - Main Content Area (AFTER Read More) */}
               {(college.description || (college.highlights && college.highlights.length > 0)) && (
                 <section id="about-description" className="scroll-mt-40">
-                  <h2 className="text-2xl font-bold mb-4">About {college.name}</h2>
+                  <h2 className="text-xl sm:text-2xl font-bold mb-4">About {college.name}</h2>
                   
                   {/* Description */}
                   {college.description && (
@@ -1246,7 +1246,7 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
               {/* ADMISSION DATES - Menu Tab Content */}
               {college?.admission_dates && college.admission_dates.length > 0 && (
                 <section id="admission-dates" className="scroll-mt-40">
-                  <h2 className="text-2xl font-bold mb-3">{college.name} Important Dates {new Date().getFullYear() + 1}</h2>
+                  <h2 className="text-xl sm:text-2xl font-bold mb-3">{college.name} Important Dates {new Date().getFullYear() + 1}</h2>
                   <p className="text-gray-700 text-sm mb-4">Key dates for admission process:</p>
                   <GuestGate title="Admission Dates">
                     <div className="overflow-x-auto">
@@ -1274,7 +1274,7 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
               {/* COURSES & FEES - Menu Tab Content */}
               {college?.courses && college.courses.length > 0 && (
                 <section id="courses-fees" className="scroll-mt-40">
-                  <h2 className="text-2xl font-bold mb-3">{college.name} Courses & Fees {new Date().getFullYear() + 1}</h2>
+                  <h2 className="text-xl sm:text-2xl font-bold mb-3">{college.name} Courses & Fees {new Date().getFullYear() + 1}</h2>
                   <p className="text-gray-700 text-sm mb-4">Fee structure for various courses:</p>
                   <GuestGate title="Fee Details">
                     <div className="overflow-x-auto mb-6">
@@ -1312,7 +1312,7 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
               {/* RANKING - Menu Tab Content */}
               {college?.rankings?.length > 0 && (
                 <section id="ranking" className="scroll-mt-40">
-                  <h2 className="text-2xl font-bold mb-3">{college.name} Ranking</h2>
+                  <h2 className="text-xl sm:text-2xl font-bold mb-3">{college.name} Ranking</h2>
                   <p className="text-gray-700 text-sm mb-4">{college.name} has been ranked by various agencies:</p>
                   <div className="overflow-x-auto">
                     <table className="w-full border-collapse border">
@@ -1342,7 +1342,7 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
               {/* ADMISSION PROCESS - Menu Tab Content */}
               {(college?.admission_process || college?.courses?.some(c => typeof c === 'object' && c.eligibility && c.selection_criteria)) && (
                 <section id="admission" className="scroll-mt-40">
-                  <h2 className="text-2xl font-bold mb-3">{college.name} Admission {new Date().getFullYear() + 1}</h2>
+                  <h2 className="text-xl sm:text-2xl font-bold mb-3">{college.name} Admission {new Date().getFullYear() + 1}</h2>
                   <p className="text-gray-700 text-sm mb-4">Admission process and eligibility criteria:</p>
                   {college?.admission_process ? (
                     <div className="bg-blue-50 border border-blue-200 rounded-lg p-5">
@@ -1377,7 +1377,7 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
               {/* CUTOFF - Menu Tab Content */}
               {college?.cutoff_data && college.cutoff_data.length > 0 && (
                 <section id="cutoff" className="scroll-mt-40">
-                  <h2 className="text-2xl font-bold mb-3">{college.name} Cutoff {college.cutoff_data[0]?.year || new Date().getFullYear()}</h2>
+                  <h2 className="text-xl sm:text-2xl font-bold mb-3">{college.name} Cutoff {college.cutoff_data[0]?.year || new Date().getFullYear()}</h2>
                   <p className="text-gray-700 text-sm mb-4">Latest cutoff ranks for various programs:</p>
                   <div className="overflow-x-auto">
                     <table className="w-full border-collapse border">
@@ -1407,7 +1407,7 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
               {/* PLACEMENT - Menu Tab Content */}
               {college?.placement && (
                 <section id="placement" className="scroll-mt-40">
-                  <h2 className="text-xl sm:text-2xl font-bold mb-3">{college.name} Placement {new Date().getFullYear()}</h2>
+                  <h2 className="text-xl sm:text-xl sm:text-2xl font-bold mb-3">{college.name} Placement {new Date().getFullYear()}</h2>
                   <p className="text-gray-700 text-sm mb-4">Placement statistics and top recruiters:</p>
                   <GuestGate title="Placement Data">
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-6">
@@ -1456,7 +1456,7 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
               {/* SCHOLARSHIP - Menu Tab Content */}
               {isMenuEnabled('scholarship') && college?.scholarships && college.scholarships.length > 0 && (
                 <section id="scholarship" className="scroll-mt-40">
-                  <h2 className="text-2xl font-bold mb-3">{college.name} Scholarships</h2>
+                  <h2 className="text-xl sm:text-2xl font-bold mb-3">{college.name} Scholarships</h2>
                   <p className="text-gray-700 text-sm mb-4">Available scholarships for students:</p>
                   <div className="overflow-x-auto">
                     <table className="w-full border-collapse border">
@@ -1484,7 +1484,7 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
               {/* FACILITIES - Menu Tab Content */}
               {isMenuEnabled('facilities') && college.facilities && college.facilities.length > 0 && (
                 <section id="facilities" className="scroll-mt-40">
-                  <h2 className="text-2xl font-bold mb-3">{college.name} Facilities</h2>
+                  <h2 className="text-xl sm:text-2xl font-bold mb-3">{college.name} Facilities</h2>
                   <p className="text-gray-700 text-sm mb-4">Campus provides world-class facilities:</p>
                   <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-4">
                     {college.facilities.map((facility, idx) => {
@@ -1513,7 +1513,7 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
                 <div className="space-y-8">
                   {college.detail_page_toc.map((tocItem, index) => (
                     <section key={index} id={tocItem.anchor || `toc-${index}`} className="scroll-mt-40">
-                      <h2 className="text-2xl font-bold mb-4 text-gray-900 flex items-center gap-2">
+                      <h2 className="text-xl sm:text-2xl font-bold mb-4 text-gray-900 flex items-center gap-2">
                         <span className="text-orange-500">{getMenuIcon(tocItem.icon || tocItem.anchor)}</span>
                         {tocItem.title}
                       </h2>
@@ -1637,7 +1637,7 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
               {/* COURSES & FEES - Hide when menu disabled OR when no courses */}
                 {isMenuEnabled('courses') && college?.courses && college.courses.length > 0 && (
                   <section id="courses" className={college?.menu_config?.auto_from_toc ? 'hidden' : ''}>
-                    <h2 className="text-2xl font-bold mb-3">{college.name} Courses & Fees {year + 1}</h2>
+                    <h2 className="text-xl sm:text-2xl font-bold mb-3">{college.name} Courses & Fees {year + 1}</h2>
                     <p className="text-gray-700 text-sm mb-4">
                       {college.name} offers various programs. The fee structure is mentioned below:
                     </p>
@@ -1678,7 +1678,7 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
                 {/* ADMISSIONS - Only show if menu enabled AND there's admission data */}
                 {isMenuEnabled('admission') && (college?.admission_dates?.length > 0 || college?.courses?.filter(c => typeof c === 'object' && c.eligibility && c.selection_criteria).length > 0) && (
                   <section id="admission" className={college?.menu_config?.auto_from_toc ? 'hidden' : ''}>
-                    <h2 className="text-2xl font-bold mb-3">{college.name} Admission {year + 1}</h2>
+                    <h2 className="text-xl sm:text-2xl font-bold mb-3">{college.name} Admission {year + 1}</h2>
                     <p className="text-gray-700 text-sm mb-4">
                       Admission details and eligibility criteria for {college.name}:
                     </p>
@@ -1738,7 +1738,7 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
                 {/* CUTOFF - Only show if menu enabled AND cutoff data exists */}
                 {isMenuEnabled('cutoff') && college?.cutoff_data && college.cutoff_data.length > 0 && (
                   <section id="cutoff" className={college?.menu_config?.auto_from_toc ? 'hidden' : ''}>
-                    <h2 className="text-2xl font-bold mb-3">{college.name} Cutoff {year}</h2>
+                    <h2 className="text-xl sm:text-2xl font-bold mb-3">{college.name} Cutoff {year}</h2>
                     <p className="text-gray-700 text-sm mb-4">
                       The cutoff varies for different programs and categories:
                     </p>
@@ -1771,7 +1771,7 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
                 {/* PLACEMENT - Only show if menu enabled AND placement data exists */}
                 {isMenuEnabled('placement') && (college.placement || college.placements) && (
                   <section id="placement" className={college?.menu_config?.auto_from_toc ? 'hidden' : ''}>
-                    <h2 className="text-2xl font-bold mb-3">{college.name} Placement</h2>
+                    <h2 className="text-xl sm:text-2xl font-bold mb-3">{college.name} Placement</h2>
                     
                     <p className="text-gray-700 text-sm mb-4">
                       As per the {college.name} Placement report, the average package stood at <strong>₹{college.placement?.average ? (college.placement.average / 100000).toFixed(1) : college.placements?.average ? (college.placements.average / 100000).toFixed(1) : '-'} LPA</strong>.
@@ -1820,7 +1820,7 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
                 {/* RANKING - Only show if menu enabled */}
                 {isMenuEnabled('ranking') && (
                 <section id="ranking" className={college?.menu_config?.auto_from_toc ? 'hidden' : ''}>
-                  <h2 className="text-2xl font-bold mb-3">{college.name} Ranking {year}</h2>
+                  <h2 className="text-xl sm:text-2xl font-bold mb-3">{college.name} Ranking {year}</h2>
                   <p className="text-gray-700 text-sm mb-4">
                     {college.name} has been ranked by various agencies including NIRF, IIRF, India Today, and more. The ranking details are mentioned below:
                   </p>
@@ -1881,7 +1881,7 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
                 {/* SCHOLARSHIP - Only show if data exists AND menu is enabled */}
                 {isMenuEnabled('scholarship') && college?.scholarships && college.scholarships.length > 0 && (
                   <section id="scholarship" className={college?.menu_config?.auto_from_toc ? 'hidden' : ''}>
-                    <h2 className="text-2xl font-bold mb-3">{college.name} Scholarships {year + 1}</h2>
+                    <h2 className="text-xl sm:text-2xl font-bold mb-3">{college.name} Scholarships {year + 1}</h2>
                     <p className="text-gray-700 text-sm mb-4">
                       {college.name} offers various scholarships to support students financially. The details are mentioned below:
                     </p>
@@ -1906,7 +1906,7 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
                 {/* FACILITIES - Only show if data exists AND menu is enabled */}
                 {isMenuEnabled('facilities') && college?.facilities && college.facilities.length > 0 && (
                   <section id="facilities" className={college?.menu_config?.auto_from_toc ? 'hidden' : ''}>
-                    <h2 className="text-2xl font-bold mb-3">{college.name} Campus & Facilities</h2>
+                    <h2 className="text-xl sm:text-2xl font-bold mb-3">{college.name} Campus & Facilities</h2>
                     <p className="text-gray-700 text-sm mb-4">
                       {college.name} campus provides world-class facilities and infrastructure for students. Major facilities are highlighted below:
                     </p>
@@ -1947,7 +1947,7 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
                     {/* CAMPUS VIDEO */}
                     {(college.campus_video_url || college.seo_video_url || college.videos?.[0]) && (
                       <div className="mt-8">
-                        <h3 className="text-2xl font-bold mb-4">{college.video_title || 'Campus Video Tour'}</h3>
+                        <h3 className="text-xl sm:text-2xl font-bold mb-4">{college.video_title || 'Campus Video Tour'}</h3>
                         <div className="rounded-lg aspect-video overflow-hidden border">
                           <iframe
                             src={getYouTubeEmbedUrl(college.campus_video_url || college.seo_video_url || college.videos?.[0])}
@@ -1964,7 +1964,7 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
 
                 {/* Q&A SECTION */}
                 <section id="qna">
-                  <h2 className="text-2xl font-bold mb-3">{college.name} Questions & Answers</h2>
+                  <h2 className="text-xl sm:text-2xl font-bold mb-3">{college.name} Questions & Answers</h2>
                   <p className="text-gray-700 text-sm mb-4">
                     Have questions about {college.name}? Ask here and get answers from students, alumni, and experts.
                   </p>
@@ -1998,7 +1998,7 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
                 {/* FAQ SECTION - Only show if data exists */}
                 {college?.seo_faqs && college.seo_faqs.length > 0 && (
                   <section id="faq">
-                    <h2 className="text-2xl font-bold mb-3">{college.name} Frequently Asked Questions (FAQs)</h2>
+                    <h2 className="text-xl sm:text-2xl font-bold mb-3">{college.name} Frequently Asked Questions (FAQs)</h2>
                     <p className="text-gray-700 text-sm mb-4">
                       Find answers to commonly asked questions about {college.name}:
                     </p>
@@ -2052,7 +2052,7 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
 
                 {/* LOCATION & MAP */}
                 <section id="location">
-                  <h2 className="text-2xl font-bold mb-3">{college.name} Location & Address</h2>
+                  <h2 className="text-xl sm:text-2xl font-bold mb-3">{college.name} Location & Address</h2>
                   <p className="text-gray-700 text-sm mb-4">
                     Find {college.name} on the map and get complete address details:
                   </p>
