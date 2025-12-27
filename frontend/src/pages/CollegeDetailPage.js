@@ -993,11 +993,11 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
                               {block.type === 'facts' && (
                                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                                   {block.title && <h4 className="font-bold text-blue-800 mb-3">{block.title}</h4>}
-                                  <div className="grid grid-cols-2 gap-3">
+                                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                     {block.items?.map((fact, fi) => (
-                                      <div key={fi} className="flex justify-between">
-                                        <span className="text-gray-600">{fact.label}</span>
-                                        <span className="font-semibold">{fact.value}</span>
+                                      <div key={fi} className="flex justify-between gap-2">
+                                        <span className="text-gray-600 text-sm">{fact.label}</span>
+                                        <span className="font-semibold text-sm break-words text-right">{fact.value}</span>
                                       </div>
                                     ))}
                                   </div>
@@ -1006,15 +1006,15 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
                               
                               {/* Key Stats Block */}
                               {block.type === 'stats' && (
-                                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
                                   {block.items?.map((stat, si) => (
-                                    <div key={si} className={`rounded-lg p-4 text-center ${
+                                    <div key={si} className={`rounded-lg p-3 sm:p-4 text-center ${
                                       stat.color === 'yellow' ? 'bg-yellow-100' :
                                       stat.color === 'green' ? 'bg-green-100' :
                                       stat.color === 'blue' ? 'bg-blue-100' :
                                       stat.color === 'pink' ? 'bg-pink-100' : 'bg-gray-100'
                                     }`}>
-                                      <div className="text-2xl font-bold">{stat.value}</div>
+                                      <div className="text-xl sm:text-2xl font-bold">{stat.value}</div>
                                       <div className="text-sm text-gray-600">{stat.label}</div>
                                     </div>
                                   ))}
