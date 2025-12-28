@@ -7,6 +7,8 @@ import { generateSlug } from '../../utils/slugify';
 import StatusBadge from '../../components/admin/StatusBadge';
 import { useAuth } from '../../contexts/AuthContext';
 import AdminLayout from '../../components/admin/AdminLayout';
+import useAutoSaveDraft from '../../hooks/useAutoSaveDraft';
+import DraftRestoreBanner, { AutoSaveIndicator } from '../../components/admin/DraftRestoreBanner';
 
 import { Link } from '../../components/CustomLink';
 const TABS = [
