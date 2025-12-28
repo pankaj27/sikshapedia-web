@@ -6277,27 +6277,39 @@ const CollegeForm = () => {
               <Button 
                 type="button" 
                 disabled={saving} 
-                onClick={() => {
-                  setFormData(prev => ({...prev, status: 'published'}));
-                  setTimeout(() => document.getElementById('institution-form').requestSubmit(), 100);
+                onClick={async () => {
+                  if (!id) {
+                    setFormData(prev => ({...prev, status: 'draft'}));
+                    setTimeout(() => document.getElementById('institution-form').requestSubmit(), 100);
+                    return;
+                  }
+                  setSaving(true);
+                  await handleSequentialSaveAll('published');
+                  setSaving(false);
                 }}
                 className="bg-green-600 hover:bg-green-700 text-white"
               >
                 {saving ? <FiLoader className="w-4 h-4 animate-spin mr-2" /> : <FiSave className="w-4 h-4 mr-2" />}
-                {saving ? 'Publishing...' : 'Save & Publish'}
+                {saving ? 'Publishing...' : (id ? 'Save All & Publish' : 'Save & Publish')}
               </Button>
             ) : (
               <Button 
                 type="button" 
                 disabled={saving} 
-                onClick={() => {
-                  setFormData(prev => ({...prev, status: 'pending'}));
-                  setTimeout(() => document.getElementById('institution-form').requestSubmit(), 100);
+                onClick={async () => {
+                  if (!id) {
+                    setFormData(prev => ({...prev, status: 'draft'}));
+                    setTimeout(() => document.getElementById('institution-form').requestSubmit(), 100);
+                    return;
+                  }
+                  setSaving(true);
+                  await handleSequentialSaveAll('pending');
+                  setSaving(false);
                 }}
                 className="bg-blue-600 hover:bg-blue-700 text-white"
               >
                 {saving ? <FiLoader className="w-4 h-4 animate-spin mr-2" /> : <FiSend className="w-4 h-4 mr-2" />}
-                {saving ? 'Submitting...' : 'Submit for Review'}
+                {saving ? 'Submitting...' : (id ? 'Save All & Submit' : 'Submit for Review')}
               </Button>
             )}
           </div>
