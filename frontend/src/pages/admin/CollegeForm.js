@@ -1278,7 +1278,13 @@ const CollegeForm = () => {
           by_road: '',
           public_transport: ''
         },
-        contact_info: collegeData.contact_info || { phone: '', email: '', website: '' },
+        contact_info: {
+          phone: collegeData.phone || collegeData.contact_info?.phone || '',
+          mobile: collegeData.contact_info?.mobile || '',
+          whatsapp: collegeData.contact_info?.whatsapp || '',
+          email: collegeData.email || collegeData.contact_info?.email || '',
+          website: collegeData.website || collegeData.contact_info?.website || ''
+        },
         social_links: collegeData.social_links || { facebook: '', twitter: '', instagram: '', linkedin: '', youtube: '' },
         placement: {
           highest: collegeData.placement?.highest || 0,
