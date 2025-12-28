@@ -225,7 +225,8 @@ const GenericManagement = ({
                       required={field.required}
                     >
                       <option value="">Select {field.label}</option>
-                      {field.options?.map((opt) => (
+                      {/* Use dynamic options if available, otherwise use static options */}
+                      {(dynamicOptions[field.key] || field.options || []).map((opt) => (
                         <option key={opt.value} value={opt.value}>{opt.label}</option>
                       ))}
                     </select>
