@@ -777,6 +777,36 @@ const CourseDetailForm = () => {
         </div>
       </div>
 
+      {/* Content Team Info - Show only when editing */}
+      {id && (formData.created_at || formData.updated_at) && (
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+          <h3 className="text-sm font-semibold text-blue-800 mb-2 flex items-center gap-2">
+            👤 Content Team Info
+          </h3>
+          <div className="grid grid-cols-2 gap-4 text-sm">
+            {formData.created_at && (
+              <div>
+                <span className="text-gray-500">Created:</span>
+                <p className="text-xs text-gray-400">on {new Date(formData.created_at).toLocaleString()}</p>
+              </div>
+            )}
+            {formData.updated_at && (
+              <div>
+                <span className="text-gray-500">Last updated:</span>
+                <p className="text-xs text-gray-400">on {new Date(formData.updated_at).toLocaleString()}</p>
+              </div>
+            )}
+            {formData.reviewed_by_name && (
+              <div>
+                <span className="text-gray-500">Reviewed by:</span>
+                <p className="font-medium text-gray-800">{formData.reviewed_by_name}</p>
+                {formData.reviewed_at && <p className="text-xs text-gray-400">on {new Date(formData.reviewed_at).toLocaleString()}</p>}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Rejection Reason Alert */}
       {formData.status === 'rejected' && formData.rejection_reason && (
         <div className="mb-4 bg-red-50 border border-red-200 rounded-lg p-4 text-red-700">
