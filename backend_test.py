@@ -1040,6 +1040,204 @@ class APITester:
             self.log_test("PUT /homepage-settings (with admin auth)", False, 
                          "Admin token not available")
 
+    def test_stream_substream_course_connection(self):
+        """Test Stream → Sub-Stream → Course connection APIs as per review request"""
+        print("🔗 Testing Stream → Sub-Stream → Course Connection APIs...")
+        
+        # Store IDs for testing
+        self.engineering_stream_id = None
+        self.cs_substream_id = None
+        self.created_course_id = None
+        
+        # Test 1: GET /api/streams - Should return list of all streams
+        success, response, status = self.make_request("GET", "/streams")
+        if success and isinstance(response, list):
+            stream_count = len(response)
+            self.log_test("GET /api/streams", True, f"Retrieved {stream_count} streams")
+            
+            # Find Engineering & Technology stream
+            engineering_stream = None
+            for stream in response:
+                if "engineering" in stream.get("name", "").lower() and "technology" in stream.get("name", "").lower():
+                    engineering_stream = stream
+                    self.engineering_stream_id = stream.get("id")
+                    break
+            
+            if engineering_stream:
+                self.log_test("Find Engineering & Technology Stream", True, 
+                             f"Found: {engineering_stream.get('name')} (ID: {self.engineering_stream_id})")
+            else:
+                self.log_test("Find Engineering & Technology Stream", False, 
+                             "Engineering & Technology stream not found")
+        else:
+            self.log_test("GET /api/streams", False, f"Status: {status}", response)
+        
+        # Test 2: GET /api/sub-streams - Should return sub-streams with stream_name populated
+        success, response, status = self.make_request("GET", "/sub-streams")
+        if success and isinstance(response, list):
+            substream_count = len(response)
+            self.log_test("GET /api/sub-streams", True, f"Retrieved {substream_count} sub-streams")
+            
+            # Check if stream_name is populated
+            populated_count = 0
+            cs_substream = None
+            for substream in response:
+                if substream.get("stream_name"):
+                    populated_count += 1
+                # Find Computer Science Engineering sub-stream
+                if ("computer" in substream.get("name", "").lower() and 
+                    "science" in substream.get("name", "").lower()):
+                    cs_substream = substream
+                    self.cs_substream_id = substream.get("id")
+            
+            if populated_count > 0:
+                self.log_test("Sub-streams with stream_name populated", True, 
+                             f"{populated_count}/{substream_count} sub-streams have stream_name")
+            else:
+                self.log_test("Sub-streams with stream_name populated", False, 
+                             "No sub-streams have stream_name populated")
+            
+            if cs_substream:
+                self.log_test("Find Computer Science Engineering Sub-stream", True, 
+                             f"Found: {cs_substream.get('name')} (ID: {self.cs_substream_id})")
+            else:
+                self.log_test("Find Computer Science Engineering Sub-stream", False, 
+                             "Computer Science Engineering sub-stream not found")
+        else:
+            self.log_test("GET /api/sub-streams", False, f"Status: {status}", response)
+        
+        # Test 3: GET /api/sub-streams?stream_id={id} - Should return filtered sub-streams
+        if self.engineering_stream_id:
+            success, response, status = self.make_request("GET", f"/sub-streams?stream_id={self.engineering_stream_id}")
+            if success and isinstance(response, list):
+                filtered_count = len(response)
+                self.log_test("GET /api/sub-streams with stream_id filter", True, 
+                             f"Retrieved {filtered_count} engineering sub-streams")
+                
+                # Verify all returned sub-streams belong to engineering stream
+                engineering_substreams = []
+                for substream in response:
+                    if substream.get("stream_id") == self.engineering_stream_id:
+                        engineering_substreams.append(substream.get("name", "Unknown"))
+                
+                if len(engineering_substreams) == filtered_count:
+                    self.log_test("Engineering Sub-streams Filter Accuracy", True, 
+                                 f"All {filtered_count} sub-streams belong to engineering: {', '.join(engineering_substreams[:3])}...")
+                else:
+                    self.log_test("Engineering Sub-streams Filter Accuracy", False, 
+                                 f"Only {len(engineering_substreams)}/{filtered_count} belong to engineering")
+            else:
+                self.log_test("GET /api/sub-streams with stream_id filter", False, f"Status: {status}", response)
+        else:
+            self.log_test("GET /api/sub-streams with stream_id filter", False, "No engineering stream ID available")
+        
+        # Test 4: GET /api/courses?limit=10 - Should return courses with stream_name and sub_stream_name
+        success, response, status = self.make_request("GET", "/courses?limit=10")
+        if success and isinstance(response, list):
+            course_count = len(response)
+            self.log_test("GET /api/courses?limit=10", True, f"Retrieved {course_count} courses")
+            
+            # Check if courses have stream_name and sub_stream_name populated
+            courses_with_stream_name = 0
+            courses_with_substream_name = 0
+            for course in response:
+                if course.get("stream_name"):
+                    courses_with_stream_name += 1
+                if course.get("sub_stream_name"):
+                    courses_with_substream_name += 1
+            
+            if courses_with_stream_name > 0:
+                self.log_test("Courses with stream_name populated", True, 
+                             f"{courses_with_stream_name}/{course_count} courses have stream_name")
+            else:
+                self.log_test("Courses with stream_name populated", False, 
+                             "No courses have stream_name populated")
+            
+            if courses_with_substream_name > 0:
+                self.log_test("Courses with sub_stream_name populated", True, 
+                             f"{courses_with_substream_name}/{course_count} courses have sub_stream_name")
+            else:
+                self.log_test("Courses with sub_stream_name populated", False, 
+                             "No courses have sub_stream_name populated")
+        else:
+            self.log_test("GET /api/courses?limit=10", False, f"Status: {status}", response)
+        
+        # Test 5: POST /api/courses - Create a new course with stream_id and sub_stream_id
+        if self.engineering_stream_id and self.cs_substream_id and self.admin_token:
+            new_course_data = {
+                "name": "B.Tech in AI",
+                "stream_id": self.engineering_stream_id,
+                "sub_stream_id": self.cs_substream_id,
+                "degree_type": "UG",
+                "duration": "4 Years",
+                "description": "Bachelor of Technology in Artificial Intelligence",
+                "eligibility": "12th with PCM and minimum 75% marks"
+            }
+            
+            success, response, status = self.make_request("POST", "/courses", new_course_data, token=self.admin_token)
+            if success and response.get("id"):
+                self.created_course_id = response.get("id")
+                course_name = response.get("name")
+                self.log_test("POST /api/courses - Create B.Tech in AI", True, 
+                             f"Created course: {course_name} (ID: {self.created_course_id})")
+                
+                # Verify the course has proper connections
+                if (response.get("stream_id") == self.engineering_stream_id and 
+                    response.get("sub_stream_id") == self.cs_substream_id):
+                    self.log_test("Course Stream/Sub-stream Connection", True, 
+                                 "Course created with proper stream_id and sub_stream_id")
+                else:
+                    self.log_test("Course Stream/Sub-stream Connection", False, 
+                                 f"Stream ID: {response.get('stream_id')}, Sub-stream ID: {response.get('sub_stream_id')}")
+            else:
+                self.log_test("POST /api/courses - Create B.Tech in AI", False, f"Status: {status}", response)
+        else:
+            missing = []
+            if not self.engineering_stream_id:
+                missing.append("engineering_stream_id")
+            if not self.cs_substream_id:
+                missing.append("cs_substream_id")
+            if not self.admin_token:
+                missing.append("admin_token")
+            self.log_test("POST /api/courses - Create B.Tech in AI", False, f"Missing: {', '.join(missing)}")
+        
+        # Test 6: GET /api/courses - Verify new course has stream_name and sub_stream_name populated
+        if self.created_course_id:
+            success, response, status = self.make_request("GET", f"/courses/{self.created_course_id}")
+            if success and isinstance(response, dict):
+                course_name = response.get("name")
+                stream_name = response.get("stream_name")
+                sub_stream_name = response.get("sub_stream_name")
+                
+                self.log_test("GET created course details", True, 
+                             f"Course: {course_name}")
+                
+                if stream_name and "engineering" in stream_name.lower() and "technology" in stream_name.lower():
+                    self.log_test("New course stream_name populated", True, 
+                                 f"Stream name: {stream_name}")
+                else:
+                    self.log_test("New course stream_name populated", False, 
+                                 f"Stream name: {stream_name or 'None'}")
+                
+                if sub_stream_name and "computer" in sub_stream_name.lower() and "science" in sub_stream_name.lower():
+                    self.log_test("New course sub_stream_name populated", True, 
+                                 f"Sub-stream name: {sub_stream_name}")
+                else:
+                    self.log_test("New course sub_stream_name populated", False, 
+                                 f"Sub-stream name: {sub_stream_name or 'None'}")
+            else:
+                self.log_test("GET created course details", False, f"Status: {status}", response)
+        else:
+            self.log_test("GET created course details", False, "No created course ID available")
+        
+        # Test 7: Verify hierarchical relationship flow
+        if (self.engineering_stream_id and self.cs_substream_id and self.created_course_id):
+            self.log_test("Complete Hierarchical Flow Test", True, 
+                         "Engineering & Technology → Computer Science Engineering → B.Tech in AI")
+        else:
+            self.log_test("Complete Hierarchical Flow Test", False, 
+                         "Could not complete full hierarchical relationship test")
+
     def test_course_details_entry_form(self):
         """Test Course Details Entry Form functionality as per review request"""
         print("📚 Testing Course Details Entry Form...")
