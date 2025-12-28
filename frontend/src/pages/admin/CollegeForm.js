@@ -5063,17 +5063,30 @@ const CollegeForm = () => {
           </div>
         ) : (
           /* For Colleges/Universities: Full Courses & Fees Section */
-          <CoursesSection 
-            formData={formData}
-            setFormData={setFormData}
-            handleChange={handleChange}
-            availableCourses={availableCourses}
-            updateCourse={updateCourse}
-            addCourse={addCourse}
-            removeCourse={removeCourse}
-            uploadingCourseBrochure={uploadingCourseBrochure}
-            handleCourseBrochureUpload={handleCourseBrochureUpload}
-          />
+          <div>
+            <CoursesSection 
+              formData={formData}
+              setFormData={setFormData}
+              handleChange={handleChange}
+              availableCourses={availableCourses}
+              updateCourse={updateCourse}
+              addCourse={addCourse}
+              removeCourse={removeCourse}
+              uploadingCourseBrochure={uploadingCourseBrochure}
+              handleCourseBrochureUpload={handleCourseBrochureUpload}
+            />
+            {/* Courses Section Save Button */}
+            {id && (
+              <div className="bg-white rounded-lg shadow p-4 mt-2 flex justify-end">
+                <SectionSaveButton 
+                  section="courses"
+                  onSave={handleSectionSave}
+                  isSaving={sectionSaving.courses}
+                  isSaved={sectionSaved.courses}
+                />
+              </div>
+            )}
+          </div>
         )}
 
         {/* Admission Details - Shown for all */}
