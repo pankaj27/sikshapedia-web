@@ -1808,9 +1808,12 @@ const CollegeForm = () => {
     } catch (error) {
       console.error('Error saving college:', error);
       
-      // Check for duplicate entry error (HTTP 409)
-      if (error.response?.status === 409) {
-        const detail = error.response.data.detail || '';
+      // Check for duplicate entry error (HTTP 409 or 400 with "already exists")
+      const detail = error.response?.data?.detail || '';
+      const isDuplicateError = error.response?.status === 409 || 
+        (error.response?.status === 400 && detail.toLowerCase().includes('already exists'));
+      
+      if (isDuplicateError) {
         toast({
           variant: "destructive",
           title: "⚠️ ডুপ্লিকেট এন্ট্রি!",
@@ -1822,10 +1825,10 @@ const CollegeForm = () => {
       // Handle other validation errors
       let errorMessage = 'Unknown error';
       if (error.response?.data?.detail) {
-        const detail = error.response.data.detail;
-        if (Array.isArray(detail)) {
+        const detailData = error.response.data.detail;
+        if (Array.isArray(detailData)) {
           // Pydantic validation errors come as array
-          errorMessage = detail.map(err => {
+          errorMessage = detailData.map(err => {
             const field = err.loc ? err.loc.join('.') : 'field';
             return `${field}: ${err.msg}`;
           }).join('\n');
