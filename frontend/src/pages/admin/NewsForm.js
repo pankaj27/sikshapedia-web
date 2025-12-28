@@ -354,9 +354,13 @@ const NewsForm = () => {
             <h1 className="text-xl font-bold text-gray-900">
               {isEdit ? 'Edit News Article' : 'Create News Article'}
             </h1>
-            {isEdit && formData.status && (
-              <StatusBadge status={formData.status} />
-            )}
+            <div className="flex items-center gap-2 mt-1">
+              {isEdit && formData.status && (
+                <StatusBadge status={formData.status} />
+              )}
+              {/* Auto-save indicator */}
+              {!isEdit && <AutoSaveIndicator lastSaved={newsDraftLastSaved} />}
+            </div>
           </div>
         </div>
         <div className="flex items-center gap-3">
@@ -368,6 +372,18 @@ const NewsForm = () => {
           </Button>
         </div>
       </div>
+
+      {/* Draft Restore Banner - Only show for new entries */}
+      {!isEdit && showDraftBanner && (
+        <div className="mb-4">
+          <DraftRestoreBanner
+            onRestore={handleRestoreNewsDraft}
+            onDiscard={handleDiscardNewsDraft}
+            savedAt={getNewsDraftInfo()?.savedAt}
+            isVisible={showDraftBanner}
+          />
+        </div>
+      )}
 
       <div className="flex bg-gray-50 -mx-6 -mb-6 p-6">
         {/* Sidebar Tabs */}
