@@ -4213,7 +4213,9 @@ async def update_college_basic_section(college_id: str, data: dict, current_user
         'is_top_rated', 'is_sponsored', 'is_admission_partner', 'is_no_cost_emi',
         'display_priority', 'accreditations',
         # School-specific fields
-        'medium', 'classes_offered', 'streams_offered'
+        'medium', 'classes_offered', 'streams_offered',
+        # Status field for publish/pending
+        'status'
     ]
     
     update_data = {k: v for k, v in data.items() if k in allowed_fields}
