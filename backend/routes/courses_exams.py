@@ -271,6 +271,8 @@ async def get_courses(
     limit: int = Query(100, ge=1, le=1000),
     search: Optional[str] = None,
     stream: Optional[str] = None,
+    stream_id: Optional[str] = None,
+    sub_stream_id: Optional[str] = None,
     degree_type: Optional[str] = None
 ):
     """Get all courses with optional filters"""
@@ -286,15 +288,30 @@ async def get_courses(
     if stream:
         query["stream"] = {"$regex": stream, "$options": "i"}
     
+    if stream_id:
+        query["stream_id"] = stream_id
+    
+    if sub_stream_id:
+        query["sub_stream_id"] = sub_stream_id
+    
     if degree_type:
         query["degree_type"] = degree_type
     
     # Sort by display_priority (descending) so high priority items like "School" appear first
     courses = await db.courses.find(query, {"_id": 0}).sort("display_priority", -1).skip(skip).limit(limit).to_list(limit)
     
+    # Get all streams and sub_streams for name lookup
+    all_streams = {s['id']: s['name'] for s in await db.streams.find({}, {"_id": 0, "id": 1, "name": 1}).to_list(100)}
+    all_sub_streams = {s['id']: s['name'] for s in await db.sub_streams.find({}, {"_id": 0, "id": 1, "name": 1}).to_list(500)}
+    
     for course in courses:
         if isinstance(course.get('created_at'), str):
             course['created_at'] = datetime.fromisoformat(course['created_at'])
+        # Add stream_name and sub_stream_name for display
+        if course.get('stream_id'):
+            course['stream_name'] = all_streams.get(course['stream_id'], '')
+        if course.get('sub_stream_id'):
+            course['sub_stream_name'] = all_sub_streams.get(course['sub_stream_id'], '')
     
     return courses
 
