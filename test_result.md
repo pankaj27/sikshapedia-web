@@ -89,7 +89,7 @@ Verify that the University API properly rejects duplicate entries for:
 - **Error Handling**: Appropriate error messages and status codes for new entries only
 
 #### 🔧 Technical Implementation
-- Backend URL: `https://eduprevent.preview.emergentagent.com/api`
+- Backend URL: `https://institute-editor.preview.emergentagent.com/api`
 - Authentication: Admin login with Bearer token
 - Database: MongoDB with **CRITICAL INCONSISTENCY**
   - Universities GET: Queries `colleges` collection with `institution_type=University`
@@ -129,7 +129,7 @@ The University API duplicate entry prevention feature is **PARTIALLY FUNCTIONAL*
 ### Test Session: College Creation Form Duplicate Prevention
 **Date**: 2025-12-28  
 **Tester**: Testing Agent  
-**Test URL**: https://eduprevent.preview.emergentagent.com/admin/colleges/new
+**Test URL**: https://institute-editor.preview.emergentagent.com/admin/colleges/new
 
 ### Test Objective
 Verify that the College creation form in Admin Panel properly prevents duplicate entries and displays appropriate error notifications with Bengali text.

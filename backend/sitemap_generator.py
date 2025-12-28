@@ -12,7 +12,7 @@ async def generate_sitemap():
     client = AsyncIOMotorClient(mongo_url)
     db = client['college_portal']
     
-    base_url = 'https://eduprevent.preview.emergentagent.com'
+    base_url = 'https://institute-editor.preview.emergentagent.com'
     
     sitemap_content = '''<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">

@@ -12,4 +12,4 @@ Allow: /study-abroad
 Allow: /scholarships
 Allow: /blog
 
-Sitemap: https://eduprevent.preview.emergentagent.com/sitemap.xml
+Sitemap: https://institute-editor.preview.emergentagent.com/sitemap.xml
