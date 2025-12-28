@@ -326,6 +326,16 @@ async def get_course(course_id: str):
     if isinstance(course.get('created_at'), str):
         course['created_at'] = datetime.fromisoformat(course['created_at'])
     
+    # Populate stream_name and sub_stream_name
+    if course.get('stream_id'):
+        stream = await db.streams.find_one({"id": course['stream_id']}, {"_id": 0, "name": 1})
+        if stream:
+            course['stream_name'] = stream['name']
+    if course.get('sub_stream_id'):
+        sub_stream = await db.sub_streams.find_one({"id": course['sub_stream_id']}, {"_id": 0, "name": 1})
+        if sub_stream:
+            course['sub_stream_name'] = sub_stream['name']
+    
     return CourseDetail(**course)
 
 
