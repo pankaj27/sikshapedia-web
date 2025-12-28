@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { FiChevronRight, FiChevronDown, FiChevronUp, FiClock, FiDollarSign, FiBook, FiUsers, FiSend, FiMessageCircle, FiPhone, FiMapPin, FiCalendar, FiAward, FiTrendingUp, FiCheckCircle, FiDownload, FiShare2, FiHeart, FiStar, FiBriefcase, FiLayers } from 'react-icons/fi';
+import { FiChevronRight, FiChevronDown, FiChevronUp, FiClock, FiDollarSign, FiBook, FiUsers, FiSend, FiMessageCircle, FiPhone, FiMapPin, FiCalendar, FiAward, FiTrendingUp, FiCheckCircle, FiDownload, FiShare2, FiHeart, FiStar, FiBriefcase, FiLayers, FiList } from 'react-icons/fi';
 import { HiOutlineAcademicCap, HiOutlineOfficeBuilding, HiOutlineLightBulb, HiOutlineDocumentText } from 'react-icons/hi';
 import api from '../api/axios';
 import { ApplyNowWidget, AskQuestionWidget, CounsellingWidget } from '../components/widgets/ActionWidgets';
