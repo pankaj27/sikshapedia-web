@@ -4201,8 +4201,14 @@ async def update_college_basic_section(college_id: str, data: dict, current_user
     allowed_fields = [
         'name', 'slug', 'type', 'institution_type', 'established_year', 
         'campus_size', 'total_students', 'state', 'city', 'address', 'pincode',
-        'latitude', 'longitude', 'how_to_reach', 'website', 'email', 'phone',
-        'alternate_phone', 'fax', 'affiliated_to', 'recognized_by', 'board'
+        'latitude', 'longitude', 'location', 'how_to_reach', 'website', 'email', 'phone',
+        'alternate_phone', 'fax', 'affiliated_to', 'recognized_by', 'memberships', 'board',
+        'contact_info', 'nirf_ranking', 'india_today_ranking', 'outlook_ranking', 'rankings',
+        'is_verified', 'is_featured', 'is_admission_open', 'is_preferred', 'is_trending',
+        'is_top_rated', 'is_sponsored', 'is_admission_partner', 'is_no_cost_emi',
+        'display_priority', 'accreditations',
+        # School-specific fields
+        'medium', 'classes_offered', 'streams_offered'
     ]
     
     update_data = {k: v for k, v in data.items() if k in allowed_fields}
