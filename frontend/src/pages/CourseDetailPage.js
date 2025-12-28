@@ -98,9 +98,10 @@ const CourseDetailPage = () => {
   const navTabs = [
     { id: 'overview', label: 'Overview', icon: FiBook, show: true },
     { id: 'eligibility', label: 'Eligibility', icon: FiCheckCircle, show: !!eligibility },
+    { id: 'admission', label: 'Admission', icon: FiCalendar, show: !!course.admission_process || !!course.selection_criteria },
     { id: 'syllabus', label: 'Syllabus', icon: HiOutlineDocumentText, show: course.syllabus && course.syllabus.length > 0 },
     { id: 'colleges', label: 'Top Colleges', icon: HiOutlineOfficeBuilding, show: course.top_colleges && course.top_colleges.length > 0 },
-    { id: 'career', label: 'Career & Jobs', icon: FiBriefcase, show: (course.job_opportunities && course.job_opportunities.length > 0) || course.career_prospects },
+    { id: 'career', label: 'Career & Jobs', icon: FiBriefcase, show: (course.job_opportunities && course.job_opportunities.length > 0) || course.career_prospects || (course.career_options && course.career_options.length > 0) },
     { id: 'faqs', label: 'FAQs', icon: HiOutlineLightBulb, show: course.faqs && course.faqs.length > 0 },
   ].filter(tab => tab.show);
 
@@ -124,6 +125,12 @@ const CourseDetailPage = () => {
   // Job Opportunities & Career - only from database
   const jobOpportunities = course.job_opportunities || [];
   const careerProspects = course.career_prospects || '';
+  const careerOptions = course.career_options || [];
+  const jobRoles = course.job_roles || [];
+
+  // Admission - only from database
+  const admissionProcess = course.admission_process || '';
+  const selectionCriteria = course.selection_criteria || '';
 
   // FAQs - only from database
   const faqs = course.faqs || [];
