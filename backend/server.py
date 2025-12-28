@@ -3889,6 +3889,15 @@ async def get_admin_stats(current_user: User = Depends(get_current_user)):
     total_courses = await db.courses.count_documents({})
     total_news = await db.news.count_documents({})
     
+    # Widget stats - real data from database
+    total_leads = await db.leads.count_documents({})
+    total_questions = await db.questions.count_documents({})
+    total_counselling = await db.counseling_sessions.count_documents({})
+    
+    # Sponsored ads stats
+    total_sponsored_ads = await db.sponsored_ads.count_documents({})
+    active_sponsored_ads = await db.sponsored_ads.count_documents({"status": "active"})
+    
     return {
         "total_colleges": total_colleges,
         "total_schools": total_schools,
@@ -3897,7 +3906,13 @@ async def get_admin_stats(current_user: User = Depends(get_current_user)):
         "total_reviews": total_reviews,
         "total_exams": total_exams,
         "total_courses": total_courses,
-        "total_news": total_news
+        "total_news": total_news,
+        # Widget stats
+        "total_leads": total_leads,
+        "total_questions": total_questions,
+        "total_counselling": total_counselling,
+        "total_sponsored_ads": total_sponsored_ads,
+        "active_sponsored_ads": active_sponsored_ads
     }
 
 # ============================================
