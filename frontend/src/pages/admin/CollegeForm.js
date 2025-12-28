@@ -637,6 +637,10 @@ const CollegeForm = () => {
   const [isAdmissionFeesCollapsed, setIsAdmissionFeesCollapsed] = useState(true);
   const [isLocationPriorityCollapsed, setIsLocationPriorityCollapsed] = useState(true);
   const [isContentStatusCollapsed, setIsContentStatusCollapsed] = useState(true);
+  
+  // Search states for multi-select fields
+  const [affiliationSearch, setAffiliationSearch] = useState('');
+  const [recognitionSearch, setRecognitionSearch] = useState('');
 
   // Icon mapping for facilities
   const iconComponents = {
