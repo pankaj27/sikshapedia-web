@@ -208,6 +208,8 @@ const NewsForm = () => {
         await api.put(`/news/${id}`, dataToSave);
       } else {
         await api.post('/news', dataToSave);
+        // Clear draft after successful creation
+        clearNewsDraft();
       }
       navigate('/admin/news');
     } catch (error) {
