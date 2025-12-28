@@ -261,6 +261,33 @@ async def get_school(school_id: str):
 @router.post("/schools", response_model=School)
 async def create_school(school: School):
     """Create a new school (admin only)"""
+    # Check for duplicate by name or slug
+    name = school.name.strip() if school.name else ''
+    slug = school.slug.strip() if school.slug else ''
+    
+    # Check duplicate by exact name (case-insensitive)
+    existing_by_name = await db.schools.find_one(
+        {"name": {"$regex": f"^{name}$", "$options": "i"}},
+        {"_id": 0, "id": 1, "name": 1, "slug": 1}
+    )
+    if existing_by_name:
+        raise HTTPException(
+            status_code=400, 
+            detail=f"School with name '{name}' already exists (ID: {existing_by_name.get('id')}, Slug: {existing_by_name.get('slug')})"
+        )
+    
+    # Check duplicate by slug
+    if slug:
+        existing_by_slug = await db.schools.find_one(
+            {"slug": slug},
+            {"_id": 0, "id": 1, "name": 1}
+        )
+        if existing_by_slug:
+            raise HTTPException(
+                status_code=400, 
+                detail=f"School with slug '{slug}' already exists (Name: {existing_by_slug.get('name')})"
+            )
+    
     school_dict = school.model_dump()
     await db.schools.insert_one(school_dict)
     return school
