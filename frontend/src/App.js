@@ -455,6 +455,7 @@ function App() {
           </Routes>
           </Suspense>
           <FloatingApplyButton />
+          <Toaster />
           </BrowserRouter>
           </YearProvider>
         </CollegeProvider>
