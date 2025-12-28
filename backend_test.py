@@ -1436,6 +1436,126 @@ class APITester:
                 else:
                     self.log_test("Course Case Sensitivity", False, f"Unexpected status: {status}", response)
 
+    def test_university_duplicate_prevention(self):
+        """Test duplicate entry prevention for University API specifically"""
+        print("🏛️ Testing University API Duplicate Prevention...")
+        
+        # Get backend URL from frontend .env
+        backend_url = BASE_URL
+        self.log_test("Backend URL Retrieved", True, f"Using backend URL: {backend_url}")
+        
+        # Test 1: Get an existing university name
+        success, response, status = self.make_request("GET", "/universities?limit=1")
+        existing_university = None
+        if success and isinstance(response, list) and len(response) > 0:
+            existing_university = response[0]
+            existing_name = existing_university.get("name")
+            existing_slug = existing_university.get("slug")
+            self.log_test("Get Existing University", True, f"Found: {existing_name} (slug: {existing_slug})")
+        else:
+            self.log_test("Get Existing University", False, f"Status: {status}", response)
+        
+        # Test 2: Create a new university with unique name and slug (should succeed)
+        unique_timestamp = int(time.time())
+        unique_university_data = {
+            "name": f"Test University {unique_timestamp}",
+            "slug": f"test-university-{unique_timestamp}",
+            "university_type": "Private",
+            "state": "West Bengal"
+        }
+        
+        success, response, status = self.make_request("POST", "/universities", unique_university_data, token=self.admin_token)
+        created_university_id = None
+        if success and response.get("id"):
+            created_university_id = response.get("id")
+            self.log_test("Create Unique University", True, f"Created university ID: {created_university_id}")
+        else:
+            self.log_test("Create Unique University", False, f"Status: {status}", response)
+            return  # Can't continue without a created university
+        
+        # Test 3: Try to create another university with SAME name (should return HTTP 409)
+        duplicate_name_data = {
+            "name": unique_university_data["name"],  # Same name
+            "slug": f"different-slug-{unique_timestamp}",  # Different slug
+            "university_type": "State",
+            "state": "Maharashtra"
+        }
+        
+        success, response, status = self.make_request("POST", "/universities", duplicate_name_data, token=self.admin_token)
+        if not success and status == 409:
+            error_msg = response.get("detail", "") if isinstance(response, dict) else str(response)
+            if "already exists" in error_msg.lower():
+                self.log_test("Duplicate Name Prevention", True, f"HTTP 409 with message: {error_msg}")
+            else:
+                self.log_test("Duplicate Name Prevention", False, f"HTTP 409 but wrong message: {error_msg}")
+        else:
+            self.log_test("Duplicate Name Prevention", False, f"Expected HTTP 409 but got {status}", response)
+        
+        # Test 4: Try to create university with SAME slug (should return HTTP 409)
+        duplicate_slug_data = {
+            "name": f"Different University Name {unique_timestamp}",  # Different name
+            "slug": unique_university_data["slug"],  # Same slug
+            "university_type": "Central",
+            "state": "Delhi"
+        }
+        
+        success, response, status = self.make_request("POST", "/universities", duplicate_slug_data, token=self.admin_token)
+        if not success and status == 409:
+            error_msg = response.get("detail", "") if isinstance(response, dict) else str(response)
+            if "already exists" in error_msg.lower():
+                self.log_test("Duplicate Slug Prevention", True, f"HTTP 409 with message: {error_msg}")
+            else:
+                self.log_test("Duplicate Slug Prevention", False, f"HTTP 409 but wrong message: {error_msg}")
+        else:
+            self.log_test("Duplicate Slug Prevention", False, f"Expected HTTP 409 but got {status}", response)
+        
+        # Test 5: Test with existing university data if available
+        if existing_university:
+            existing_name = existing_university.get("name")
+            existing_slug = existing_university.get("slug")
+            
+            # Try duplicate existing name
+            if existing_name:
+                existing_name_data = {
+                    "name": existing_name,
+                    "slug": f"new-slug-{unique_timestamp}",
+                    "university_type": "Private",
+                    "state": "Karnataka"
+                }
+                
+                success, response, status = self.make_request("POST", "/universities", existing_name_data, token=self.admin_token)
+                if not success and status == 409:
+                    error_msg = response.get("detail", "") if isinstance(response, dict) else str(response)
+                    self.log_test("Existing Name Duplicate Prevention", True, f"HTTP 409: {error_msg}")
+                else:
+                    self.log_test("Existing Name Duplicate Prevention", False, f"Expected HTTP 409 but got {status}", response)
+            
+            # Try duplicate existing slug
+            if existing_slug:
+                existing_slug_data = {
+                    "name": f"New University Name {unique_timestamp}",
+                    "slug": existing_slug,
+                    "university_type": "Deemed",
+                    "state": "Tamil Nadu"
+                }
+                
+                success, response, status = self.make_request("POST", "/universities", existing_slug_data, token=self.admin_token)
+                if not success and status == 409:
+                    error_msg = response.get("detail", "") if isinstance(response, dict) else str(response)
+                    self.log_test("Existing Slug Duplicate Prevention", True, f"HTTP 409: {error_msg}")
+                else:
+                    self.log_test("Existing Slug Duplicate Prevention", False, f"Expected HTTP 409 but got {status}", response)
+        
+        # Test 6: Verify the successfully created university can be retrieved
+        if created_university_id:
+            success, response, status = self.make_request("GET", f"/universities/{created_university_id}")
+            if success and response.get("id") == created_university_id:
+                retrieved_name = response.get("name")
+                retrieved_slug = response.get("slug")
+                self.log_test("Verify Created University", True, f"Retrieved: {retrieved_name} (slug: {retrieved_slug})")
+            else:
+                self.log_test("Verify Created University", False, f"Status: {status}", response)
+
     def test_course_listing_settings(self):
         """Test Course Listing Settings feature"""
         print("📚 Testing Course Listing Settings Feature...")
