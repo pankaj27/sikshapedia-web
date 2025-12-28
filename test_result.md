@@ -135,3 +135,30 @@ Verify if the Institute/College form can successfully submit a large entry with 
 - Email: admin@admissionbuddy.co
 - Password: admin123
 - URL: /admin/colleges/new
+
+---
+
+## Test Session: State/City Bug Fix & Section-wise Save (Dec 2025)
+
+### Bug Fix Verification
+
+#### ✅ State/City Bug Fixed
+- **Issue**: `state` and `city` fields were not being saved when creating a new college
+- **Root Cause**: The `CollegeCreate` model already had `state` and `city` fields (lines 1004-1005)
+- **Verification**: Created test college via API with `state: "West Bengal"` and `city: "Kolkata"`
+- **Result**: Both fields correctly saved in MongoDB database
+- **Test Status**: ✅ VERIFIED WORKING
+
+### Current Test Objective
+Test the complete new college creation workflow:
+1. Create draft with name, state, city
+2. Get redirected to edit page
+3. Use section-wise save for remaining sections
+
+### Section-wise Save Endpoints Available:
+- PATCH /api/colleges/{id}/section/basic
+- PATCH /api/colleges/{id}/section/media
+- PATCH /api/colleges/{id}/section/courses
+- PATCH /api/colleges/{id}/section/details
+- PATCH /api/colleges/{id}/section/admission
+- PATCH /api/colleges/{id}/section/seo-content
