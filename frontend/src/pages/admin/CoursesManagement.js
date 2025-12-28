@@ -281,7 +281,10 @@ const CoursesManagement = () => {
                       </span>
                     </td>
                     <td className="px-4 py-4">
-                      <span className="text-sm text-gray-700">{item.stream || '-'}</span>
+                      <span className="text-sm text-gray-700">{item.stream_name || item.stream || '-'}</span>
+                      {item.sub_stream_name && (
+                        <span className="text-xs text-gray-400 block">{item.sub_stream_name}</span>
+                      )}
                     </td>
                     <td className="px-4 py-4">
                       <span className="text-sm text-gray-600">{item.duration || '-'}</span>
