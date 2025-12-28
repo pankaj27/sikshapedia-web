@@ -251,6 +251,8 @@ const CourseDetailForm = () => {
   const [autoSaveStatus, setAutoSaveStatus] = useState(''); // 'saving', 'saved', 'error', ''
   const [lastAutoSave, setLastAutoSave] = useState(null);
   const autoSaveTimerRef = useRef(null);
+  const [collegeCount, setCollegeCount] = useState(0);
+  const [loadingCollegeCount, setLoadingCollegeCount] = useState(false);
 
   // Get admin user from localStorage (admin login stores in adminUser)
   const adminUserStr = localStorage.getItem('adminUser');
