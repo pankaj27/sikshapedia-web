@@ -4286,6 +4286,28 @@ async def update_college_status_section(college_id: str, data: dict, current_use
     await db.colleges.update_one({"id": college_id}, {"$set": update_data})
     return {"success": True, "section": "status", "status": requested_status, "message": f"Status updated to {requested_status}"}
 
+@api_router.patch("/colleges/{college_id}/section/seo-content")
+async def update_college_seo_content_section(college_id: str, data: dict, current_user: User = Depends(get_current_user)):
+    """Update SEO Content section: seo_intro, seo_full_content, seo_toc, seo_faqs, custom_tables"""
+    if current_user.role not in ["admin", "super_admin"]:
+        raise HTTPException(status_code=403, detail="Only admins can update colleges")
+    
+    existing = await db.colleges.find_one({"id": college_id}, {"_id": 0})
+    if not existing:
+        raise HTTPException(status_code=404, detail="College not found")
+    
+    allowed_fields = [
+        'seo_intro', 'seo_full_content', 'seo_toc', 'seo_faqs', 'custom_tables',
+        'overview_content', 'faq_content', 'rating', 'rating_count'
+    ]
+    
+    update_data = {k: v for k, v in data.items() if k in allowed_fields}
+    update_data['updated_by'] = current_user.id
+    update_data['updated_at'] = datetime.now(timezone.utc).isoformat()
+    
+    await db.colleges.update_one({"id": college_id}, {"$set": update_data})
+    return {"success": True, "section": "seo-content", "message": "SEO Content saved"}
+
 @api_router.delete("/colleges/{college_id}")
 async def delete_college(college_id: str, current_user: User = Depends(get_current_user)):
     if current_user.role != "admin":
