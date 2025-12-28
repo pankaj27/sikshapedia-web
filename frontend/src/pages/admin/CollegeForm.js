@@ -2282,6 +2282,16 @@ const CollegeForm = () => {
       {/* Form Content with max-width container */}
       <form id="institution-form" onSubmit={handleSubmit} className="max-w-7xl mx-auto px-6 py-6 space-y-4">
         
+        {/* Draft Restore Banner - Only show for new entries */}
+        {!id && showDraftBanner && (
+          <DraftRestoreBanner
+            onRestore={handleRestoreDraft}
+            onDiscard={handleDiscardDraft}
+            savedAt={getDraftInfo()?.savedAt}
+            isVisible={showDraftBanner}
+          />
+        )}
+        
         {/* ═══════════════════════════════════════════════════════════════════════════════ */}
         {/* STEP 1: COMMON INFORMATION (Always Required)                                    */}
         {/* ═══════════════════════════════════════════════════════════════════════════════ */}
