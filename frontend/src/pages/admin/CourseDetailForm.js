@@ -16,6 +16,8 @@ import { useAuth } from '../../contexts/AuthContext';
 import AdminLayout from '../../components/admin/AdminLayout';
 import { SeoMetaSection } from '../../components/admin/college-form';
 import { CourseMenuConfigSection } from '../../components/admin/course-form';
+import useAutoSaveDraft from '../../hooks/useAutoSaveDraft';
+import DraftRestoreBanner, { AutoSaveIndicator } from '../../components/admin/DraftRestoreBanner';
 
 // Simple Rich Text Toolbar for Short Description
 const SimpleRichTextToolbar = ({ editor }) => {
