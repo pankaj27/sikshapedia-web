@@ -326,6 +326,113 @@ const CourseDetailPage = () => {
               )}
             </section>
 
+            {/* Table of Contents / Description Content - Only show if data exists */}
+            {course.description_toc && course.description_toc.length > 0 && (
+              <section id="content" className="bg-white rounded-2xl shadow-sm p-6 md:p-8">
+                <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+                  <span className="w-10 h-10 bg-indigo-100 rounded-xl flex items-center justify-center">
+                    <FiList className="text-indigo-600" size={20} />
+                  </span>
+                  Course Content
+                </h2>
+                
+                {/* TOC Navigation */}
+                <div className="mb-8 p-4 bg-gray-50 rounded-xl">
+                  <h3 className="font-semibold text-gray-800 mb-3">Table of Contents</h3>
+                  <ul className="space-y-2">
+                    {course.description_toc.map((section, idx) => (
+                      <li key={idx}>
+                        <a 
+                          href={`#${section.anchor}`} 
+                          className="text-blue-600 hover:text-blue-800 hover:underline text-sm flex items-center gap-2"
+                        >
+                          <span className="w-5 h-5 bg-blue-100 rounded text-blue-600 flex items-center justify-center text-xs font-medium">
+                            {idx + 1}
+                          </span>
+                          {section.title}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* TOC Content Sections */}
+                <div className="space-y-8">
+                  {course.description_toc.map((section, idx) => (
+                    <div key={idx} id={section.anchor} className="scroll-mt-24">
+                      <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                        <span className="w-8 h-8 bg-orange-100 rounded-lg text-orange-600 flex items-center justify-center text-sm font-bold">
+                          {idx + 1}
+                        </span>
+                        {section.title}
+                      </h3>
+                      
+                      {section.blocks && section.blocks.map((block, blockIdx) => (
+                        <div key={blockIdx} className="mb-4">
+                          {block.type === 'text' && (
+                            <div className="prose prose-gray max-w-none">
+                              {block.heading && (
+                                <h4 className="font-semibold text-gray-800 mb-2">{block.heading}</h4>
+                              )}
+                              <div 
+                                className="text-gray-700 leading-relaxed whitespace-pre-line"
+                                dangerouslySetInnerHTML={{ __html: block.content?.replace(/\n/g, '<br/>') || '' }}
+                              />
+                            </div>
+                          )}
+                          
+                          {block.type === 'image' && block.url && (
+                            <figure className="my-4">
+                              <img 
+                                src={block.url} 
+                                alt={block.alt || block.title || section.title}
+                                className="rounded-xl max-w-full h-auto shadow-sm"
+                                style={{ width: block.width || 'auto' }}
+                              />
+                              {(block.caption || block.imageTitle) && (
+                                <figcaption className="text-sm text-gray-500 mt-2 text-center">
+                                  {block.caption || block.imageTitle}
+                                </figcaption>
+                              )}
+                            </figure>
+                          )}
+                          
+                          {block.type === 'video' && block.url && (
+                            <div className="my-4 aspect-video rounded-xl overflow-hidden">
+                              <iframe 
+                                src={block.url.replace('watch?v=', 'embed/')} 
+                                title={block.title || 'Video'}
+                                className="w-full h-full"
+                                allowFullScreen
+                              />
+                            </div>
+                          )}
+                          
+                          {block.type === 'table' && block.data && (
+                            <div className="my-4 overflow-x-auto">
+                              <table className="min-w-full border border-gray-200 rounded-lg">
+                                <tbody>
+                                  {block.data.map((row, rowIdx) => (
+                                    <tr key={rowIdx} className={rowIdx === 0 ? 'bg-gray-100 font-semibold' : ''}>
+                                      {row.map((cell, cellIdx) => (
+                                        <td key={cellIdx} className="border border-gray-200 px-4 py-2 text-sm">
+                                          {cell}
+                                        </td>
+                                      ))}
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
+
             {/* Eligibility Section - Only show if data exists */}
             {(eligibility || ageLimit || (course.entrance_exams && course.entrance_exams.length > 0)) && (
               <section id="eligibility" className="bg-white rounded-2xl shadow-sm p-6 md:p-8">
