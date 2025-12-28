@@ -990,6 +990,11 @@ class CollegeCreate(BaseModel):
     location: Dict = {}
     established_year: Optional[int] = None
     type: Optional[str] = None
+    institution_type: Optional[str] = None
+    state: Optional[str] = None
+    city: Optional[str] = None
+    address: Optional[str] = None
+    pincode: Optional[str] = None
     affiliation: Optional[str] = None
     nirf_ranking: Optional[int] = None
     average_fees: Optional[float] = 0
