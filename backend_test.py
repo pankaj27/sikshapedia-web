@@ -275,7 +275,9 @@ class APITester:
                     {"event": "Application End", "date": "2025-06-30"},
                     {"event": "Counseling Start", "date": "2025-07-15"},
                     {"event": "Classes Begin", "date": "2025-08-15"}
-                ]
+                ],
+                "meta_title": "Test Engineering College Mumbai - Top Engineering College in Maharashtra",
+                "meta_description": "Test Engineering College Mumbai offers quality technical education with 100% placement record. Apply now for B.Tech, M.Tech, and MBA programs."
             }
             
             success, response, status = self.make_request("PATCH", f"/colleges/{self.created_college_id}/section/admission", 
