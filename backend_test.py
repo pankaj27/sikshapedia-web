@@ -7271,6 +7271,14 @@ class APITester:
         self.test_p1_role_based_access_control()
         
         print("\n" + "=" * 80)
+        print("📚 COURSE DETAILS ENTRY FORM TESTING")
+        print("=" * 80)
+        
+        # **NEW: Course Details Entry Form Testing**
+        self.test_authentication()  # Ensure we have admin token
+        self.test_course_details_entry_form()  # Test the specific functionality requested
+        
+        print("\n" + "=" * 80)
         print("🔄 DEPLOYMENT HEALTH CHECK - BACKEND API TESTING")
         print("=" * 80)
         
