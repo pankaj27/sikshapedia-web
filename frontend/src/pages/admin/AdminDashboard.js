@@ -114,7 +114,7 @@ const AdminDashboard = () => {
           <h2 className="text-lg font-bold text-gray-900 mb-4">Frontend Widgets</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {/* Apply Now Widget Card */}
-            <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl p-5 text-white shadow-md">
+            <Link to="/admin/leads" className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl p-5 text-white shadow-md hover:shadow-lg transition-shadow">
               <div className="flex items-center justify-between mb-3">
                 <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
                   <FiSend size={20} />
@@ -124,12 +124,12 @@ const AdminDashboard = () => {
               <h3 className="font-bold">Apply Now</h3>
               <p className="text-xs text-white/80 mb-3">Quick admission form widget</p>
               <div className="flex items-center gap-2">
-                <span className="text-sm font-semibold">124 Submissions</span>
+                <span className="text-sm font-semibold">{stats.total_leads} Submissions</span>
               </div>
-            </div>
+            </Link>
 
             {/* Ask Question Widget Card */}
-            <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-5 text-white shadow-md">
+            <Link to="/admin/questions" className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-5 text-white shadow-md hover:shadow-lg transition-shadow">
               <div className="flex items-center justify-between mb-3">
                 <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
                   <FiMessageCircle size={20} />
@@ -139,12 +139,12 @@ const AdminDashboard = () => {
               <h3 className="font-bold">Ask Question</h3>
               <p className="text-xs text-white/80 mb-3">Q&A support widget</p>
               <div className="flex items-center gap-2">
-                <span className="text-sm font-semibold">89 Questions</span>
+                <span className="text-sm font-semibold">{stats.total_questions} Questions</span>
               </div>
-            </div>
+            </Link>
 
             {/* Counselling Widget Card */}
-            <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl p-5 text-white shadow-md">
+            <Link to="/admin/counselling" className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl p-5 text-white shadow-md hover:shadow-lg transition-shadow">
               <div className="flex items-center justify-between mb-3">
                 <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
                   <FiPhone size={20} />
@@ -154,24 +154,24 @@ const AdminDashboard = () => {
               <h3 className="font-bold">Counselling</h3>
               <p className="text-xs text-white/80 mb-3">Free career guidance</p>
               <div className="flex items-center gap-2">
-                <span className="text-sm font-semibold">56 Requests</span>
+                <span className="text-sm font-semibold">{stats.total_counselling} Requests</span>
               </div>
-            </div>
+            </Link>
 
             {/* Sponsor Ads Widget Card */}
-            <div className="bg-gradient-to-br from-gray-700 to-gray-800 rounded-xl p-5 text-white shadow-md">
+            <Link to="/admin/sponsored-ads" className="bg-gradient-to-br from-gray-700 to-gray-800 rounded-xl p-5 text-white shadow-md hover:shadow-lg transition-shadow">
               <div className="flex items-center justify-between mb-3">
                 <div className="w-10 h-10 bg-yellow-500/20 rounded-lg flex items-center justify-center">
                   <HiOutlineSparkles size={20} className="text-yellow-400" />
                 </div>
-                <span className="px-2 py-1 bg-yellow-400/20 text-yellow-200 text-xs rounded-full">3 Active</span>
+                <span className="px-2 py-1 bg-yellow-400/20 text-yellow-200 text-xs rounded-full">{stats.active_sponsored_ads} Active</span>
               </div>
               <h3 className="font-bold">Sponsor Ads</h3>
               <p className="text-xs text-white/80 mb-3">Sponsored advertisements</p>
               <div className="flex items-center gap-2">
-                <span className="text-sm font-semibold">₹45,000 Revenue</span>
+                <span className="text-sm font-semibold">{stats.total_sponsored_ads} Total Ads</span>
               </div>
-            </div>
+            </Link>
           </div>
         </div>
 
