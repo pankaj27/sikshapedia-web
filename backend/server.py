@@ -777,7 +777,7 @@ class College(BaseModel):
     
     # Recognition & Affiliations
     recognized_by: List[str] = []  # UGC, AICTE, NBA, NAAC
-    affiliated_to: Optional[str] = None
+    affiliated_to: Union[str, List[str]] = []  # Can be string (legacy) or list (new multi-select)
     board: Optional[str] = None  # For Schools: CBSE, ICSE, State Board, etc.
     memberships: List[str] = []  # AIU, ACU, IUAC
     
