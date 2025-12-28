@@ -14,7 +14,13 @@ const AdminDashboard = () => {
     total_reviews: 0,
     total_exams: 0,
     total_courses: 0,
-    total_news: 0
+    total_news: 0,
+    // Widget stats
+    total_leads: 0,
+    total_questions: 0,
+    total_counselling: 0,
+    total_sponsored_ads: 0,
+    active_sponsored_ads: 0
   });
   const [loading, setLoading] = useState(true);
 
