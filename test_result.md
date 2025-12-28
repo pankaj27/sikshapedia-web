@@ -1,32 +1,29 @@
 # Test Results
 
-## Test Session: Duplicate Entry Prevention Validation
+## Test Session: University API Duplicate Entry Prevention Validation
 
 ### Test Objective
-Verify that the backend API properly rejects duplicate entries for:
-1. Courses (by name)
-2. Exams (by name)
-3. News (by title)
+Verify that the University API properly rejects duplicate entries for:
+1. Universities (by name)
+2. Universities (by slug)
 
 ### Endpoints to Test
-1. POST /api/courses - Should return 409 if course with same name exists
-2. POST /api/exams - Should return 409 if exam with same name exists
-3. POST /api/news - Should return 409 if news with same title exists
+1. GET /api/universities?limit=1 - Get existing university
+2. POST /api/universities - Should return 409 if university with same name/slug exists
 
 ### Test Data
-- Existing Course Name: "School"
-- Existing Exam Name: "JEE Main"
-- Existing News Title: "Test Unique News Article 1766888339"
+- Existing University Name: "Delhi University"
+- Existing University Slug: "delhi-university"
 
 ### Expected Behavior
 - Creating duplicate should return HTTP 409 Conflict
 - Error message should mention the duplicate field and existing ID
 
-### Test Status: ✅ COMPLETED
+### Test Status: ⚠️ PARTIALLY COMPLETED - CRITICAL ISSUE FOUND
 
 ### Test Results Summary
 
-**Backend Duplicate Prevention Tests: 13/13 PASSED (100% Success Rate)**
+**University API Duplicate Prevention Tests: 5/7 PASSED (71% Success Rate)**
 
 #### Course Duplicate Prevention ✅
 - **Get Existing Course**: ✅ Found existing course "School"
