@@ -21,6 +21,7 @@ import {
 import { HiOutlineAcademicCap, HiOutlineOfficeBuilding, HiOutlineCurrencyRupee, HiOutlineLibrary } from 'react-icons/hi';
 import api from '../../api/axios';
 import { useAuth } from '../../contexts/AuthContext';
+import { useToast } from '../../hooks/use-toast';
 
 // Image/Video Insert Modal Component
 const MediaInsertModal = ({ type, isOpen, onClose, onInsert, collegeName }) => {
