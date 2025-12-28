@@ -80,9 +80,22 @@ async def delete_stream(stream_id: str):
 # ============================================
 
 @router.get("/sub-streams")
-async def get_sub_streams(limit: int = 100):
-    """Get all sub-streams"""
-    sub_streams = await db.sub_streams.find({}, {"_id": 0}).limit(limit).to_list(limit)
+async def get_sub_streams(limit: int = 500, stream_id: Optional[str] = None):
+    """Get all sub-streams with optional stream filter"""
+    query = {}
+    if stream_id:
+        query["stream_id"] = stream_id
+    
+    sub_streams = await db.sub_streams.find(query, {"_id": 0}).limit(limit).to_list(limit)
+    
+    # Get all streams for name lookup
+    all_streams = {s['id']: s['name'] for s in await db.streams.find({}, {"_id": 0, "id": 1, "name": 1}).to_list(100)}
+    
+    # Add stream_name for display
+    for sub_stream in sub_streams:
+        if sub_stream.get('stream_id'):
+            sub_stream['stream_name'] = all_streams.get(sub_stream['stream_id'], '')
+    
     return sub_streams
 
 
