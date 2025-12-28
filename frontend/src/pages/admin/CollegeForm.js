@@ -629,6 +629,10 @@ const CollegeForm = () => {
   const [availableFacilities, setAvailableFacilities] = useState([]);
   const [availableNews, setAvailableNews] = useState([]);
   
+  // Section-wise save states
+  const [sectionSaving, setSectionSaving] = useState({});
+  const [sectionSaved, setSectionSaved] = useState({});
+  
   // Collapsible section states for form UI
   const [isAdmissionFeesCollapsed, setIsAdmissionFeesCollapsed] = useState(true);
   const [isLocationPriorityCollapsed, setIsLocationPriorityCollapsed] = useState(true);
