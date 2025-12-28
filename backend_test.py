@@ -177,7 +177,7 @@ class APITester:
             basic_section_data = {
                 "established_year": 2010,
                 "type": "Private",
-                "affiliation": "Mumbai University",
+                "affiliated_to": "Mumbai University",
                 "recognized_by": ["AICTE", "UGC"],
                 "institution_type": "College"
             }
