@@ -1203,16 +1203,23 @@ const CollegeForm = () => {
         seo_video_url: collegeData.seo_video_url || '',
         seo_video_title: collegeData.seo_video_title || '',
         seo_video_description: collegeData.seo_video_description || '',
-        location: collegeData.location || { 
-          city: '', 
-          state: '', 
-          address: '', 
-          pincode: '',
-          google_maps_url: '',
-          latitude: '',
-          longitude: '',
-          nearby_places: []
+        // Map top-level state/city/address/pincode to location object
+        // Backend stores at top-level, form uses nested location object
+        location: {
+          city: collegeData.city || collegeData.location?.city || '', 
+          state: collegeData.state || collegeData.location?.state || '', 
+          address: collegeData.address || collegeData.location?.address || '', 
+          pincode: collegeData.pincode || collegeData.location?.pincode || '',
+          google_maps_url: collegeData.location?.google_maps_url || '',
+          latitude: collegeData.latitude || collegeData.location?.latitude || '',
+          longitude: collegeData.longitude || collegeData.location?.longitude || '',
+          nearby_places: collegeData.location?.nearby_places || []
         },
+        // Also keep top-level for backwards compatibility
+        state: collegeData.state || collegeData.location?.state || '',
+        city: collegeData.city || collegeData.location?.city || '',
+        address: collegeData.address || collegeData.location?.address || '',
+        pincode: collegeData.pincode || collegeData.location?.pincode || '',
         how_to_reach: collegeData.how_to_reach || {
           by_air: '',
           by_train: '',
