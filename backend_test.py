@@ -142,9 +142,11 @@ class APITester:
         self.created_college_id = None
         
         # Test 1: Create college draft with minimal data (name, slug, state, city)
+        import time
+        timestamp = str(int(time.time()))
         draft_college_data = {
-            "name": "Test Engineering College Mumbai",
-            "slug": "test-engineering-college-mumbai",
+            "name": f"Test Engineering College Mumbai {timestamp}",
+            "slug": f"test-engineering-college-mumbai-{timestamp}",
             "state": "Maharashtra",
             "city": "Mumbai"
         }
