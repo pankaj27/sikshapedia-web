@@ -1941,7 +1941,12 @@ const CollegeForm = () => {
         errorMessage = error.message;
         // Add more context for network errors
         if (error.message === 'Network Error') {
-          errorMessage = 'Network Error - Please check your internet connection and try again. If the problem persists, try refreshing the page.';
+          errorMessage = 'Network Error - The server is taking too long to respond. Your data has been auto-saved as draft. Please try again in a few minutes.';
+          // Auto-save to draft on network error
+          saveDraft();
+        } else if (error.code === 'ECONNABORTED' || error.message.includes('timeout')) {
+          errorMessage = 'Request timed out - The server is busy. Your data has been auto-saved as draft. Please try again later.';
+          saveDraft();
         }
       }
       
