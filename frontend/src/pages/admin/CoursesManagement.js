@@ -134,7 +134,7 @@ const CoursesManagement = () => {
   const filteredItems = items.filter(item => {
     const matchesSearch = item.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
                           item.full_name?.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStream = !filterStream || item.stream === filterStream;
+    const matchesStream = !filterStream || item.stream === filterStream || item.stream_name === filterStream;
     const matchesDegree = !filterDegree || item.degree_type === filterDegree;
     return matchesSearch && matchesStream && matchesDegree;
   });
