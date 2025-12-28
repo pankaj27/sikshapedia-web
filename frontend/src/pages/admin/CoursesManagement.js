@@ -8,6 +8,9 @@ import { generateSlug } from '../../utils/slugify';
 const CoursesManagement = () => {
   const [items, setItems] = useState([]);
   const [exams, setExams] = useState([]);
+  const [allStreams, setAllStreams] = useState([]);  // New - streams from API
+  const [allSubStreams, setAllSubStreams] = useState([]);  // New - sub-streams from API
+  const [filteredSubStreams, setFilteredSubStreams] = useState([]);  // Filtered by selected stream
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStream, setFilterStream] = useState('');
@@ -17,7 +20,7 @@ const CoursesManagement = () => {
   const [formData, setFormData] = useState({});
 
   const { streams, degreeTypes } = useMemo(() => {
-    const s = [...new Set(items.map(i => i.stream).filter(Boolean))].sort();
+    const s = [...new Set(items.map(i => i.stream_name || i.stream).filter(Boolean))].sort();
     const d = [...new Set(items.map(i => i.degree_type).filter(Boolean))].sort();
     return { streams: s, degreeTypes: d };
   }, [items]);
@@ -25,7 +28,19 @@ const CoursesManagement = () => {
   useEffect(() => {
     fetchItems();
     fetchExams();
+    fetchStreams();
+    fetchSubStreams();
   }, []);
+
+  // Filter sub-streams when stream changes in form
+  useEffect(() => {
+    if (formData.stream_id) {
+      const filtered = allSubStreams.filter(s => s.stream_id === formData.stream_id);
+      setFilteredSubStreams(filtered);
+    } else {
+      setFilteredSubStreams([]);
+    }
+  }, [formData.stream_id, allSubStreams]);
 
   const fetchItems = async () => {
     try {
@@ -44,6 +59,24 @@ const CoursesManagement = () => {
       setExams(response.data);
     } catch (error) {
       console.error('Error fetching exams:', error);
+    }
+  };
+
+  const fetchStreams = async () => {
+    try {
+      const response = await api.get('/streams?limit=100');
+      setAllStreams(response.data);
+    } catch (error) {
+      console.error('Error fetching streams:', error);
+    }
+  };
+
+  const fetchSubStreams = async () => {
+    try {
+      const response = await api.get('/sub-streams?limit=500');
+      setAllSubStreams(response.data);
+    } catch (error) {
+      console.error('Error fetching sub-streams:', error);
     }
   };
 
