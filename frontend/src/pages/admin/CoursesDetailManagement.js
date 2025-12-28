@@ -98,7 +98,7 @@ const CoursesDetailManagement = () => {
           <tbody className="bg-white divide-y divide-gray-200">
             {filteredCourses.length === 0 ? (
               <tr>
-                <td colSpan="6" className="px-6 py-8 text-center text-gray-500">
+                <td colSpan="7" className="px-6 py-8 text-center text-gray-500">
                   No courses found. Add your first detailed course!
                 </td>
               </tr>
@@ -108,6 +108,25 @@ const CoursesDetailManagement = () => {
                   <td className="px-6 py-4">
                     <div className="text-sm font-medium text-gray-900">{course.name}</div>
                     <div className="text-xs text-gray-500">{course.slug}</div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {course.status === 'published' ? (
+                      <span className="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                        ✓ Published
+                      </span>
+                    ) : course.status === 'pending' ? (
+                      <span className="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                        ⏳ Pending
+                      </span>
+                    ) : course.status === 'rejected' ? (
+                      <span className="px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">
+                        ✗ Rejected
+                      </span>
+                    ) : (
+                      <span className="px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">
+                        ✎ Draft
+                      </span>
+                    )}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className="px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
