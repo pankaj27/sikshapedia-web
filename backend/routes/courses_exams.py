@@ -43,7 +43,7 @@ class Course(BaseModel):
     cutoffs: List[Cutoff] = []
 
 class CourseDetail(BaseModel):
-    model_config = ConfigDict(extra="ignore")
+    model_config = ConfigDict(extra="allow")  # Allow extra fields
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     name: str
     slug: Optional[str] = None
