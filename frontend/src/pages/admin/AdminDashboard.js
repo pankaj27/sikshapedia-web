@@ -82,9 +82,6 @@ const AdminDashboard = () => {
                   {loading ? '...' : stat.value.toLocaleString()}
                 </h3>
                 <p className="text-sm text-gray-600">{stat.title}</p>
-                {stat.subValue && (
-                  <p className="text-xs text-gray-400 mt-1">({stat.subValue})</p>
-                )}
               </Link>
             ))}
           </div>
