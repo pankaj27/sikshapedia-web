@@ -114,6 +114,23 @@ Verify if the Institute/College form can successfully submit a large entry with 
 
 **Current Status**: Form validation is working correctly, requiring completion of State and City fields for final submission.
 
+### Additional Testing (Dec 28, 2025 - Continued)
+
+#### ✅ API-based College Creation Test
+- **College Created**: "Bengal Institute of Technology"
+- **Serial Number**: 19
+- **Courses Added**: 10 (B.Tech CS, B.Tech Mechanical, B.Tech Chemical, etc.)
+- **Fees Range**: ₹180,000 - ₹300,000
+- **Affiliated To**: ['AICTE', 'UGC'] (array format)
+- **Recognized By**: ['AICTE', 'NBA', 'NAAC']
+- **URL**: /colleges/19-bengal-institute-of-technology
+- **Result**: ✅ Successfully created and displayed on frontend
+
+#### Bug Fix Applied
+- **Issue**: `affiliated_to` field in College model was string type, but frontend sends array
+- **Fix**: Changed `affiliated_to: Optional[str]` to `affiliated_to: Union[str, List[str]]` in backend model
+- **Frontend Fix**: Updated `CollegeDetailPage.js` to handle array format for affiliations display
+
 ### Admin Credentials (Confirmed Working)
 - Email: admin@admissionbuddy.co
 - Password: admin123
