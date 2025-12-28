@@ -176,10 +176,28 @@ const CoursesDetailManagement = () => {
         </div>
 
         {/* Summary Stats */}
-        <div className="mt-6 grid grid-cols-4 gap-4">
+        <div className="mt-6 grid grid-cols-6 gap-4">
           <div className="bg-white rounded-lg shadow p-4">
             <div className="text-2xl font-bold text-orange-600">{courses.length}</div>
             <div className="text-sm text-gray-600">Total Courses</div>
+          </div>
+          <div className="bg-white rounded-lg shadow p-4">
+            <div className="text-2xl font-bold text-gray-600">
+              {courses.filter(c => c.status === 'draft' || !c.status).length}
+            </div>
+            <div className="text-sm text-gray-600">📝 Draft</div>
+          </div>
+          <div className="bg-white rounded-lg shadow p-4">
+            <div className="text-2xl font-bold text-yellow-600">
+              {courses.filter(c => c.status === 'pending').length}
+            </div>
+            <div className="text-sm text-gray-600">⏳ Pending</div>
+          </div>
+          <div className="bg-white rounded-lg shadow p-4">
+            <div className="text-2xl font-bold text-green-600">
+              {courses.filter(c => c.status === 'published').length}
+            </div>
+            <div className="text-sm text-gray-600">✓ Published</div>
           </div>
           <div className="bg-white rounded-lg shadow p-4">
             <div className="text-2xl font-bold text-blue-600">
@@ -188,16 +206,10 @@ const CoursesDetailManagement = () => {
             <div className="text-sm text-gray-600">UG Courses</div>
           </div>
           <div className="bg-white rounded-lg shadow p-4">
-            <div className="text-2xl font-bold text-green-600">
-            {courses.filter(c => c.degree_type === 'PG').length}
-          </div>
-          <div className="text-sm text-gray-600">PG Courses</div>
-        </div>
-          <div className="bg-white rounded-lg shadow p-4">
             <div className="text-2xl font-bold text-purple-600">
-              {courses.filter(c => c.is_popular).length}
+              {courses.filter(c => c.degree_type === 'PG').length}
             </div>
-            <div className="text-sm text-gray-600">Popular Courses</div>
+            <div className="text-sm text-gray-600">PG Courses</div>
           </div>
         </div>
       </div>
