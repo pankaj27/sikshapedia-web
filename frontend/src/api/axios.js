@@ -7,7 +7,7 @@ const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-  timeout: 120000, // 120 seconds timeout for large form submissions
+  timeout: 180000, // 180 seconds (3 minutes) timeout for large form submissions
   maxContentLength: Infinity,
   maxBodyLength: Infinity,
 });
