@@ -92,6 +92,36 @@ const NewsForm = () => {
 
   const [tagInput, setTagInput] = useState('');
   const [keywordInput, setKeywordInput] = useState('');
+  const [showDraftBanner, setShowDraftBanner] = useState(false);
+
+  // Auto-save draft hook - only enabled for new entries (not editing)
+  const {
+    saveDraft: saveNewsDraft,
+    clearDraft: clearNewsDraft,
+    restoreDraft: restoreNewsDraft,
+    getDraftInfo: getNewsDraftInfo,
+    lastSaved: newsDraftLastSaved,
+    hasDraft: hasNewsDraft
+  } = useAutoSaveDraft('news_draft_new', formData, setFormData, 30000, !isEdit);
+
+  // Check for existing draft on mount
+  useEffect(() => {
+    if (!isEdit && hasNewsDraft) {
+      setShowDraftBanner(true);
+    }
+  }, [isEdit, hasNewsDraft]);
+
+  // Handle draft restore
+  const handleRestoreNewsDraft = () => {
+    restoreNewsDraft();
+    setShowDraftBanner(false);
+  };
+
+  // Handle draft discard
+  const handleDiscardNewsDraft = () => {
+    clearNewsDraft();
+    setShowDraftBanner(false);
+  };
 
   // Auto-fill author from current logged-in user
   useEffect(() => {
