@@ -87,6 +87,7 @@ const CoursesDetailManagement = () => {
           <thead className="bg-gray-50">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Course Name</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Degree Type</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Duration</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Avg Fees</th>
