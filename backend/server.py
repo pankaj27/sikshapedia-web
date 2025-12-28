@@ -3957,6 +3957,34 @@ async def create_college(college_data: CollegeCreate, background_tasks: Backgrou
         raise HTTPException(status_code=403, detail="Only admins can create colleges")
     
     # Auto-assign serial number (find max and increment)
+    # Check for duplicate by name or slug
+    college_input = college_data.model_dump()
+    name = college_input.get('name', '').strip()
+    slug = college_input.get('slug', '').strip()
+    
+    # Check duplicate by exact name (case-insensitive)
+    existing_by_name = await db.colleges.find_one(
+        {"name": {"$regex": f"^{name}$", "$options": "i"}},
+        {"_id": 0, "id": 1, "name": 1, "slug": 1}
+    )
+    if existing_by_name:
+        raise HTTPException(
+            status_code=400, 
+            detail=f"College with name '{name}' already exists (ID: {existing_by_name.get('id')}, Slug: {existing_by_name.get('slug')})"
+        )
+    
+    # Check duplicate by slug
+    if slug:
+        existing_by_slug = await db.colleges.find_one(
+            {"slug": slug},
+            {"_id": 0, "id": 1, "name": 1, "slug": 1}
+        )
+        if existing_by_slug:
+            raise HTTPException(
+                status_code=400, 
+                detail=f"College with slug '{slug}' already exists (Name: {existing_by_slug.get('name')})"
+            )
+    
     max_serial = await db.colleges.find_one(
         {"serial_number": {"$exists": True}},
         {"serial_number": 1},
