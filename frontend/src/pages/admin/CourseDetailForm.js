@@ -1786,14 +1786,12 @@ const CourseDetailForm = () => {
 
             <div>
               <label className="block text-sm font-medium mb-1">Overview</label>
-              <textarea
-                name="overview"
+              <SimpleRichTextEditor
                 value={formData.overview}
-                onChange={handleChange}
-                rows="4"
+                onChange={(html) => setFormData(prev => ({ ...prev, overview: html }))}
                 placeholder="Detailed course overview..."
-                className="w-full border rounded px-3 py-2"
               />
+              <p className="text-xs text-gray-500 mt-1">You can change text color and add links</p>
             </div>
 
             <div>
