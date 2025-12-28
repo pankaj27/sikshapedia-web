@@ -315,3 +315,26 @@ Complete end-to-end UI test of the new college creation workflow with section-wi
 - **Email**: admin@admissionbuddy.co ✅ Working
 - **Password**: admin123 ✅ Working
 - **Access Level**: Full admin access to college management
+
+---
+
+## Final Verification: State/City Bug Fix (Dec 28, 2025)
+
+### Bug Fix Applied
+- **Issue**: Frontend was sending `formData.state` and `formData.city` (top-level fields)
+- **Root Cause**: Form UI uses `formData.location.state` and `formData.location.city` (nested fields)
+- **Fix**: Updated `CollegeForm.js` to use `formData.location?.state || formData.state` pattern
+- **Files Modified**: `/app/frontend/src/pages/admin/CollegeForm.js` (lines 2118-2119 and 1929-1938)
+
+### Verification Results
+✅ **API Test Passed**: Created college with state=West Bengal, city=Kolkata
+✅ **Section Save Passed**: PATCH /api/colleges/{id}/section/basic updated correctly
+✅ **MongoDB Verification**: State and City persisted correctly in database
+✅ **Data Integrity**: All fields (name, type, established_year, state, city) preserved
+
+### Test Status: ✅ STATE/CITY BUG FIXED AND VERIFIED
+
+The recurring "Network Error" issue should now be fully resolved with:
+1. State and City fields correctly mapped from location object
+2. Section-wise save mechanism preventing large payload timeouts
+3. Draft-first workflow enabling incremental data entry
