@@ -1791,6 +1791,18 @@ const CollegeForm = () => {
         }).filter(Boolean) // Remove empty strings
       };
 
+      // Clean up empty/null fields to reduce payload size
+      Object.keys(transformedFormData).forEach(key => {
+        const value = transformedFormData[key];
+        if (value === null || value === undefined || value === '') {
+          delete transformedFormData[key];
+        }
+        // Remove empty arrays (except required ones)
+        if (Array.isArray(value) && value.length === 0 && !['courses', 'facilities'].includes(key)) {
+          delete transformedFormData[key];
+        }
+      });
+
       if (id) {
         await api.put(`/colleges/${id}`, transformedFormData);
         toast({
