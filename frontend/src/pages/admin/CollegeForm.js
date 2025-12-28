@@ -2115,8 +2115,8 @@ const CollegeForm = () => {
           slug: formData.slug,
           institution_type: formData.institution_type || 'College',
           type: formData.type || 'Private',
-          state: formData.state,
-          city: formData.city,
+          state: formData.location?.state || formData.state,
+          city: formData.location?.city || formData.city,
           status: 'draft'
         };
         
