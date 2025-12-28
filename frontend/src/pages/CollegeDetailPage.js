@@ -668,7 +668,13 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
                     {college.affiliated_to && (
                       <div className="flex items-center gap-2">
                         <span className="text-xs font-medium text-gray-500">Affiliated:</span>
-                        <span className="px-2 py-0.5 bg-white text-orange-600 text-xs font-medium rounded border border-orange-100">{college.affiliated_to}</span>
+                        {Array.isArray(college.affiliated_to) ? (
+                          college.affiliated_to.map((aff, idx) => (
+                            <span key={idx} className="px-2 py-0.5 bg-white text-orange-600 text-xs font-medium rounded border border-orange-100">{aff}</span>
+                          ))
+                        ) : (
+                          <span className="px-2 py-0.5 bg-white text-orange-600 text-xs font-medium rounded border border-orange-100">{college.affiliated_to}</span>
+                        )}
                       </div>
                     )}
                   </div>
