@@ -536,7 +536,7 @@ const CourseDetailForm = () => {
     getDraftInfo: getCourseDraftInfo,
     lastSaved: courseDraftLastSaved,
     hasDraft: hasCourseDraft
-  } = useAutoSaveDraft('course_detail_draft_new', formData, setFormData, 30000, !id);
+  } = useAutoSaveDraft('course_detail_draft_new', formData, setFormData, 10000, !id);
 
   // Check for existing draft on mount
   useEffect(() => {

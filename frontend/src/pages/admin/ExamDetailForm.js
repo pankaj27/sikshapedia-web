@@ -287,7 +287,7 @@ const ExamDetailForm = () => {
     getDraftInfo: getExamDraftInfo,
     lastSaved: examDraftLastSaved,
     hasDraft: hasExamDraft
-  } = useAutoSaveDraft('exam_detail_draft_new', formData, setFormData, 30000, !id);
+  } = useAutoSaveDraft('exam_detail_draft_new', formData, setFormData, 10000, !id);
 
   // Check for existing draft on mount
   useEffect(() => {

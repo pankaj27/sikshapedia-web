@@ -102,7 +102,7 @@ const NewsForm = () => {
     getDraftInfo: getNewsDraftInfo,
     lastSaved: newsDraftLastSaved,
     hasDraft: hasNewsDraft
-  } = useAutoSaveDraft('news_draft_new', formData, setFormData, 30000, !isEdit);
+  } = useAutoSaveDraft('news_draft_new', formData, setFormData, 10000, !isEdit);
 
   // Check for existing draft on mount
   useEffect(() => {
