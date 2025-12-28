@@ -4104,7 +4104,8 @@ async def create_college(college_data: CollegeCreate, background_tasks: Backgrou
 
 @api_router.put("/colleges/{college_id}", response_model=College)
 async def update_college(college_id: str, college_data: dict, current_user: User = Depends(get_current_user)):
-    if current_user.role != "admin":
+    # Allow admin and super_admin roles
+    if current_user.role not in ["admin", "super_admin"]:
         raise HTTPException(status_code=403, detail="Only admins can update colleges")
     
     existing_college = await db.colleges.find_one({"id": college_id}, {"_id": 0})
@@ -4127,6 +4128,7 @@ async def update_college(college_id: str, college_data: dict, current_user: User
     college_data['updated_by_name'] = current_user.name
     college_data['updated_at'] = datetime.now(timezone.utc).isoformat()
     
+    # Perform update
     await db.colleges.update_one({"id": college_id}, {"$set": college_data})
     
     # Fetch and return updated college
