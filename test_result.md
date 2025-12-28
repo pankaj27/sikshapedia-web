@@ -91,10 +91,33 @@ Verify that the University API properly rejects duplicate entries for:
 #### 🔧 Technical Implementation
 - Backend URL: `https://eduprevent.preview.emergentagent.com/api`
 - Authentication: Admin login with Bearer token
-- Database: MongoDB with proper unique constraints
+- Database: MongoDB with **CRITICAL INCONSISTENCY**
+  - Universities GET: Queries `colleges` collection with `institution_type=University`
+  - Universities POST: Inserts into `universities` collection
+  - This mismatch causes data retrieval and duplicate checking failures
 - API Response Format: JSON with detailed error messages
 
-### Conclusion
-The duplicate entry prevention feature is **FULLY FUNCTIONAL** and working as expected. All test cases passed successfully with proper HTTP 409 Conflict responses and descriptive error messages that include the existing item's ID.
+### Critical Issues Requiring Immediate Fix
 
-**Status**: ✅ READY FOR PRODUCTION
+#### 🚨 Database Collection Inconsistency
+**Problem**: The University API has a fundamental database collection mismatch:
+- `GET /api/universities` queries the `colleges` collection
+- `POST /api/universities` inserts into the `universities` collection
+- Duplicate checking queries the `universities` collection
+
+**Impact**:
+1. Created universities cannot be retrieved via GET endpoints (404 errors)
+2. Duplicate prevention fails for existing universities in `colleges` collection
+3. Data inconsistency between collections
+
+**Root Cause**: The University API was designed to query existing data from `colleges` collection but create new data in `universities` collection.
+
+**Recommended Fix**: 
+- Either modify POST to insert into `colleges` collection with `institution_type=University`
+- Or modify GET to query `universities` collection
+- Ensure duplicate checking queries the same collection as GET endpoints
+
+### Conclusion
+The University API duplicate entry prevention feature is **PARTIALLY FUNCTIONAL** with critical database inconsistency issues. While duplicate prevention works for newly created entries, it fails for existing data due to collection mismatch. This requires immediate attention before production deployment.
+
+**Status**: ⚠️ CRITICAL ISSUES FOUND - REQUIRES MAIN AGENT INTERVENTION
