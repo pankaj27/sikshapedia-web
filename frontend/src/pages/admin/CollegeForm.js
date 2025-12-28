@@ -2462,20 +2462,62 @@ const CollegeForm = () => {
                 </>
               ) : (
                 <>
-                  <label className="block text-sm font-medium mb-1">Affiliated To</label>
-                  <select
-                    name="affiliated_to"
-                    value={formData.affiliated_to}
-                    onChange={handleChange}
-                    className="w-full border rounded px-3 py-2"
-                  >
-                    <option value="">Select Affiliation</option>
-                    {affiliations.map((affiliation) => (
-                      <option key={affiliation.id} value={affiliation.name}>
-                        {affiliation.name}
-                      </option>
-                    ))}
-                  </select>
+                  <label className="block text-sm font-medium mb-1">
+                    Affiliated To <span className="text-xs text-gray-500">(Select multiple if applicable)</span>
+                  </label>
+                  <div className="border rounded p-3 max-h-48 overflow-y-auto bg-white">
+                    {affiliations.length === 0 ? (
+                      <p className="text-sm text-gray-400">Loading affiliations...</p>
+                    ) : (
+                      <div className="space-y-2">
+                        {affiliations.map((affiliation) => {
+                          const isSelected = (formData.affiliated_to_list || []).includes(affiliation.name) ||
+                                           formData.affiliated_to === affiliation.name;
+                          return (
+                            <label 
+                              key={affiliation.id} 
+                              className={`flex items-center gap-2 p-2 rounded cursor-pointer hover:bg-gray-50 ${
+                                isSelected ? 'bg-orange-50 border border-orange-200' : ''
+                              }`}
+                            >
+                              <input
+                                type="checkbox"
+                                checked={isSelected}
+                                onChange={(e) => {
+                                  const currentList = formData.affiliated_to_list || 
+                                    (formData.affiliated_to ? [formData.affiliated_to] : []);
+                                  
+                                  if (e.target.checked) {
+                                    setFormData({ 
+                                      ...formData, 
+                                      affiliated_to_list: [...currentList, affiliation.name],
+                                      affiliated_to: [...currentList, affiliation.name].join(', ')
+                                    });
+                                  } else {
+                                    const newList = currentList.filter(a => a !== affiliation.name);
+                                    setFormData({ 
+                                      ...formData, 
+                                      affiliated_to_list: newList,
+                                      affiliated_to: newList.join(', ')
+                                    });
+                                  }
+                                }}
+                                className="w-4 h-4 text-orange-500 rounded border-gray-300 focus:ring-orange-500"
+                              />
+                              <span className={`text-sm ${isSelected ? 'font-medium text-orange-700' : 'text-gray-700'}`}>
+                                {affiliation.name}
+                              </span>
+                            </label>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                  {(formData.affiliated_to_list?.length > 0 || formData.affiliated_to) && (
+                    <p className="text-xs text-green-600 mt-1">
+                      ✓ Selected: {(formData.affiliated_to_list || [formData.affiliated_to].filter(Boolean)).join(', ')}
+                    </p>
+                  )}
                 </>
               )}
             </div>
