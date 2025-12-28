@@ -469,6 +469,38 @@ const CourseDetailPage = () => {
               </section>
             )}
 
+            {/* Admission Process Section - Only show if data exists */}
+            {(admissionProcess || selectionCriteria) && (
+              <section id="admission" className="bg-white rounded-2xl shadow-sm p-6 md:p-8">
+                <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+                  <span className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
+                    <FiCalendar className="text-blue-600" size={20} />
+                  </span>
+                  Admission Process
+                </h2>
+                
+                {admissionProcess && (
+                  <div className="mb-6">
+                    <h3 className="text-lg font-semibold text-gray-800 mb-3">How to Apply</h3>
+                    <div 
+                      className="prose prose-gray max-w-none text-gray-700"
+                      dangerouslySetInnerHTML={{ __html: admissionProcess }}
+                    />
+                  </div>
+                )}
+                
+                {selectionCriteria && (
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-800 mb-3">Selection Criteria</h3>
+                    <div 
+                      className="prose prose-gray max-w-none text-gray-700"
+                      dangerouslySetInnerHTML={{ __html: selectionCriteria }}
+                    />
+                  </div>
+                )}
+              </section>
+            )}
+
             {/* Syllabus Section - Only show if data exists */}
             {syllabusData.length > 0 && (
               <section id="syllabus" className="bg-white rounded-2xl shadow-sm p-6 md:p-8">
