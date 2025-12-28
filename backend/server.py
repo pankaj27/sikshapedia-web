@@ -3881,65 +3881,42 @@ async def get_admin_stats(current_user: User = Depends(get_current_user)):
     if current_user.role != "admin":
         raise HTTPException(status_code=403, detail="Admin access required")
     
-    # Count colleges - only those with institution_type = 'College' or no type
-    # colleges collection contains mixed data (colleges, universities, schools)
-    total_colleges_in_collection = await db.colleges.count_documents({})
-    colleges_only = await db.colleges.count_documents({
-        "$or": [
-            {"institution_type": "College"},
-            {"institution_type": {"$exists": False}},
-            {"institution_type": None}
-        ]
-    })
-    
-    # Count schools - from both collections
-    schools_in_colleges = await db.colleges.count_documents({"institution_type": "School"})
-    schools_in_schools = await db.schools.count_documents({})
-    total_schools = schools_in_colleges + schools_in_schools
-    
-    # Count universities - from both collections
-    universities_in_colleges = await db.colleges.count_documents({"institution_type": "University"})
-    universities_in_universities = await db.universities.count_documents({})
-    total_universities = universities_in_colleges + universities_in_universities
+    # Count from colleges collection by institution_type
+    total_colleges = await db.colleges.count_documents({"institution_type": "College"})
+    total_schools = await db.colleges.count_documents({"institution_type": "School"})
+    total_universities = await db.colleges.count_documents({"institution_type": "University"})
     
     total_users = await db.users.count_documents({})
     total_reviews = await db.reviews.count_documents({})
     
-    # Exams - total and detailed (with description)
-    total_exams = await db.exams.count_documents({})
-    detailed_exams = await db.exams.count_documents({
+    # Only detailed exams (with description)
+    total_exams = await db.exams.count_documents({
         "description": {"$exists": True, "$ne": "", "$ne": None}
     })
     
-    # Courses - total and detailed (with description)
-    total_courses = await db.courses.count_documents({})
-    detailed_courses = await db.courses.count_documents({
+    # Only detailed courses (with description)
+    total_courses = await db.courses.count_documents({
         "description": {"$exists": True, "$ne": "", "$ne": None}
     })
     
     total_news = await db.news.count_documents({})
     
-    # Widget stats - real data from database
+    # Widget stats
     total_leads = await db.leads.count_documents({})
     total_questions = await db.questions.count_documents({})
     total_counselling = await db.counseling_sessions.count_documents({})
-    
-    # Sponsored ads stats
     total_sponsored_ads = await db.sponsored_ads.count_documents({})
     active_sponsored_ads = await db.sponsored_ads.count_documents({"status": "active"})
     
     return {
-        "total_colleges": colleges_only,
+        "total_colleges": total_colleges,
         "total_schools": total_schools,
         "total_universities": total_universities,
         "total_users": total_users,
         "total_reviews": total_reviews,
         "total_exams": total_exams,
-        "detailed_exams": detailed_exams,
         "total_courses": total_courses,
-        "detailed_courses": detailed_courses,
         "total_news": total_news,
-        # Widget stats
         "total_leads": total_leads,
         "total_questions": total_questions,
         "total_counselling": total_counselling,
