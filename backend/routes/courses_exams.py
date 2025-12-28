@@ -449,10 +449,17 @@ async def create_course_detail(course_data: dict):
     if 'id' not in course_data:
         course_data['id'] = str(uuid.uuid4())
     
+    # Fix meta_keywords if it's a string instead of list
+    if isinstance(course_data.get('meta_keywords'), str):
+        course_data['meta_keywords'] = [kw.strip() for kw in course_data['meta_keywords'].split(',') if kw.strip()] if course_data['meta_keywords'] else []
+    
     course_data['created_at'] = datetime.now(timezone.utc).isoformat()
     await db.courses_detailed.insert_one(course_data)
     
     created = await db.courses_detailed.find_one({"id": course_data['id']}, {"_id": 0})
+    # Fix meta_keywords in response too
+    if isinstance(created.get('meta_keywords'), str):
+        created['meta_keywords'] = [kw.strip() for kw in created['meta_keywords'].split(',') if kw.strip()] if created['meta_keywords'] else []
     return CourseDetail(**created)
 
 
