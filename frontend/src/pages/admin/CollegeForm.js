@@ -1770,6 +1770,8 @@ const CollegeForm = () => {
     setFormData({ ...formData, seo_faqs: formData.seo_faqs.filter((_, i) => i !== index) });
   };
 
+  const { toast } = useToast();
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSaving(true);
@@ -1791,15 +1793,33 @@ const CollegeForm = () => {
 
       if (id) {
         await api.put(`/colleges/${id}`, transformedFormData);
-        alert('College updated successfully!');
+        toast({
+          title: "✅ সফল!",
+          description: "College সফলভাবে আপডেট হয়েছে!",
+        });
       } else {
         await api.post('/colleges', transformedFormData);
-        alert('College created successfully!');
+        toast({
+          title: "✅ সফল!",
+          description: "নতুন College সফলভাবে তৈরি হয়েছে!",
+        });
       }
       navigate('/admin/colleges');
     } catch (error) {
       console.error('Error saving college:', error);
-      // Handle validation errors properly
+      
+      // Check for duplicate entry error (HTTP 409)
+      if (error.response?.status === 409) {
+        const detail = error.response.data.detail || '';
+        toast({
+          variant: "destructive",
+          title: "⚠️ ডুপ্লিকেট এন্ট্রি!",
+          description: detail || "এই নামের বা slug এর institution ইতিমধ্যে আছে। অনুগ্রহ করে ভিন্ন নাম ব্যবহার করুন।",
+        });
+        return;
+      }
+      
+      // Handle other validation errors
       let errorMessage = 'Unknown error';
       if (error.response?.data?.detail) {
         const detail = error.response.data.detail;
@@ -1817,7 +1837,12 @@ const CollegeForm = () => {
       } else if (error.message) {
         errorMessage = error.message;
       }
-      alert(`Failed to save college:\n${errorMessage}`);
+      
+      toast({
+        variant: "destructive",
+        title: "❌ ত্রুটি!",
+        description: errorMessage,
+      });
     } finally {
       setSaving(false);
     }
