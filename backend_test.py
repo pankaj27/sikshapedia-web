@@ -7743,22 +7743,21 @@ class APITester:
             self.log_test("Hero Slider Settings Update", False, "No admin token available for testing updates")
 
     def run_all_tests(self):
-        """Run all test suites focusing on Priority Fixes first"""
-        print("🚀 PRIORITY FIXES TESTING - P0 & P1")
+        """Run all test suites focusing on Section-wise College Creation first"""
+        print("🚀 SECTION-WISE COLLEGE CREATION TESTING")
         print(f"🌐 Base URL: {BASE_URL}")
         print("=" * 80)
         
-        # **PRIORITY: P0 & P1 FIXES FROM REVIEW REQUEST**
-        self.test_p0_featured_colleges_fix()
-        self.test_p1_role_based_access_control()
+        # **MAIN FOCUS: Section-wise College Creation Workflow**
+        self.test_authentication()  # Ensure we have admin token
+        self.test_section_wise_college_creation()  # Test the specific functionality requested
         
         print("\n" + "=" * 80)
-        print("📚 COURSE DETAILS ENTRY FORM TESTING")
+        print("🏫 ADDITIONAL COLLEGE ROUTE TESTING")
         print("=" * 80)
         
-        # **NEW: Course Details Entry Form Testing**
-        self.test_authentication()  # Ensure we have admin token
-        self.test_course_details_entry_form()  # Test the specific functionality requested
+        # Additional college-related tests
+        self.test_old_college_routes()
         
         print("\n" + "=" * 80)
         print("🔗 STREAM → SUB-STREAM → COURSE CONNECTION TESTING")
