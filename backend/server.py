@@ -6409,6 +6409,20 @@ async def get_news_article(news_id: str):
 async def create_news(news: News):
     """Create a new news article (admin only)"""
     news_dict = news.model_dump()
+    
+    # Check for duplicate by title (case-insensitive)
+    news_title = news_dict.get('title', '').strip()
+    if news_title:
+        existing_news = await db.news.find_one(
+            {"title": {"$regex": f"^{news_title}$", "$options": "i"}},
+            {"_id": 0, "id": 1, "title": 1}
+        )
+        if existing_news:
+            raise HTTPException(
+                status_code=409,
+                detail=f"News article with title '{news_title}' already exists (ID: {existing_news.get('id')})"
+            )
+    
     await db.news.insert_one(news_dict)
     return news
 
