@@ -6984,6 +6984,9 @@ class APITester:
         self.test_homepage_settings_api()
         self.test_city_icon_files_exist()
         
+        # **NEW: Duplicate Entry Prevention Tests (Review Request):**
+        self.test_duplicate_entry_prevention()
+        
         # Summary
         print("=" * 80)
         print("📊 COMPREHENSIVE TEST SUMMARY")
