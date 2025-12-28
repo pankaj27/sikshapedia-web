@@ -7,7 +7,9 @@ const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-  timeout: 60000, // 60 seconds timeout for large form submissions
+  timeout: 120000, // 120 seconds timeout for large form submissions
+  maxContentLength: Infinity,
+  maxBodyLength: Infinity,
 });
 
 // Helper function to safely get current path without causing React re-renders
@@ -47,12 +49,23 @@ api.interceptors.request.use(
   }
 );
 
-// Handle auth errors - DON'T auto-logout, let components handle it
+// Handle errors with retry logic for network errors
 api.interceptors.response.use(
   (response) => response,
-  (error) => {
-    // Just pass through the error, don't auto-logout
-    // Components will handle 401 errors as needed
+  async (error) => {
+    const originalRequest = error.config;
+    
+    // Retry once on network error (but not on 4xx/5xx errors)
+    if (error.message === 'Network Error' && !originalRequest._retry) {
+      originalRequest._retry = true;
+      console.log('[API] Retrying request after network error...');
+      
+      // Wait 2 seconds before retry
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      return api(originalRequest);
+    }
+    
     return Promise.reject(error);
   }
 );
