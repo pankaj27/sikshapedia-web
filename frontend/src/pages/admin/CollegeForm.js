@@ -2597,6 +2597,24 @@ const CollegeForm = () => {
               />
             )}
           </div>
+          
+          {/* Guidance message for new entries */}
+          {!id && (
+            <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+              <div className="flex items-start gap-3">
+                <span className="text-2xl">💡</span>
+                <div>
+                  <p className="font-semibold text-blue-800 mb-1">Quick Save Workflow</p>
+                  <p className="text-sm text-blue-700">
+                    Fill in <strong>Name, State & City</strong> below, then click <strong>"Save Draft"</strong> to create the entry. 
+                    After saving, you'll be redirected to the Edit page where you can complete all sections using 
+                    <strong> "Save Section"</strong> buttons - this prevents timeout errors for large forms.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+          
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium mb-1">
