@@ -2578,36 +2578,51 @@ const CollegeForm = () => {
               />
             </div>
             
-            {/* Streams Selection - Hidden for Schools */}
+            {/* Streams Selection - Auto-calculated from selected courses */}
             {!isSchool && (
               <div className="col-span-2">
                 <label className="block text-sm font-medium mb-2">
-                  Streams Offered <span className="text-xs text-gray-500">(Used for filtering on listing pages)</span>
+                  Streams Offered <span className="text-xs text-green-600">(Auto-calculated from selected courses)</span>
                 </label>
                 <div className="flex flex-wrap gap-2 mb-2">
-                  {['Engineering', 'Medical', 'Management', 'Law', 'Arts', 'Science', 'Commerce', 'Education', 'Pharmacy', 'Architecture', 'Design', 'Agriculture', 'Nursing', 'Dental', 'Hotel Management', 'Mass Communication', 'Computer Applications'].map((stream) => (
-                    <button
-                      key={stream}
-                      type="button"
-                      onClick={() => {
-                        const currentStreams = formData.streams || [];
-                        if (currentStreams.includes(stream)) {
-                          setFormData({ ...formData, streams: currentStreams.filter(s => s !== stream) });
-                        } else {
-                          setFormData({ ...formData, streams: [...currentStreams, stream] });
-                        }
-                      }}
-                      className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
-                        (formData.streams || []).includes(stream)
-                          ? 'bg-orange-500 text-white'
-                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                      }`}
-                    >
-                      {stream} {(formData.streams || []).includes(stream) && '✓'}
-                    </button>
-                  ))}
+                  {/* Get unique streams from selected courses */}
+                  {(() => {
+                    const courseStreams = new Set();
+                    (formData.courses || []).forEach(course => {
+                      if (course.stream) courseStreams.add(course.stream);
+                    });
+                    const uniqueStreams = Array.from(courseStreams);
+                    
+                    if (uniqueStreams.length === 0) {
+                      return (
+                        <p className="text-sm text-gray-400 italic">
+                          No streams yet - add courses in the "Courses & Fees" section below
+                        </p>
+                      );
+                    }
+                    
+                    return uniqueStreams.map(stream => (
+                      <span
+                        key={stream}
+                        className="px-3 py-1.5 rounded-full text-sm font-medium bg-orange-500 text-white"
+                      >
+                        {stream} ✓
+                      </span>
+                    ));
+                  })()}
                 </div>
-                <p className="text-xs text-gray-500">Selected: {(formData.streams || []).join(', ') || 'None'}</p>
+                <p className="text-xs text-gray-500">
+                  {(() => {
+                    const courseStreams = new Set();
+                    (formData.courses || []).forEach(course => {
+                      if (course.stream) courseStreams.add(course.stream);
+                    });
+                    const count = courseStreams.size;
+                    return count > 0 
+                      ? `${count} stream(s) from ${(formData.courses || []).length} course(s)` 
+                      : 'Add courses to see streams here';
+                  })()}
+                </p>
               </div>
             )}
           </div>
