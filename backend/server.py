@@ -792,6 +792,11 @@ class College(BaseModel):
     board: Optional[str] = None  # For Schools: CBSE, ICSE, State Board, etc.
     memberships: List[str] = []  # AIU, ACU, IUAC
     
+    # School-specific fields
+    medium: Optional[str] = None  # Medium of instruction: English, Hindi, etc.
+    classes_offered: List[str] = []  # For Schools: ["Nursery", "LKG", "UKG", "1", "2", ...]
+    streams_offered: List[str] = []  # For Schools: ["Science", "Commerce", "Arts"]
+    
     # Rankings - Multiple agencies
     nirf_ranking: Optional[int] = None
     india_today_ranking: Optional[int] = None
