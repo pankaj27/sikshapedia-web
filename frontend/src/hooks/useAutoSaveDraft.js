@@ -115,6 +115,34 @@ const useAutoSaveDraft = (key, formData, setFormData, interval = 30000, enabled 
     };
   }, [formData, interval, enabled, saveDraft]);
 
+  // Save draft on page unload/close - THIS IS THE KEY FIX!
+  useEffect(() => {
+    if (!enabled) return;
+
+    const handleBeforeUnload = () => {
+      // Save immediately when user closes browser/tab
+      try {
+        const draftData = {
+          formData,
+          savedAt: new Date().toISOString(),
+          version: 1
+        };
+        localStorage.setItem(key, JSON.stringify(draftData));
+        console.log(`[AutoSave] Draft saved on page unload for ${key}`);
+      } catch (error) {
+        console.error('[AutoSave] Error saving draft on unload:', error);
+      }
+    };
+
+    // Add event listener for page close/refresh
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    // Cleanup
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [enabled, key, formData]);
+
   // Check for existing draft on mount
   useEffect(() => {
     if (enabled) {
