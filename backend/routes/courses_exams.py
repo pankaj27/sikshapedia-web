@@ -403,6 +403,17 @@ async def get_courses_detail(
     return courses
 
 
+@router.get("/courses-detail/college-count/{course_name}")
+async def get_college_count_for_course(course_name: str):
+    """Get count of colleges offering a specific course"""
+    # Search in colleges collection for colleges that offer this course
+    # Course name can be partial match (e.g., "B.Tech" matches "B.Tech Computer Science")
+    count = await db.colleges.count_documents({
+        "courses.name": {"$regex": course_name, "$options": "i"}
+    })
+    return {"course_name": course_name, "total_colleges": count}
+
+
 @router.get("/courses-detail/{course_id}", response_model=CourseDetail)
 async def get_course_detail(course_id: str):
     """Get a specific detailed course page"""
