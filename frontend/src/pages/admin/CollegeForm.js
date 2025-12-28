@@ -1843,7 +1843,7 @@ const CollegeForm = () => {
       
       toast({
         variant: "destructive",
-        title: "❌ ত্রুটি!",
+        title: "❌ Error!",
         description: errorMessage,
       });
     } finally {
