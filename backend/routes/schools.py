@@ -265,26 +265,39 @@ async def create_school(school: School):
     name = school.name.strip() if school.name else ''
     slug = school.slug.strip() if school.slug else ''
     
-    # Check duplicate by exact name (case-insensitive)
-    existing_by_name = await db.schools.find_one(
-        {"name": {"$regex": f"^{name}$", "$options": "i"}},
-        {"_id": 0, "id": 1, "name": 1, "slug": 1}
-    )
-    if existing_by_name:
-        raise HTTPException(
-            status_code=400, 
-            detail=f"School with name '{name}' already exists (ID: {existing_by_name.get('id')}, Slug: {existing_by_name.get('slug')})"
+    # Check duplicate by exact name (case-insensitive) - check BOTH collections
+    if name:
+        existing_by_name = await db.schools.find_one(
+            {"name": {"$regex": f"^{name}$", "$options": "i"}},
+            {"_id": 0, "id": 1, "name": 1, "slug": 1}
         )
+        if not existing_by_name:
+            # Also check in colleges collection (where schools are stored with institution_type)
+            existing_by_name = await db.colleges.find_one(
+                {"name": {"$regex": f"^{name}$", "$options": "i"}, "institution_type": "School"},
+                {"_id": 0, "id": 1, "name": 1, "slug": 1}
+            )
+        if existing_by_name:
+            raise HTTPException(
+                status_code=409, 
+                detail=f"School with name '{name}' already exists (ID: {existing_by_name.get('id')}, Slug: {existing_by_name.get('slug')})"
+            )
     
-    # Check duplicate by slug
+    # Check duplicate by slug - check BOTH collections
     if slug:
         existing_by_slug = await db.schools.find_one(
             {"slug": slug},
             {"_id": 0, "id": 1, "name": 1}
         )
+        if not existing_by_slug:
+            # Also check in colleges collection
+            existing_by_slug = await db.colleges.find_one(
+                {"slug": slug, "institution_type": "School"},
+                {"_id": 0, "id": 1, "name": 1}
+            )
         if existing_by_slug:
             raise HTTPException(
-                status_code=400, 
+                status_code=409, 
                 detail=f"School with slug '{slug}' already exists (Name: {existing_by_slug.get('name')})"
             )
     
