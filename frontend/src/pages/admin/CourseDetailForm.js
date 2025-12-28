@@ -573,8 +573,36 @@ const CourseDetailForm = () => {
         eligibility: selectedCourse.eligibility || '',
         base_course_id: selectedCourse.id
       });
+      
+      // Fetch college count for this course
+      fetchCollegeCount(selectedCourse.name);
     }
   };
+
+  // Fetch college count when course name changes
+  const fetchCollegeCount = async (courseName) => {
+    if (!courseName) {
+      setCollegeCount(0);
+      return;
+    }
+    setLoadingCollegeCount(true);
+    try {
+      const response = await api.get(`/courses-detail/college-count/${encodeURIComponent(courseName)}`);
+      setCollegeCount(response.data.total_colleges || 0);
+    } catch (error) {
+      console.error('Error fetching college count:', error);
+      setCollegeCount(0);
+    } finally {
+      setLoadingCollegeCount(false);
+    }
+  };
+
+  // Fetch college count when editing existing course
+  useEffect(() => {
+    if (formData.name && id) {
+      fetchCollegeCount(formData.name);
+    }
+  }, [formData.name, id]);
 
   const fetchCourse = async () => {
     setLoading(true);
