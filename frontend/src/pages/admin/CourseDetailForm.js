@@ -3096,14 +3096,12 @@ const CourseDetailForm = () => {
             {/* SEO Full Content */}
             <div>
               <label className="block text-sm font-medium mb-1">SEO Full Content</label>
-              <textarea
-                name="seo_full_content"
+              <SimpleRichTextEditor
                 value={formData.seo_full_content || ''}
-                onChange={handleChange}
-                rows="8"
-                placeholder="Detailed SEO content with HTML formatting..."
-                className="w-full border rounded px-3 py-2 font-mono text-sm"
+                onChange={(html) => setFormData(prev => ({ ...prev, seo_full_content: html }))}
+                placeholder="Detailed SEO content with formatting..."
               />
+              <p className="text-xs text-gray-500 mt-1">You can change text color, add links, and format content</p>
             </div>
 
             {/* Table Builder */}
