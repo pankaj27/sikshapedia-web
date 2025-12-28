@@ -12,4 +12,4 @@ Allow: /study-abroad
 Allow: /scholarships
 Allow: /blog
 
-Sitemap: https://course-stream-fix.preview.emergentagent.com/sitemap.xml
+Sitemap: https://form-sections.preview.emergentagent.com/sitemap.xml

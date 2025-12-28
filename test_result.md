@@ -74,12 +74,12 @@ Verify if the Institute/College form can successfully submit a large entry with 
 ### Detailed Test Results
 
 #### ✅ Admin Authentication
-- **Login URL**: https://course-stream-fix.preview.emergentagent.com/admin/login
+- **Login URL**: https://form-sections.preview.emergentagent.com/admin/login
 - **Credentials**: admin@admissionbuddy.co / admin123
 - **Result**: Successfully authenticated and redirected to admin dashboard
 
 #### ✅ College Form Functionality
-- **Form URL**: https://course-stream-fix.preview.emergentagent.com/admin/colleges/new
+- **Form URL**: https://form-sections.preview.emergentagent.com/admin/colleges/new
 - **College Name**: "Test Engineering College Kolkata" (auto-generated slug: test-engineering-college-kolkata)
 - **Type**: Government
 - **Established Year**: 2025 (dropdown working)
