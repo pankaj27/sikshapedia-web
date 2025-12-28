@@ -1040,6 +1040,161 @@ class APITester:
             self.log_test("PUT /homepage-settings (with admin auth)", False, 
                          "Admin token not available")
 
+    def test_course_details_entry_form(self):
+        """Test Course Details Entry Form functionality as per review request"""
+        print("📚 Testing Course Details Entry Form...")
+        
+        # Store created course IDs for cleanup
+        self.created_course_detail_ids = []
+        
+        # Test 1: Get available courses for dropdown
+        success, response, status = self.make_request("GET", "/courses?limit=10")
+        available_courses = []
+        if success and isinstance(response, list) and len(response) > 0:
+            available_courses = response
+            self.log_test("Get Available Courses for Dropdown", True, 
+                         f"Found {len(available_courses)} courses: {', '.join([c.get('name', 'Unknown') for c in available_courses[:3]])}...")
+        else:
+            self.log_test("Get Available Courses for Dropdown", False, f"Status: {status}", response)
+        
+        # Test 2: Save as Draft Functionality
+        if available_courses:
+            selected_course = available_courses[0]
+            course_name = selected_course.get("name", "B.Tech")
+            
+            draft_course_data = {
+                "name": course_name,
+                "stream": "Engineering",
+                "duration": "4 Years",
+                "degree_type": "UG",
+                "description": "Test course detail entry for draft functionality",
+                "status": "draft",
+                "eligibility": "12th with PCM",
+                "career_prospects": "Software Engineer, Data Scientist",
+                "average_salary": "6-12 LPA",
+                "top_recruiters": ["TCS", "Infosys", "Wipro"],
+                "specializations": ["Computer Science", "Information Technology"],
+                "subjects": ["Mathematics", "Physics", "Programming"],
+                "skills_gained": ["Programming", "Problem Solving", "Analytical Thinking"],
+                "entrance_exams": ["JEE Main", "JEE Advanced"],
+                "fees_range": "2-15 Lakhs",
+                "min_fees": 200000,
+                "max_fees": 1500000
+            }
+            
+            success, response, status = self.make_request("POST", "/courses-detail", draft_course_data, token=self.admin_token)
+            if success and response.get("id"):
+                draft_course_id = response.get("id")
+                self.created_course_detail_ids.append(draft_course_id)
+                course_status = response.get("status", "unknown")
+                self.log_test("Save as Draft Functionality", True, 
+                             f"Course saved as draft with ID: {draft_course_id}, Status: {course_status}")
+                
+                # Test 3: Verify draft appears in course list
+                success, list_response, list_status = self.make_request("GET", "/courses-detail")
+                if success and isinstance(list_response, list):
+                    draft_found = any(course.get("id") == draft_course_id for course in list_response)
+                    if draft_found:
+                        self.log_test("Draft Course in List", True, "Draft course appears in courses-detail list")
+                    else:
+                        self.log_test("Draft Course in List", False, "Draft course not found in courses-detail list")
+                else:
+                    self.log_test("Draft Course in List", False, f"Failed to get courses list, status: {list_status}")
+                
+                # Test 4: Content Team Info Display (Edit the saved course)
+                success, edit_response, edit_status = self.make_request("GET", f"/courses-detail/{draft_course_id}", token=self.admin_token)
+                if success and isinstance(edit_response, dict):
+                    created_at = edit_response.get("created_at")
+                    created_by = edit_response.get("created_by")
+                    updated_at = edit_response.get("updated_at")
+                    updated_by = edit_response.get("updated_by")
+                    
+                    content_team_info_present = bool(created_at)
+                    if content_team_info_present:
+                        self.log_test("Content Team Info Display", True, 
+                                     f"Created at: {created_at}, Created by: {created_by or 'N/A'}")
+                    else:
+                        self.log_test("Content Team Info Display", False, "Content team info (created_at) not found")
+                else:
+                    self.log_test("Content Team Info Display", False, f"Failed to get course detail, status: {edit_status}")
+                
+                # Test 5: Submit for Review
+                success, review_response, review_status = self.make_request("POST", f"/admin/submit-for-review/course/{draft_course_id}", 
+                                                                          {}, token=self.admin_token)
+                if success:
+                    self.log_test("Submit for Review", True, "Course submitted for review successfully")
+                    
+                    # Verify status changed to pending
+                    success, status_response, status_check = self.make_request("GET", f"/courses-detail/{draft_course_id}")
+                    if success and status_response.get("status") == "pending":
+                        self.log_test("Status Change to Pending", True, "Course status changed to 'pending'")
+                        
+                        # Test 6: Approval Workflow
+                        approval_data = {
+                            "action": "approve",
+                            "comment": "Course approved for publication"
+                        }
+                        success, approve_response, approve_status = self.make_request("POST", f"/admin/approve/course/{draft_course_id}", 
+                                                                                    approval_data, token=self.admin_token)
+                        if success:
+                            self.log_test("Approve Course", True, "Course approved successfully")
+                            
+                            # Verify status changed to published
+                            success, final_response, final_status = self.make_request("GET", f"/courses-detail/{draft_course_id}")
+                            if success and final_response.get("status") == "published":
+                                self.log_test("Status Change to Published", True, "Course status changed to 'published'")
+                                
+                                # Test 7: Link Generation (Slug)
+                                course_slug = final_response.get("slug")
+                                if course_slug:
+                                    self.log_test("Course Slug Generation", True, f"Course slug generated: {course_slug}")
+                                    
+                                    # Test accessing course by slug
+                                    success, slug_response, slug_status = self.make_request("GET", f"/courses-detail/{course_slug}")
+                                    if success and slug_response.get("id") == draft_course_id:
+                                        self.log_test("Course Access by Slug", True, f"Course accessible via slug: {course_slug}")
+                                    else:
+                                        self.log_test("Course Access by Slug", False, f"Course not accessible via slug, status: {slug_status}")
+                                else:
+                                    self.log_test("Course Slug Generation", False, "Course slug not generated")
+                            else:
+                                self.log_test("Status Change to Published", False, 
+                                             f"Status not changed to published. Current: {final_response.get('status') if success else 'Error'}")
+                        else:
+                            self.log_test("Approve Course", False, f"Status: {approve_status}", approve_response)
+                    else:
+                        self.log_test("Status Change to Pending", False, 
+                                     f"Status not changed to pending. Current: {status_response.get('status') if success else 'Error'}")
+                else:
+                    self.log_test("Submit for Review", False, f"Status: {review_status}", review_response)
+            else:
+                self.log_test("Save as Draft Functionality", False, f"Status: {status}", response)
+        else:
+            self.log_test("Save as Draft Functionality", False, "No available courses found for testing")
+        
+        # Test 8: Update Course Detail (PUT endpoint)
+        if self.created_course_detail_ids:
+            course_id = self.created_course_detail_ids[0]
+            update_data = {
+                "description": "Updated description for course detail",
+                "average_salary": "8-15 LPA",
+                "skills_gained": ["Programming", "Problem Solving", "Analytical Thinking", "Team Work"],
+                "updated_by": "test_admin",
+                "updated_by_name": "Test Admin"
+            }
+            
+            success, update_response, update_status = self.make_request("PUT", f"/courses-detail/{course_id}", 
+                                                                       update_data, token=self.admin_token)
+            if success and update_response.get("id") == course_id:
+                updated_desc = update_response.get("description", "")
+                updated_salary = update_response.get("average_salary", "")
+                if "Updated description" in updated_desc and "8-15 LPA" in updated_salary:
+                    self.log_test("Update Course Detail", True, "Course detail updated successfully")
+                else:
+                    self.log_test("Update Course Detail", False, "Course detail not updated properly")
+            else:
+                self.log_test("Update Course Detail", False, f"Status: {update_status}", update_response)
+
     def test_city_icon_files_exist(self):
         """Test that all city icon files exist in the public assets folder"""
         print("📁 Testing City Icon Files Existence...")
