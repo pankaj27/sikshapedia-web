@@ -872,9 +872,8 @@ const CollegeForm = () => {
   const [boards, setBoards] = useState([]);
   const [showDraftBanner, setShowDraftBanner] = useState(false);
 
-  // Auto-save draft hook - only enabled for new entries (not editing)
-  const institutionType = formData.institution_type?.toLowerCase() || 'college';
-  const draftKey = `${institutionType}_draft_new`;
+  // Auto-save draft hook - use fixed key for all institution types
+  const draftKey = 'institution_draft_new';  // Fixed key for all types
   const {
     saveDraft,
     clearDraft,
@@ -882,7 +881,7 @@ const CollegeForm = () => {
     getDraftInfo,
     lastSaved: draftLastSaved,
     hasDraft
-  } = useAutoSaveDraft(draftKey, formData, setFormData, 30000, !id); // Disabled when editing
+  } = useAutoSaveDraft(draftKey, formData, setFormData, 10000, !id); // Save every 10 seconds (was 30)
 
   // Check for existing draft on mount
   useEffect(() => {
