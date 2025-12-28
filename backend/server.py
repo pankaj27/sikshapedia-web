@@ -4007,7 +4007,7 @@ class SponsoredCollegeEntry(BaseModel):
 
 @api_router.post("/colleges", response_model=College)
 async def create_college(college_data: CollegeCreate, background_tasks: BackgroundTasks, current_user: User = Depends(get_current_user)):
-    if current_user.role != "admin":
+    if current_user.role not in ["admin", "super_admin", "content_team"]:
         raise HTTPException(status_code=403, detail="Only admins can create colleges")
     
     # Auto-assign serial number (find max and increment)
