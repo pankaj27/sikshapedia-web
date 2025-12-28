@@ -1096,6 +1096,255 @@ class APITester:
         else:
             self.log_test("Cities Assets Folder Exists", False, f"Assets folder not found: {assets_path}")
 
+    def test_duplicate_entry_prevention(self):
+        """Test duplicate entry prevention for courses, exams, and news APIs"""
+        print("🚫 Testing Duplicate Entry Prevention...")
+        
+        # Store created IDs for cleanup
+        self.created_test_ids = {
+            'courses': [],
+            'exams': [],
+            'news': []
+        }
+        
+        # Test 1: Course Duplicate Prevention
+        print("   Testing Course Duplicate Prevention...")
+        
+        # First, get an existing course name
+        success, response, status = self.make_request("GET", "/courses?limit=1")
+        existing_course_name = None
+        if success and isinstance(response, list) and len(response) > 0:
+            existing_course_name = response[0].get("name")
+            self.log_test("Get Existing Course Name", True, f"Found existing course: {existing_course_name}")
+        else:
+            self.log_test("Get Existing Course Name", False, f"Status: {status}", response)
+        
+        # Try to create a course with unique name first (should succeed)
+        unique_course_data = {
+            "name": f"Test Unique Course {int(time.time())}",
+            "degree_type": "UG",
+            "duration": "4 years",
+            "description": "Test course for duplicate prevention testing"
+        }
+        
+        success, response, status = self.make_request("POST", "/courses", unique_course_data, token=self.admin_token)
+        if success and response.get("id"):
+            course_id = response.get("id")
+            self.created_test_ids['courses'].append(course_id)
+            self.log_test("Create Unique Course", True, f"Created course ID: {course_id}")
+            
+            # Now try to create another course with the same name (should fail with 409)
+            duplicate_course_data = {
+                "name": unique_course_data["name"],  # Same name
+                "degree_type": "PG",
+                "duration": "2 years"
+            }
+            
+            success, response, status = self.make_request("POST", "/courses", duplicate_course_data, token=self.admin_token)
+            if not success and status == 409:
+                error_msg = response.get("detail", "") if isinstance(response, dict) else str(response)
+                if "already exists" in error_msg.lower():
+                    self.log_test("Course Duplicate Prevention", True, f"Correctly rejected with 409: {error_msg}")
+                else:
+                    self.log_test("Course Duplicate Prevention", False, f"409 returned but wrong error message: {error_msg}")
+            else:
+                self.log_test("Course Duplicate Prevention", False, f"Expected 409 but got status {status}", response)
+        else:
+            self.log_test("Create Unique Course", False, f"Status: {status}", response)
+        
+        # Test with existing course name if available
+        if existing_course_name:
+            existing_duplicate_data = {
+                "name": existing_course_name,
+                "degree_type": "UG",
+                "duration": "4 years"
+            }
+            
+            success, response, status = self.make_request("POST", "/courses", existing_duplicate_data, token=self.admin_token)
+            if not success and status == 409:
+                error_msg = response.get("detail", "") if isinstance(response, dict) else str(response)
+                self.log_test("Course Duplicate Prevention (Existing)", True, f"Correctly rejected existing course name: {error_msg}")
+            else:
+                self.log_test("Course Duplicate Prevention (Existing)", False, f"Expected 409 but got status {status}", response)
+        
+        # Test 2: Exam Duplicate Prevention
+        print("   Testing Exam Duplicate Prevention...")
+        
+        # First, get an existing exam name
+        success, response, status = self.make_request("GET", "/exams?limit=1")
+        existing_exam_name = None
+        if success and isinstance(response, list) and len(response) > 0:
+            existing_exam_name = response[0].get("name")
+            self.log_test("Get Existing Exam Name", True, f"Found existing exam: {existing_exam_name}")
+        else:
+            self.log_test("Get Existing Exam Name", False, f"Status: {status}", response)
+        
+        # Try to create an exam with unique name first (should succeed)
+        unique_exam_data = {
+            "name": f"Test Unique Exam {int(time.time())}",
+            "full_name": "Test Unique Exam Full Name",
+            "description": "Test exam for duplicate prevention testing",
+            "conducting_body": "Test Board",
+            "exam_level": "National",
+            "exam_type": "Entrance"
+        }
+        
+        success, response, status = self.make_request("POST", "/exams", unique_exam_data, token=self.admin_token)
+        if success and response.get("id"):
+            exam_id = response.get("id")
+            self.created_test_ids['exams'].append(exam_id)
+            self.log_test("Create Unique Exam", True, f"Created exam ID: {exam_id}")
+            
+            # Now try to create another exam with the same name (should fail with 409)
+            duplicate_exam_data = {
+                "name": unique_exam_data["name"],  # Same name
+                "full_name": "Different Full Name",
+                "conducting_body": "Different Board"
+            }
+            
+            success, response, status = self.make_request("POST", "/exams", duplicate_exam_data, token=self.admin_token)
+            if not success and status == 409:
+                error_msg = response.get("detail", "") if isinstance(response, dict) else str(response)
+                if "already exists" in error_msg.lower():
+                    self.log_test("Exam Duplicate Prevention", True, f"Correctly rejected with 409: {error_msg}")
+                else:
+                    self.log_test("Exam Duplicate Prevention", False, f"409 returned but wrong error message: {error_msg}")
+            else:
+                self.log_test("Exam Duplicate Prevention", False, f"Expected 409 but got status {status}", response)
+        else:
+            self.log_test("Create Unique Exam", False, f"Status: {status}", response)
+        
+        # Test with existing exam name if available
+        if existing_exam_name:
+            existing_duplicate_data = {
+                "name": existing_exam_name,
+                "conducting_body": "Test Board"
+            }
+            
+            success, response, status = self.make_request("POST", "/exams", existing_duplicate_data, token=self.admin_token)
+            if not success and status == 409:
+                error_msg = response.get("detail", "") if isinstance(response, dict) else str(response)
+                self.log_test("Exam Duplicate Prevention (Existing)", True, f"Correctly rejected existing exam name: {error_msg}")
+            else:
+                self.log_test("Exam Duplicate Prevention (Existing)", False, f"Expected 409 but got status {status}", response)
+        
+        # Test 3: News Duplicate Prevention
+        print("   Testing News Duplicate Prevention...")
+        
+        # First, get an existing news title
+        success, response, status = self.make_request("GET", "/news?limit=1")
+        existing_news_title = None
+        if success and isinstance(response, list) and len(response) > 0:
+            existing_news_title = response[0].get("title")
+            self.log_test("Get Existing News Title", True, f"Found existing news: {existing_news_title}")
+        else:
+            self.log_test("Get Existing News Title", False, f"Status: {status}", response)
+        
+        # Try to create a news article with unique title first (should succeed)
+        unique_news_data = {
+            "title": f"Test Unique News Article {int(time.time())}",
+            "category": "Admission",
+            "summary": "Test news article for duplicate prevention testing",
+            "content": "This is a test news article content for duplicate prevention testing.",
+            "author": "Test Author",
+            "published": True
+        }
+        
+        success, response, status = self.make_request("POST", "/news", unique_news_data, token=self.admin_token)
+        if success and response.get("id"):
+            news_id = response.get("id")
+            self.created_test_ids['news'].append(news_id)
+            self.log_test("Create Unique News", True, f"Created news ID: {news_id}")
+            
+            # Now try to create another news article with the same title (should fail with 409)
+            duplicate_news_data = {
+                "title": unique_news_data["title"],  # Same title
+                "category": "Exams",
+                "summary": "Different summary",
+                "content": "Different content",
+                "author": "Different Author"
+            }
+            
+            success, response, status = self.make_request("POST", "/news", duplicate_news_data, token=self.admin_token)
+            if not success and status == 409:
+                error_msg = response.get("detail", "") if isinstance(response, dict) else str(response)
+                if "already exists" in error_msg.lower():
+                    self.log_test("News Duplicate Prevention", True, f"Correctly rejected with 409: {error_msg}")
+                else:
+                    self.log_test("News Duplicate Prevention", False, f"409 returned but wrong error message: {error_msg}")
+            else:
+                self.log_test("News Duplicate Prevention", False, f"Expected 409 but got status {status}", response)
+        else:
+            self.log_test("Create Unique News", False, f"Status: {status}", response)
+        
+        # Test with existing news title if available
+        if existing_news_title:
+            existing_duplicate_data = {
+                "title": existing_news_title,
+                "category": "Policy",
+                "summary": "Test summary",
+                "content": "Test content"
+            }
+            
+            success, response, status = self.make_request("POST", "/news", existing_duplicate_data, token=self.admin_token)
+            if not success and status == 409:
+                error_msg = response.get("detail", "") if isinstance(response, dict) else str(response)
+                self.log_test("News Duplicate Prevention (Existing)", True, f"Correctly rejected existing news title: {error_msg}")
+            else:
+                self.log_test("News Duplicate Prevention (Existing)", False, f"Expected 409 but got status {status}", response)
+        
+        # Test 4: Verify created items can be retrieved
+        print("   Verifying Created Items...")
+        
+        for course_id in self.created_test_ids['courses']:
+            success, response, status = self.make_request("GET", f"/courses/{course_id}")
+            if success and response.get("id") == course_id:
+                self.log_test(f"Verify Created Course {course_id}", True, f"Course retrieved: {response.get('name')}")
+            else:
+                self.log_test(f"Verify Created Course {course_id}", False, f"Status: {status}")
+        
+        for exam_id in self.created_test_ids['exams']:
+            success, response, status = self.make_request("GET", f"/exams/{exam_id}")
+            if success and response.get("id") == exam_id:
+                self.log_test(f"Verify Created Exam {exam_id}", True, f"Exam retrieved: {response.get('name')}")
+            else:
+                self.log_test(f"Verify Created Exam {exam_id}", False, f"Status: {status}")
+        
+        for news_id in self.created_test_ids['news']:
+            success, response, status = self.make_request("GET", f"/news/{news_id}")
+            if success and response.get("id") == news_id:
+                self.log_test(f"Verify Created News {news_id}", True, f"News retrieved: {response.get('title')}")
+            else:
+                self.log_test(f"Verify Created News {news_id}", False, f"Status: {status}")
+        
+        # Test 5: Test case sensitivity (if names differ only by case, should they be considered duplicates?)
+        print("   Testing Case Sensitivity...")
+        
+        if self.created_test_ids['courses']:
+            # Get the first created course name and try with different case
+            success, response, status = self.make_request("GET", f"/courses/{self.created_test_ids['courses'][0]}")
+            if success and response.get("name"):
+                original_name = response.get("name")
+                case_variant_name = original_name.upper() if original_name.islower() else original_name.lower()
+                
+                case_test_data = {
+                    "name": case_variant_name,
+                    "degree_type": "UG",
+                    "duration": "3 years"
+                }
+                
+                success, response, status = self.make_request("POST", "/courses", case_test_data, token=self.admin_token)
+                if not success and status == 409:
+                    self.log_test("Course Case Sensitivity", True, "Case-insensitive duplicate detection working")
+                elif success:
+                    # If it succeeds, case-sensitive duplicate detection
+                    created_id = response.get("id")
+                    if created_id:
+                        self.created_test_ids['courses'].append(created_id)
+                    self.log_test("Course Case Sensitivity", True, "Case-sensitive duplicate detection (allows different cases)")
+                else:
+                    self.log_test("Course Case Sensitivity", False, f"Unexpected status: {status}", response)
+
     def test_course_listing_settings(self):
         """Test Course Listing Settings feature"""
         print("📚 Testing Course Listing Settings Feature...")
