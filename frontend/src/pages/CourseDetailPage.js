@@ -567,7 +567,7 @@ const CourseDetailPage = () => {
             )}
 
             {/* Career Section - Only show if data exists */}
-            {(jobOpportunities.length > 0 || careerProspects) && (
+            {(jobOpportunities.length > 0 || careerProspects || careerOptions.length > 0 || jobRoles.length > 0) && (
               <section id="career" className="bg-white rounded-2xl shadow-sm p-6 md:p-8">
                 <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
                   <span className="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center">
@@ -579,7 +579,40 @@ const CourseDetailPage = () => {
                 {/* Career Prospects Text */}
                 {careerProspects && (
                   <div className="mb-6 p-4 bg-amber-50 rounded-xl">
-                    <p className="text-gray-700">{careerProspects}</p>
+                    <div 
+                      className="text-gray-700 prose prose-gray max-w-none"
+                      dangerouslySetInnerHTML={{ __html: careerProspects }}
+                    />
+                  </div>
+                )}
+                
+                {/* Career Options */}
+                {careerOptions.length > 0 && (
+                  <div className="mb-6">
+                    <h3 className="text-lg font-semibold text-gray-800 mb-3">Career Options</h3>
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3">
+                      {careerOptions.map((option, idx) => (
+                        <div key={idx} className="p-3 bg-blue-50 rounded-lg flex items-center gap-2">
+                          <FiTrendingUp className="text-blue-600" />
+                          <span className="text-gray-800">{typeof option === 'string' ? option : option.title}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                
+                {/* Job Roles */}
+                {jobRoles.length > 0 && (
+                  <div className="mb-6">
+                    <h3 className="text-lg font-semibold text-gray-800 mb-3">Job Roles</h3>
+                    <div className="grid md:grid-cols-2 gap-3">
+                      {jobRoles.map((role, idx) => (
+                        <div key={idx} className="p-3 bg-green-50 rounded-lg flex items-center gap-2">
+                          <FiBriefcase className="text-green-600" />
+                          <span className="text-gray-800">{typeof role === 'string' ? role : role.title}</span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 )}
                 
