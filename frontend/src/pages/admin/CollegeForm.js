@@ -2722,12 +2722,26 @@ const CollegeForm = () => {
                   <label className="block text-sm font-medium mb-1">
                     Affiliated To <span className="text-xs text-gray-500">(Select multiple if applicable)</span>
                   </label>
+                  {/* Search Input for Affiliations */}
+                  <input
+                    type="text"
+                    placeholder="🔍 Search affiliations..."
+                    value={affiliationSearch}
+                    onChange={(e) => setAffiliationSearch(e.target.value)}
+                    className="w-full border rounded px-3 py-2 mb-2 text-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                  />
                   <div className="border rounded p-3 max-h-48 overflow-y-auto bg-white">
                     {affiliations.length === 0 ? (
                       <p className="text-sm text-gray-400">Loading affiliations...</p>
                     ) : (
                       <div className="space-y-2">
-                        {affiliations.map((affiliation) => {
+                        {affiliations
+                          .filter(affiliation => 
+                            !affiliationSearch || 
+                            affiliation.name.toLowerCase().includes(affiliationSearch.toLowerCase()) ||
+                            (affiliation.full_name && affiliation.full_name.toLowerCase().includes(affiliationSearch.toLowerCase()))
+                          )
+                          .map((affiliation) => {
                           const isSelected = (formData.affiliated_to_list || []).includes(affiliation.name) ||
                                            formData.affiliated_to === affiliation.name;
                           return (
