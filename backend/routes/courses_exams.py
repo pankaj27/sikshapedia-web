@@ -470,11 +470,19 @@ async def update_course_detail(course_id: str, course_data: dict):
     if not existing:
         raise HTTPException(status_code=404, detail="Course detail not found")
     
+    # Fix meta_keywords if it's a string instead of list
+    if isinstance(course_data.get('meta_keywords'), str):
+        course_data['meta_keywords'] = [kw.strip() for kw in course_data['meta_keywords'].split(',') if kw.strip()] if course_data['meta_keywords'] else []
+    
     course_data.pop('id', None)
     course_data['updated_at'] = datetime.now(timezone.utc).isoformat()
     
     await db.courses_detailed.update_one({"id": course_id}, {"$set": course_data})
     updated = await db.courses_detailed.find_one({"id": course_id}, {"_id": 0})
+    
+    # Fix meta_keywords in response too
+    if isinstance(updated.get('meta_keywords'), str):
+        updated['meta_keywords'] = [kw.strip() for kw in updated['meta_keywords'].split(',') if kw.strip()] if updated['meta_keywords'] else []
     
     return CourseDetail(**updated)
 
