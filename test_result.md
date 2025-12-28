@@ -64,19 +64,29 @@ Verify that the University API properly rejects duplicate entries for:
 ### Key Findings
 
 #### ✅ Working Features
-1. **Duplicate Detection**: All three APIs (courses, exams, news) properly detect duplicates by name/title
+1. **Duplicate Detection**: University API properly detects duplicates by name for new entries
 2. **HTTP 409 Response**: Correct HTTP status code returned for conflicts
 3. **Error Messages**: Clear, descriptive error messages with existing item ID
-4. **Case Sensitivity**: Duplicate detection works correctly (case-insensitive for courses)
+4. **New Entry Validation**: Duplicate prevention works correctly for newly created entries
 5. **Authentication**: Admin authentication required for POST operations
-6. **Data Integrity**: Unique constraints properly enforced at API level
+6. **Data Integrity**: Unique constraints properly enforced at API level for new entries
+
+#### ❌ Critical Issues Found
+1. **Database Collection Mismatch**: 
+   - GET endpoints query `colleges` collection with `institution_type=University`
+   - POST endpoint inserts into `universities` collection
+   - This causes created universities to be unretrievable via GET endpoints
+2. **Existing Data Duplicate Check Failure**: 
+   - Duplicate prevention only works for entries in `universities` collection
+   - Existing universities in `colleges` collection are not checked for duplicates
+   - This allows creation of duplicate universities if original is in `colleges` collection
 
 #### 📋 Test Coverage
 - **Positive Tests**: Creating unique items works correctly
-- **Negative Tests**: Duplicate prevention works as expected
-- **Edge Cases**: Testing with existing data from database
+- **Negative Tests**: Duplicate prevention works for new entries only
+- **Edge Cases**: Testing with existing data reveals critical database inconsistency
 - **Authentication**: Proper admin token validation
-- **Error Handling**: Appropriate error messages and status codes
+- **Error Handling**: Appropriate error messages and status codes for new entries only
 
 #### 🔧 Technical Implementation
 - Backend URL: `https://eduprevent.preview.emergentagent.com/api`
