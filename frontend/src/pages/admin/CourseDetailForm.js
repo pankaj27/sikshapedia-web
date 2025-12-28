@@ -347,6 +347,7 @@ const CourseDetailForm = () => {
   const [uploadingVideo, setUploadingVideo] = useState(null); // Track which TOC index is uploading video
   const [uploadingSeoImage, setUploadingSeoImage] = useState(false);
   const [uploadingSeoVideo, setUploadingSeoVideo] = useState(false);
+  const [uploadingContentImage, setUploadingContentImage] = useState({}); // Track content block image uploads
 
   useEffect(() => {
     fetchDropdownData();
