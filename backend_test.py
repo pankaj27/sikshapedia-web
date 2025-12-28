@@ -134,6 +134,290 @@ class APITester:
             self.log_test("GET /auth/me (no token - should fail)", False, 
                          f"Should have been rejected but got status {status}", response)
 
+    def test_section_wise_college_creation(self):
+        """Test section-wise college creation workflow to prevent Network Error"""
+        print("🏫 Testing Section-wise College Creation Workflow...")
+        
+        # Store created college ID for cleanup
+        self.created_college_id = None
+        
+        # Test 1: Create college draft with minimal data (name, slug, state, city)
+        draft_college_data = {
+            "name": "Test Engineering College Mumbai",
+            "slug": "test-engineering-college-mumbai",
+            "state": "Maharashtra",
+            "city": "Mumbai"
+        }
+        
+        success, response, status = self.make_request("POST", "/colleges", draft_college_data, token=self.admin_token)
+        if success and response.get("id"):
+            self.created_college_id = response.get("id")
+            college_name = response.get("name")
+            saved_state = response.get("state")
+            saved_city = response.get("city")
+            
+            self.log_test("POST /api/colleges - Create Draft", True, 
+                         f"Created college: {college_name} (ID: {self.created_college_id})")
+            
+            # Verify state and city are saved
+            if saved_state == "Maharashtra" and saved_city == "Mumbai":
+                self.log_test("State/City Persistence in Draft", True, 
+                             f"State: {saved_state}, City: {saved_city}")
+            else:
+                self.log_test("State/City Persistence in Draft", False, 
+                             f"Expected Maharashtra/Mumbai, got {saved_state}/{saved_city}")
+        else:
+            self.log_test("POST /api/colleges - Create Draft", False, f"Status: {status}", response)
+            return
+        
+        # Test 2: PATCH /api/colleges/{id}/section/basic
+        if self.created_college_id:
+            basic_section_data = {
+                "established_year": 2010,
+                "type": "Private",
+                "affiliation": "Mumbai University",
+                "recognized_by": ["AICTE", "UGC"],
+                "institution_type": "College"
+            }
+            
+            success, response, status = self.make_request("PATCH", f"/colleges/{self.created_college_id}/section/basic", 
+                                                        basic_section_data, token=self.admin_token)
+            if success:
+                self.log_test("PATCH /api/colleges/{id}/section/basic", True, 
+                             f"Basic section updated: {response.get('message', 'Success')}")
+            else:
+                self.log_test("PATCH /api/colleges/{id}/section/basic", False, f"Status: {status}", response)
+        
+        # Test 3: PATCH /api/colleges/{id}/section/media
+        if self.created_college_id:
+            media_section_data = {
+                "logo_url": "https://example.com/logo.png",
+                "banner_url": "https://example.com/banner.jpg",
+                "campus_images": [
+                    {"url": "https://example.com/campus1.jpg", "alt": "Campus View 1"},
+                    {"url": "https://example.com/campus2.jpg", "alt": "Campus View 2"}
+                ],
+                "brochure_url": "https://example.com/brochure.pdf"
+            }
+            
+            success, response, status = self.make_request("PATCH", f"/colleges/{self.created_college_id}/section/media", 
+                                                        media_section_data, token=self.admin_token)
+            if success:
+                self.log_test("PATCH /api/colleges/{id}/section/media", True, 
+                             f"Media section updated: {response.get('message', 'Success')}")
+            else:
+                self.log_test("PATCH /api/colleges/{id}/section/media", False, f"Status: {status}", response)
+        
+        # Test 4: PATCH /api/colleges/{id}/section/courses
+        if self.created_college_id:
+            courses_section_data = {
+                "courses": [
+                    {"name": "B.Tech Computer Science", "fees": 150000, "duration": "4 Years"},
+                    {"name": "B.Tech Mechanical", "fees": 140000, "duration": "4 Years"},
+                    {"name": "B.Tech Electronics", "fees": 145000, "duration": "4 Years"},
+                    {"name": "B.Tech Civil", "fees": 135000, "duration": "4 Years"},
+                    {"name": "B.Tech Information Technology", "fees": 155000, "duration": "4 Years"},
+                    {"name": "M.Tech Computer Science", "fees": 180000, "duration": "2 Years"},
+                    {"name": "M.Tech Mechanical", "fees": 175000, "duration": "2 Years"},
+                    {"name": "MBA", "fees": 200000, "duration": "2 Years"}
+                ]
+            }
+            
+            success, response, status = self.make_request("PATCH", f"/colleges/{self.created_college_id}/section/courses", 
+                                                        courses_section_data, token=self.admin_token)
+            if success:
+                self.log_test("PATCH /api/colleges/{id}/section/courses", True, 
+                             f"Courses section updated with {len(courses_section_data['courses'])} courses")
+            else:
+                self.log_test("PATCH /api/colleges/{id}/section/courses", False, f"Status: {status}", response)
+        
+        # Test 5: PATCH /api/colleges/{id}/section/details
+        if self.created_college_id:
+            details_section_data = {
+                "description": "Test Engineering College Mumbai is a premier institution offering quality technical education. Established in 2010, the college has been consistently ranked among the top engineering colleges in Maharashtra.",
+                "highlights": [
+                    "NAAC A+ Accredited",
+                    "100% Placement Record",
+                    "State-of-the-art Infrastructure",
+                    "Industry Partnerships",
+                    "Research Excellence"
+                ],
+                "facilities": [
+                    "Modern Laboratories",
+                    "Digital Library",
+                    "Sports Complex",
+                    "Hostel Accommodation",
+                    "Wi-Fi Campus",
+                    "Cafeteria",
+                    "Medical Center"
+                ]
+            }
+            
+            success, response, status = self.make_request("PATCH", f"/colleges/{self.created_college_id}/section/details", 
+                                                        details_section_data, token=self.admin_token)
+            if success:
+                self.log_test("PATCH /api/colleges/{id}/section/details", True, 
+                             f"Details section updated: {response.get('message', 'Success')}")
+            else:
+                self.log_test("PATCH /api/colleges/{id}/section/details", False, f"Status: {status}", response)
+        
+        # Test 6: PATCH /api/colleges/{id}/section/admission
+        if self.created_college_id:
+            admission_section_data = {
+                "admission_process": "Admission is based on JEE Main scores for B.Tech programs and GATE scores for M.Tech programs. MBA admission is through CAT/MAT scores.",
+                "admission_dates": [
+                    {"event": "Application Start", "date": "2025-04-01"},
+                    {"event": "Application End", "date": "2025-06-30"},
+                    {"event": "Counseling Start", "date": "2025-07-15"},
+                    {"event": "Classes Begin", "date": "2025-08-15"}
+                ]
+            }
+            
+            success, response, status = self.make_request("PATCH", f"/colleges/{self.created_college_id}/section/admission", 
+                                                        admission_section_data, token=self.admin_token)
+            if success:
+                self.log_test("PATCH /api/colleges/{id}/section/admission", True, 
+                             f"Admission section updated: {response.get('message', 'Success')}")
+            else:
+                self.log_test("PATCH /api/colleges/{id}/section/admission", False, f"Status: {status}", response)
+        
+        # Test 7: PATCH /api/colleges/{id}/section/seo-content
+        if self.created_college_id:
+            seo_content_data = {
+                "meta_title": "Test Engineering College Mumbai - Top Engineering College in Maharashtra",
+                "meta_description": "Test Engineering College Mumbai offers quality technical education with 100% placement record. Apply now for B.Tech, M.Tech, and MBA programs.",
+                "seo_full_content": "Test Engineering College Mumbai stands as a beacon of excellence in technical education. Located in the heart of Mumbai, our institution has been nurturing engineering talent since 2010. With state-of-the-art facilities, experienced faculty, and strong industry connections, we provide students with the perfect platform to launch their careers in engineering and technology."
+            }
+            
+            success, response, status = self.make_request("PATCH", f"/colleges/{self.created_college_id}/section/seo-content", 
+                                                        seo_content_data, token=self.admin_token)
+            if success:
+                self.log_test("PATCH /api/colleges/{id}/section/seo-content", True, 
+                             f"SEO Content section updated: {response.get('message', 'Success')}")
+            else:
+                self.log_test("PATCH /api/colleges/{id}/section/seo-content", False, f"Status: {status}", response)
+        
+        # Test 8: Verify data persistence - Get the complete college data
+        if self.created_college_id:
+            success, response, status = self.make_request("GET", f"/colleges/{self.created_college_id}")
+            if success and isinstance(response, dict):
+                # Verify all sections are saved correctly
+                verification_results = []
+                
+                # Check basic section
+                if (response.get("established_year") == 2010 and 
+                    response.get("type") == "Private" and 
+                    response.get("affiliation") == "Mumbai University"):
+                    verification_results.append("Basic section ✓")
+                else:
+                    verification_results.append("Basic section ✗")
+                
+                # Check media section
+                if (response.get("logo_url") and 
+                    response.get("banner_url") and 
+                    response.get("campus_images")):
+                    verification_results.append("Media section ✓")
+                else:
+                    verification_results.append("Media section ✗")
+                
+                # Check courses section
+                courses = response.get("courses", [])
+                if isinstance(courses, list) and len(courses) >= 8:
+                    verification_results.append(f"Courses section ✓ ({len(courses)} courses)")
+                else:
+                    verification_results.append(f"Courses section ✗ ({len(courses)} courses)")
+                
+                # Check details section
+                if (response.get("description") and 
+                    response.get("highlights") and 
+                    response.get("facilities")):
+                    verification_results.append("Details section ✓")
+                else:
+                    verification_results.append("Details section ✗")
+                
+                # Check admission section
+                if (response.get("admission_process") and 
+                    response.get("admission_dates")):
+                    verification_results.append("Admission section ✓")
+                else:
+                    verification_results.append("Admission section ✗")
+                
+                # Check SEO content section
+                if (response.get("meta_title") and 
+                    response.get("meta_description") and 
+                    response.get("seo_full_content")):
+                    verification_results.append("SEO Content section ✓")
+                else:
+                    verification_results.append("SEO Content section ✗")
+                
+                # Check state and city persistence
+                if (response.get("state") == "Maharashtra" and 
+                    response.get("city") == "Mumbai"):
+                    verification_results.append("State/City ✓")
+                else:
+                    verification_results.append("State/City ✗")
+                
+                success_count = len([r for r in verification_results if "✓" in r])
+                total_count = len(verification_results)
+                
+                if success_count == total_count:
+                    self.log_test("Data Persistence Verification", True, 
+                                 f"All {success_count} sections saved correctly: {', '.join(verification_results)}")
+                else:
+                    self.log_test("Data Persistence Verification", False, 
+                                 f"Only {success_count}/{total_count} sections saved correctly: {', '.join(verification_results)}")
+            else:
+                self.log_test("Data Persistence Verification", False, f"Status: {status}", response)
+        
+        # Test 9: Verify MongoDB data directly (if possible)
+        if self.created_college_id:
+            # This test verifies that the data is actually persisted in MongoDB
+            # by checking if a fresh GET request returns the same data
+            time.sleep(1)  # Small delay to ensure data is written
+            
+            success, response, status = self.make_request("GET", f"/colleges/{self.created_college_id}")
+            if success and isinstance(response, dict):
+                # Check if all the data we saved is still there
+                mongodb_checks = []
+                
+                # Check if complex data structures are preserved
+                courses = response.get("courses", [])
+                if isinstance(courses, list) and len(courses) >= 8:
+                    # Check if course details are preserved
+                    cs_course = next((c for c in courses if "Computer Science" in c.get("name", "")), None)
+                    if cs_course and cs_course.get("fees") == 150000:
+                        mongodb_checks.append("Course details preserved ✓")
+                    else:
+                        mongodb_checks.append("Course details lost ✗")
+                else:
+                    mongodb_checks.append("Courses lost ✗")
+                
+                # Check if arrays are preserved
+                highlights = response.get("highlights", [])
+                if isinstance(highlights, list) and len(highlights) >= 5:
+                    mongodb_checks.append("Highlights array preserved ✓")
+                else:
+                    mongodb_checks.append("Highlights array lost ✗")
+                
+                # Check if nested objects are preserved
+                admission_dates = response.get("admission_dates", [])
+                if isinstance(admission_dates, list) and len(admission_dates) >= 4:
+                    mongodb_checks.append("Admission dates preserved ✓")
+                else:
+                    mongodb_checks.append("Admission dates lost ✗")
+                
+                success_checks = len([c for c in mongodb_checks if "✓" in c])
+                total_checks = len(mongodb_checks)
+                
+                if success_checks == total_checks:
+                    self.log_test("MongoDB Data Integrity", True, 
+                                 f"All {success_checks} data structures preserved: {', '.join(mongodb_checks)}")
+                else:
+                    self.log_test("MongoDB Data Integrity", False, 
+                                 f"Only {success_checks}/{total_checks} data structures preserved: {', '.join(mongodb_checks)}")
+            else:
+                self.log_test("MongoDB Data Integrity", False, "Could not retrieve college data for verification")
+
     def test_old_college_routes(self):
         """Test old monolithic college routes (critical for frontend)"""
         print("🏫 Testing Old College Routes (Frontend Dependencies)...")
