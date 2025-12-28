@@ -1214,7 +1214,14 @@ const CollegeForm = () => {
         is_admission_open: collegeData.is_admission_open || false,
         display_priority: collegeData.display_priority || 0,
         streams: Array.isArray(collegeData.streams) ? collegeData.streams : [],
-        courses: Array.isArray(collegeData.courses) ? collegeData.courses : [],
+        // Map courses and convert 'fees' field to 'first_year_fee' for form compatibility
+        courses: Array.isArray(collegeData.courses) 
+          ? collegeData.courses.map(c => ({
+              ...c,
+              first_year_fee: c.first_year_fee || c.fees || '',
+              total_fee: c.total_fee || (c.fees && c.duration ? c.fees * parseInt(c.duration) : '') || ''
+            }))
+          : [],
         // School-specific fields
         classes_offered: Array.isArray(collegeData.classes_offered) ? collegeData.classes_offered : [],
         streams_offered: Array.isArray(collegeData.streams_offered) ? collegeData.streams_offered : [],
