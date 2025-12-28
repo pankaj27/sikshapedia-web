@@ -440,10 +440,23 @@ async def get_college_count_for_course(course_name: str):
 @router.get("/courses-detail/{course_id}", response_model=CourseDetail)
 async def get_course_detail(course_id: str):
     """Get a specific detailed course page"""
-    course = await db.courses_detailed.find_one(
-        {"$or": [{"id": course_id}, {"slug": course_id}]}, 
-        {"_id": 0}
-    )
+    # First try to find by ID
+    course = await db.courses_detailed.find_one({"id": course_id}, {"_id": 0})
+    
+    # If not found by ID, try by slug - prioritize published courses
+    if not course:
+        # First try to find published course with this slug
+        course = await db.courses_detailed.find_one(
+            {"slug": course_id, "status": "published"}, 
+            {"_id": 0}
+        )
+        # If no published course, try any course with this slug
+        if not course:
+            course = await db.courses_detailed.find_one(
+                {"slug": course_id}, 
+                {"_id": 0}
+            )
+    
     if not course:
         raise HTTPException(status_code=404, detail="Course detail not found")
     
