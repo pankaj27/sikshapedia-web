@@ -1640,46 +1640,7 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
               </section>
               )}
 
-              {/* COURSES & FEES - Hide when menu disabled OR when no courses */}
-                {isMenuEnabled('courses') && college?.courses && college.courses.length > 0 && (
-                  <section id="courses" className={college?.menu_config?.auto_from_toc ? 'hidden' : ''}>
-                    <h2 className="text-xl sm:text-2xl font-bold mb-3">{college.name} Courses & Fees {year + 1}</h2>
-                    <p className="text-gray-700 text-sm mb-4">
-                      {college.name} offers various programs. The fee structure is mentioned below:
-                    </p>
-
-                    <div className="overflow-x-auto mb-6">
-                      <table className="w-full border-collapse border">
-                        <thead>
-                          <tr className="bg-orange-50">
-                            <th className="border px-4 py-3 text-left text-sm font-bold">Course</th>
-                            <th className="border px-4 py-3 text-left text-sm font-bold">Duration</th>
-                            <th className="border px-4 py-3 text-left text-sm font-bold">1st Year Fee</th>
-                            <th className="border px-4 py-3 text-left text-sm font-bold">Total Fee</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {college.courses.map((course, idx) => {
-                            const courseName = typeof course === 'string' ? course : course.name;
-                            const duration = typeof course === 'object' ? course.duration : '';
-                            const firstYearFee = typeof course === 'object' ? (course.first_year_fee || college.average_fees) : college.average_fees;
-                            const totalFee = typeof course === 'object' ? (course.total_fee || firstYearFee * 4) : college.average_fees * 4;
-                            return (
-                              <tr key={idx} className="hover:bg-gray-50">
-                                <td className="border px-4 py-3">
-                                  <span className="text-blue-600 font-medium">{courseName}</span>
-                                </td>
-                                <td className="border px-4 py-3 text-sm">{duration || '-'}</td>
-                                <td className="border px-4 py-3 text-sm font-semibold">₹{(firstYearFee / 100000).toFixed(2)} Lakhs</td>
-                                <td className="border px-4 py-3 text-sm font-semibold">₹{(totalFee / 100000).toFixed(2)} Lakhs</td>
-                              </tr>
-                            );
-                          })}
-                        </tbody>
-                      </table>
-                    </div>
-                  </section>
-                )}
+              {/* COURSES & FEES - Removed duplicate, using only the GuestGate protected one above */}
 
                 {/* ADMISSIONS - Only show if menu enabled AND there's admission data */}
                 {isMenuEnabled('admission') && (college?.admission_dates?.length > 0 || college?.courses?.filter(c => typeof c === 'object' && c.eligibility && c.selection_criteria).length > 0) && (
