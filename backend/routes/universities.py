@@ -197,6 +197,34 @@ async def get_university(university_id: str):
 @router.post("/universities", response_model=University)
 async def create_university(university: University):
     """Create a new university (admin only)"""
+    # Check for duplicate by name or slug
+    name = university.name.strip() if university.name else ''
+    slug = university.slug.strip() if university.slug else ''
+    
+    # Check duplicate by exact name (case-insensitive)
+    if name:
+        existing_by_name = await db.universities.find_one(
+            {"name": {"$regex": f"^{name}$", "$options": "i"}},
+            {"_id": 0, "id": 1, "name": 1, "slug": 1}
+        )
+        if existing_by_name:
+            raise HTTPException(
+                status_code=409, 
+                detail=f"University with name '{name}' already exists (ID: {existing_by_name.get('id')}, Slug: {existing_by_name.get('slug')})"
+            )
+    
+    # Check duplicate by slug
+    if slug:
+        existing_by_slug = await db.universities.find_one(
+            {"slug": slug},
+            {"_id": 0, "id": 1, "name": 1}
+        )
+        if existing_by_slug:
+            raise HTTPException(
+                status_code=409, 
+                detail=f"University with slug '{slug}' already exists (Name: {existing_by_slug.get('name')})"
+            )
+    
     university_dict = university.model_dump()
     await db.universities.insert_one(university_dict)
     return university
