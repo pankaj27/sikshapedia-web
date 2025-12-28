@@ -210,7 +210,7 @@ const CoursesSection = ({
                       <div className="flex-1">
                         <div className="font-medium text-gray-800">{course.name}</div>
                         <div className="text-xs text-gray-500">
-                          {course.degree_type} • {course.duration} • ₹{(course.average_fees || 0).toLocaleString('en-IN')}/year
+                          {course.degree_type} • {course.duration}
                         </div>
                       </div>
                       <div className={`w-6 h-6 rounded-full flex items-center justify-center ${
