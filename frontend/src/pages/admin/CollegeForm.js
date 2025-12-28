@@ -870,6 +870,38 @@ const CollegeForm = () => {
   const [uploadingCourseBrochure, setUploadingCourseBrochure] = useState({});
   const [uploadingContentImage, setUploadingContentImage] = useState({});
   const [boards, setBoards] = useState([]);
+  const [showDraftBanner, setShowDraftBanner] = useState(false);
+
+  // Auto-save draft hook - only enabled for new entries (not editing)
+  const institutionType = formData.institution_type?.toLowerCase() || 'college';
+  const draftKey = `${institutionType}_draft_new`;
+  const {
+    saveDraft,
+    clearDraft,
+    restoreDraft,
+    getDraftInfo,
+    lastSaved: draftLastSaved,
+    hasDraft
+  } = useAutoSaveDraft(draftKey, formData, setFormData, 30000, !id); // Disabled when editing
+
+  // Check for existing draft on mount
+  useEffect(() => {
+    if (!id && hasDraft) {
+      setShowDraftBanner(true);
+    }
+  }, [id, hasDraft]);
+
+  // Handle draft restore
+  const handleRestoreDraft = () => {
+    restoreDraft();
+    setShowDraftBanner(false);
+  };
+
+  // Handle draft discard
+  const handleDiscardDraft = () => {
+    clearDraft();
+    setShowDraftBanner(false);
+  };
 
   // Update available cities when state changes (must be after formData declaration)
   useEffect(() => {
