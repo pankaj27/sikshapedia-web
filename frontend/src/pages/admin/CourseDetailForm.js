@@ -2820,14 +2820,12 @@ const CourseDetailForm = () => {
             {/* SEO Intro */}
             <div>
               <label className="block text-sm font-medium mb-1">SEO Intro (Short Preview)</label>
-              <textarea
-                name="seo_intro"
+              <SimpleRichTextEditor
                 value={formData.seo_intro || ''}
-                onChange={handleChange}
-                rows="3"
+                onChange={(html) => setFormData(prev => ({ ...prev, seo_intro: html }))}
                 placeholder="Brief introduction about this course (3-4 lines visible before 'Read More')"
-                className="w-full border rounded px-3 py-2"
               />
+              <p className="text-xs text-gray-500 mt-1">You can change text color and add links</p>
             </div>
 
             {/* Table of Contents Builder */}
