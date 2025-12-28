@@ -988,14 +988,27 @@ const CourseDetailForm = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-1">Total Colleges Offering</label>
-              <input
-                type="number"
-                name="total_colleges_offering"
-                value={formData.total_colleges_offering}
-                onChange={handleChange}
-                className="w-full border rounded px-3 py-2"
-              />
+              <label className="block text-sm font-medium mb-1">
+                Total Colleges Offering
+                <span className="text-xs text-blue-600 ml-2">(Auto-calculated)</span>
+              </label>
+              <div className="relative">
+                <input
+                  type="number"
+                  name="total_colleges_offering"
+                  value={collegeCount}
+                  readOnly
+                  className="w-full border rounded px-3 py-2 bg-gray-50 cursor-not-allowed"
+                />
+                {loadingCollegeCount && (
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                    <div className="animate-spin h-4 w-4 border-2 border-orange-500 border-t-transparent rounded-full"></div>
+                  </div>
+                )}
+              </div>
+              <p className="text-xs text-gray-500 mt-1">
+                System থেকে auto-calculate হবে - কতগুলো college এই course offer করে
+              </p>
             </div>
           </div>
         </div>
