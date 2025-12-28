@@ -1873,6 +1873,22 @@ const CollegeForm = () => {
         }
       });
 
+      // Remove very large fields if empty to reduce payload
+      const fieldsToCleanup = ['description', 'short_description', 'admission_info', 'seo'];
+      fieldsToCleanup.forEach(field => {
+        if (transformedFormData[field]) {
+          if (typeof transformedFormData[field] === 'object') {
+            // Remove empty nested objects
+            const hasValue = Object.values(transformedFormData[field]).some(v => v && v !== '');
+            if (!hasValue) {
+              delete transformedFormData[field];
+            }
+          }
+        }
+      });
+
+      console.log('[CollegeForm] Submitting data size:', JSON.stringify(transformedFormData).length, 'bytes');
+
       if (id) {
         await api.put(`/colleges/${id}`, transformedFormData);
         toast({
