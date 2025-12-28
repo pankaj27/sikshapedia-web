@@ -201,24 +201,37 @@ async def create_university(university: University):
     name = university.name.strip() if university.name else ''
     slug = university.slug.strip() if university.slug else ''
     
-    # Check duplicate by exact name (case-insensitive)
+    # Check duplicate by exact name (case-insensitive) - check BOTH collections
     if name:
+        # Check in universities collection
         existing_by_name = await db.universities.find_one(
             {"name": {"$regex": f"^{name}$", "$options": "i"}},
             {"_id": 0, "id": 1, "name": 1, "slug": 1}
         )
+        if not existing_by_name:
+            # Also check in colleges collection (where universities are stored with institution_type)
+            existing_by_name = await db.colleges.find_one(
+                {"name": {"$regex": f"^{name}$", "$options": "i"}, "institution_type": "University"},
+                {"_id": 0, "id": 1, "name": 1, "slug": 1}
+            )
         if existing_by_name:
             raise HTTPException(
                 status_code=409, 
                 detail=f"University with name '{name}' already exists (ID: {existing_by_name.get('id')}, Slug: {existing_by_name.get('slug')})"
             )
     
-    # Check duplicate by slug
+    # Check duplicate by slug - check BOTH collections
     if slug:
         existing_by_slug = await db.universities.find_one(
             {"slug": slug},
             {"_id": 0, "id": 1, "name": 1}
         )
+        if not existing_by_slug:
+            # Also check in colleges collection
+            existing_by_slug = await db.colleges.find_one(
+                {"slug": slug, "institution_type": "University"},
+                {"_id": 0, "id": 1, "name": 1}
+            )
         if existing_by_slug:
             raise HTTPException(
                 status_code=409, 
