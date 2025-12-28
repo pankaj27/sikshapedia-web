@@ -7197,6 +7197,9 @@ class APITester:
         # **NEW: Duplicate Entry Prevention Tests (Review Request):**
         self.test_duplicate_entry_prevention()
         
+        # **NEW: University API Duplicate Prevention Test (Review Request):**
+        self.test_university_duplicate_prevention()
+        
         # Summary
         print("=" * 80)
         print("📊 COMPREHENSIVE TEST SUMMARY")
