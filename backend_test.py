@@ -1105,7 +1105,8 @@ class APITester:
         self.created_test_ids = {
             'courses': [],
             'exams': [],
-            'news': []
+            'news': [],
+            'universities': []
         }
         
         # Test 1: Course Duplicate Prevention
