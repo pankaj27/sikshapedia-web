@@ -1794,14 +1794,14 @@ const CollegeForm = () => {
       if (id) {
         await api.put(`/colleges/${id}`, transformedFormData);
         toast({
-          title: "✅ সফল!",
-          description: "College সফলভাবে আপডেট হয়েছে!",
+          title: "✅ Success!",
+          description: "College updated successfully!",
         });
       } else {
         await api.post('/colleges', transformedFormData);
         toast({
-          title: "✅ সফল!",
-          description: "নতুন College সফলভাবে তৈরি হয়েছে!",
+          title: "✅ Success!",
+          description: "New College created successfully!",
         });
       }
       navigate('/admin/colleges');
@@ -1816,8 +1816,8 @@ const CollegeForm = () => {
       if (isDuplicateError) {
         toast({
           variant: "destructive",
-          title: "⚠️ ডুপ্লিকেট এন্ট্রি!",
-          description: detail || "এই নামের বা slug এর institution ইতিমধ্যে আছে। অনুগ্রহ করে ভিন্ন নাম ব্যবহার করুন।",
+          title: "⚠️ Duplicate Entry!",
+          description: detail || "An institution with this name or slug already exists. Please use a different name.",
         });
         return;
       }
