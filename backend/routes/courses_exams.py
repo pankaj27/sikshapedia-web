@@ -373,10 +373,20 @@ async def get_courses_detail(
     limit: int = Query(100, ge=1, le=1000),
     search: Optional[str] = None,
     stream: Optional[str] = None,
-    degree_type: Optional[str] = None
+    degree_type: Optional[str] = None,
+    status: Optional[str] = None,
+    eligibility_level: Optional[str] = None
 ):
     """Get all detailed course pages"""
     query = {}
+    
+    # Filter by status (important for public pages to only show published)
+    if status:
+        query["status"] = status
+    
+    # Filter by eligibility level
+    if eligibility_level:
+        query["eligibility_level"] = eligibility_level
     
     if search:
         query["$or"] = [
