@@ -444,6 +444,33 @@ const CourseDetailForm = () => {
     }
   };
 
+  // Handle content block image upload
+  const handleContentImageUpload = async (file, tocIndex, blockIndex) => {
+    if (!file) return;
+    const uploadKey = `${tocIndex}-${blockIndex}`;
+    setUploadingContentImage(prev => ({ ...prev, [uploadKey]: true }));
+    try {
+      const formDataUpload = new FormData();
+      formDataUpload.append('file', file);
+      const response = await api.post('/upload/image?type=content', formDataUpload, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      const newToc = [...(formData.description_toc || [])];
+      newToc[tocIndex].blocks[blockIndex].url = response.data.url;
+      // Auto-generate SEO fields
+      const courseName = formData.name || 'Course';
+      const imageTitle = newToc[tocIndex].blocks[blockIndex].imageTitle || 'Image';
+      newToc[tocIndex].blocks[blockIndex].alt = `${imageTitle} - ${courseName} | AdmissionBuddy`;
+      newToc[tocIndex].blocks[blockIndex].title = `${imageTitle} - ${courseName} | AdmissionBuddy.co`;
+      setFormData({ ...formData, description_toc: newToc });
+    } catch (error) {
+      console.error('Error uploading content image:', error);
+      alert('Failed to upload image');
+    } finally {
+      setUploadingContentImage(prev => ({ ...prev, [uploadKey]: false }));
+    }
+  };
+
   // Handle SEO content image upload
   const handleSeoImageUpload = async (file) => {
     if (!file) return;
