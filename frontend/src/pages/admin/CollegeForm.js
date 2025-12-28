@@ -5136,6 +5136,18 @@ const CollegeForm = () => {
           removeFacility={removeFacility}
           renderIcon={renderIcon}
         />
+        
+        {/* Details Section Save Button (Facilities, Rankings, Placements) */}
+        {id && (
+          <div className="bg-white rounded-lg shadow p-4 flex justify-end">
+            <SectionSaveButton 
+              section="details"
+              onSave={handleSectionSave}
+              isSaving={sectionSaving.details}
+              isSaved={sectionSaved.details}
+            />
+          </div>
+        )}
 
         {/* Updates & News - Extracted Component */}
         <UpdatesSection 
