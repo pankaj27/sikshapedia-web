@@ -4053,6 +4053,10 @@ async def create_college(college_data: CollegeCreate, background_tasks: Backgrou
     # Super admin/content_manager can publish directly, data_entry creates as draft/pending
     college_dict_input = college_data.model_dump()
     requested_status = college_dict_input.pop('status', 'draft')  # Remove status from dict to avoid duplicate
+    
+    # Set default institution_type to "College" if not provided
+    if not college_dict_input.get('institution_type'):
+        college_dict_input['institution_type'] = 'College'
     if requested_status == 'published' and admin_role == 'data_entry':
         initial_status = 'pending'  # Data entry cannot publish directly
     else:
