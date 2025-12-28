@@ -4148,11 +4148,25 @@ const CollegeForm = () => {
                                             <tr>
                                               {(block.headers || []).map((h, hi) => (
                                                 <th key={hi} className="border p-2">
-                                                  <input type="text" value={h} onChange={(e) => {
-                                                    const newToc = [...(formData.seo_toc || [])];
-                                                    newToc[index].blocks[blockIndex].headers[hi] = e.target.value;
-                                                    setFormData({...formData, seo_toc: newToc});
-                                                  }} className="w-full px-2 py-1 border rounded text-center font-semibold text-sm" />
+                                                  <div className="flex items-center gap-1">
+                                                    <input type="text" value={h} onChange={(e) => {
+                                                      const newToc = [...(formData.seo_toc || [])];
+                                                      newToc[index].blocks[blockIndex].headers[hi] = e.target.value;
+                                                      setFormData({...formData, seo_toc: newToc});
+                                                    }} className="w-full px-2 py-1 border rounded text-center font-semibold text-sm" />
+                                                    {(block.headers?.length || 0) > 1 && (
+                                                      <button type="button" onClick={() => {
+                                                        const newToc = [...(formData.seo_toc || [])];
+                                                        // Remove header at index hi
+                                                        newToc[index].blocks[blockIndex].headers = block.headers.filter((_, i) => i !== hi);
+                                                        // Remove cell at index hi from each row
+                                                        newToc[index].blocks[blockIndex].rows = (block.rows || []).map(row => row.filter((_, i) => i !== hi));
+                                                        setFormData({...formData, seo_toc: newToc});
+                                                      }} className="text-red-500 hover:bg-red-50 p-1 rounded flex-shrink-0" title="Delete Column">
+                                                        <FiX size={14} />
+                                                      </button>
+                                                    )}
+                                                  </div>
                                                 </th>
                                               ))}
                                               <th className="w-10 bg-teal-100"></th>
