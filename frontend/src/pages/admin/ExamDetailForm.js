@@ -576,6 +576,8 @@ const ExamDetailForm = () => {
                 {id ? 'Edit Exam' : 'Add New Exam'}
               </h1>
               {id && formData.status && <StatusBadge status={formData.status} />}
+              {/* Auto-save indicator */}
+              {!id && <AutoSaveIndicator lastSaved={examDraftLastSaved} />}
             </div>
             <div className="flex items-center gap-3">
               {id && formData.status === 'draft' && (
@@ -606,6 +608,16 @@ const ExamDetailForm = () => {
 
       {/* Form */}
       <form onSubmit={handleSubmit} className="max-w-7xl mx-auto px-6 py-6 space-y-5">
+        
+        {/* Draft Restore Banner - Only show for new entries */}
+        {!id && showDraftBanner && (
+          <DraftRestoreBanner
+            onRestore={handleRestoreExamDraft}
+            onDiscard={handleDiscardExamDraft}
+            savedAt={getExamDraftInfo()?.savedAt}
+            isVisible={showDraftBanner}
+          />
+        )}
         
         {/* Popular & Featured Toggle - Prominent at top */}
         <div className="bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-200 rounded-xl p-4">
