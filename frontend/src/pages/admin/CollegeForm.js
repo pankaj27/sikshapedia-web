@@ -2479,27 +2479,43 @@ const CollegeForm = () => {
                 <Button 
                   type="button"
                   disabled={saving}
-                  onClick={() => {
-                    setFormData(prev => ({...prev, status: 'published'}));
-                    setTimeout(() => document.getElementById('institution-form').requestSubmit(), 100);
+                  onClick={async () => {
+                    if (!id) {
+                      // For new form, just save as draft first
+                      setFormData(prev => ({...prev, status: 'draft'}));
+                      setTimeout(() => document.getElementById('institution-form').requestSubmit(), 100);
+                      return;
+                    }
+                    // For existing form, save all sections then publish
+                    setSaving(true);
+                    await handleSequentialSaveAll('published');
+                    setSaving(false);
                   }}
                   className="bg-green-600 hover:bg-green-700 text-white"
                 >
                   {saving && formData.status === 'published' ? <FiLoader className="w-4 h-4 animate-spin mr-2" /> : <FiSave className="w-4 h-4 mr-2" />}
-                  Save & Publish
+                  {id ? 'Save All & Publish' : 'Save & Publish'}
                 </Button>
               ) : (
                 <Button 
                   type="button"
                   disabled={saving}
-                  onClick={() => {
-                    setFormData(prev => ({...prev, status: 'pending'}));
-                    setTimeout(() => document.getElementById('institution-form').requestSubmit(), 100);
+                  onClick={async () => {
+                    if (!id) {
+                      // For new form, just save as draft first
+                      setFormData(prev => ({...prev, status: 'draft'}));
+                      setTimeout(() => document.getElementById('institution-form').requestSubmit(), 100);
+                      return;
+                    }
+                    // For existing form, save all sections then submit for review
+                    setSaving(true);
+                    await handleSequentialSaveAll('pending');
+                    setSaving(false);
                   }}
                   className="bg-blue-600 hover:bg-blue-700 text-white"
                 >
                   {saving && formData.status === 'pending' ? <FiLoader className="w-4 h-4 animate-spin mr-2" /> : <FiSend className="w-4 h-4 mr-2" />}
-                  Submit for Review
+                  {id ? 'Save All & Submit' : 'Submit for Review'}
                 </Button>
               )}
             </div>
