@@ -657,13 +657,13 @@ const CourseDetailForm = () => {
       };
       
       if (id) {
-        await api.put(`/courses/${id}`, dataToSave);
+        await api.put(`/courses-detail/${id}`, dataToSave);
         alert('Draft saved successfully!');
       } else {
-        const response = await api.post('/courses', dataToSave);
+        const response = await api.post('/courses-detail', dataToSave);
         alert('Draft saved successfully!');
         // Navigate to edit the newly created draft
-        navigate(`/admin/courses-detail/${response.data.id}`);
+        navigate(`/admin/courses-detail/edit/${response.data.id}`);
         return;
       }
       setLastAutoSave(new Date());
