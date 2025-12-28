@@ -254,7 +254,7 @@ const CourseDetailForm = () => {
 
   // Role checks
   const isDataEntry = user?.role === 'data_entry';
-  const canApprove = user?.role === 'super_admin' || user?.role === 'content_manager';
+  const canApprove = user?.role === 'super_admin' || user?.role === 'content_manager' || user?.role === 'admin';
 
   const [formData, setFormData] = useState({
     name: '',
