@@ -632,10 +632,10 @@ const CourseDetailForm = () => {
       };
       
       if (id) {
-        await api.put(`/courses/${id}`, dataToSave);
+        await api.put(`/courses-detail/${id}`, dataToSave);
         alert('Course updated successfully!');
       } else {
-        await api.post('/courses', dataToSave);
+        await api.post('/courses-detail', dataToSave);
         alert('Course created successfully!');
       }
       navigate('/admin/courses-detail');
