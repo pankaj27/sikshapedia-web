@@ -1005,12 +1005,20 @@ class CollegeCreate(BaseModel):
     city: Optional[str] = None
     address: Optional[str] = None
     pincode: Optional[str] = None
+    latitude: Optional[str] = None
+    longitude: Optional[str] = None
     affiliation: Optional[str] = None
+    affiliated_to: List = []
+    recognized_by: List = []
+    memberships: List = []
     nirf_ranking: Optional[int] = None
+    india_today_ranking: Optional[int] = None
+    outlook_ranking: Optional[int] = None
     average_fees: Optional[float] = 0
     courses: List = []
     facilities: List = []
     contact_info: Dict = {}
+    how_to_reach: Optional[Dict] = None
     logo_url: Optional[str] = None
     logo_title: Optional[str] = None
     logo_alt: Optional[str] = None
@@ -1018,10 +1026,19 @@ class CollegeCreate(BaseModel):
     banner_title: Optional[str] = None
     banner_alt: Optional[str] = None
     images: List = []
+    campus_images: List = []
+    brochure_url: Optional[str] = None
+    campus_video_url: Optional[str] = None
+    virtual_tour_url: Optional[str] = None
     description: str = ""
     highlights: List = []
     accreditations: List = []
     placement_stats: List = []
+    # School-specific fields
+    board: Optional[str] = None
+    medium: Optional[str] = None
+    classes_offered: List = []
+    streams_offered: List = []
     # Admission fields
     admission_process: Optional[str] = None
     admission_dates: Optional[Any] = None
@@ -1029,16 +1046,32 @@ class CollegeCreate(BaseModel):
     admission_fees: Optional[Dict] = None
     is_admission_partner: bool = False
     is_admission_open: bool = False
+    # Contact fields (top-level)
+    website: Optional[str] = None
+    email: Optional[str] = None
+    phone: Optional[str] = None
+    # Flags
+    is_verified: bool = False
+    is_featured: bool = False
+    is_preferred: bool = False
+    is_trending: bool = False
+    is_top_rated: bool = False
+    is_sponsored: bool = False
+    is_no_cost_emi: bool = False
+    display_priority: int = 0
     # Cutoff & Placement
     cutoff_data: List = []
     placement: Optional[Dict] = None
     placements: Optional[Dict] = None
+    # SEO fields
+    meta_title: Optional[str] = None
+    meta_description: Optional[str] = None
+    seo_full_content: Optional[str] = None
     # Menu & Content
     menu_config: Optional[Dict] = None
     sidebar_widgets: Optional[Dict] = None
     # Status
     status: str = "draft"
-    institution_type: Optional[str] = None
 
 # Review Models
 class Review(BaseModel):
