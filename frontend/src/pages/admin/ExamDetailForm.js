@@ -486,6 +486,8 @@ const ExamDetailForm = () => {
         alert('Exam updated successfully!');
       } else {
         await api.post('/exams-detail', dataToSave);
+        // Clear draft after successful creation
+        clearExamDraft();
         alert('Exam created successfully!');
       }
       navigate('/admin/exams-detail');
