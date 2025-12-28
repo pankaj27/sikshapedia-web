@@ -271,11 +271,15 @@ const CoursesSection = ({
                   <div className="flex items-center gap-4">
                     <div className="text-right">
                       <div className="text-xs text-gray-500">First Year Fee</div>
-                      <div className="font-medium">₹{(course.first_year_fee || 0).toLocaleString('en-IN')}</div>
+                      <div className={`font-medium ${course.first_year_fee ? 'text-gray-800' : 'text-orange-500'}`}>
+                        {course.first_year_fee ? `₹${parseFloat(course.first_year_fee).toLocaleString('en-IN')}` : 'Enter fee →'}
+                      </div>
                     </div>
                     <div className="text-right">
                       <div className="text-xs text-gray-500">Total Fee</div>
-                      <div className="font-medium">₹{(course.total_fee || 0).toLocaleString('en-IN')}</div>
+                      <div className={`font-medium ${course.total_fee ? 'text-gray-800' : 'text-gray-400'}`}>
+                        {course.total_fee ? `₹${parseFloat(course.total_fee).toLocaleString('en-IN')}` : '-'}
+                      </div>
                     </div>
                     <Button
                       type="button"
