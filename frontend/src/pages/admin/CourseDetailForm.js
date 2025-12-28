@@ -810,6 +810,8 @@ const CourseDetailForm = () => {
         <div className="flex items-center gap-3">
           <h1 className="text-3xl font-bold">{id ? 'Edit Course Details' : 'Add New Course (Detailed)'}</h1>
           {id && formData.status && <StatusBadge status={formData.status} />}
+          {/* Auto-save indicator */}
+          {!id && <AutoSaveIndicator lastSaved={courseDraftLastSaved} />}
         </div>
         <div className="flex items-center gap-2">
           {/* Approval Actions */}
