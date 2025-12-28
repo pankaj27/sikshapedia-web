@@ -291,9 +291,13 @@ class APITester:
         # Test 7: PATCH /api/colleges/{id}/section/seo-content
         if self.created_college_id:
             seo_content_data = {
-                "meta_title": "Test Engineering College Mumbai - Top Engineering College in Maharashtra",
-                "meta_description": "Test Engineering College Mumbai offers quality technical education with 100% placement record. Apply now for B.Tech, M.Tech, and MBA programs.",
-                "seo_full_content": "Test Engineering College Mumbai stands as a beacon of excellence in technical education. Located in the heart of Mumbai, our institution has been nurturing engineering talent since 2010. With state-of-the-art facilities, experienced faculty, and strong industry connections, we provide students with the perfect platform to launch their careers in engineering and technology."
+                "seo_full_content": "Test Engineering College Mumbai stands as a beacon of excellence in technical education. Located in the heart of Mumbai, our institution has been nurturing engineering talent since 2010. With state-of-the-art facilities, experienced faculty, and strong industry connections, we provide students with the perfect platform to launch their careers in engineering and technology.",
+                "seo_intro": "Premier engineering college in Mumbai offering quality technical education since 2010.",
+                "seo_toc": [
+                    {"title": "About the College", "anchor": "about"},
+                    {"title": "Courses Offered", "anchor": "courses"},
+                    {"title": "Admission Process", "anchor": "admission"}
+                ]
             }
             
             success, response, status = self.make_request("PATCH", f"/colleges/{self.created_college_id}/section/seo-content", 
