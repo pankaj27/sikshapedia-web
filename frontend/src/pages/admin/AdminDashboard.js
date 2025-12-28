@@ -13,11 +13,8 @@ const AdminDashboard = () => {
     total_users: 0,
     total_reviews: 0,
     total_exams: 0,
-    detailed_exams: 0,
     total_courses: 0,
-    detailed_courses: 0,
     total_news: 0,
-    // Widget stats
     total_leads: 0,
     total_questions: 0,
     total_counselling: 0,
