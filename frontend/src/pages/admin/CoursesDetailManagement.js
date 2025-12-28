@@ -106,8 +106,15 @@ const CoursesDetailManagement = () => {
               filteredCourses.map((course) => (
                 <tr key={course.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4">
-                    <div className="text-sm font-medium text-gray-900">{course.name}</div>
-                    <div className="text-xs text-gray-500">{course.slug}</div>
+                    <div className="text-sm font-medium text-gray-900">
+                      {course.full_name || course.name}
+                    </div>
+                    <div className="text-xs text-gray-500">
+                      {course.name !== course.full_name && course.full_name && (
+                        <span className="text-blue-600 mr-2">[{course.name}]</span>
+                      )}
+                      {course.slug}
+                    </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     {course.status === 'published' ? (
