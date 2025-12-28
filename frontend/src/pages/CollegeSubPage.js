@@ -252,8 +252,21 @@ const CollegeSubPage = () => {
     );
   }
 
-  // Get menu items - use new simplified menu_config
-  const menuItems = (college.menu_config?.items || [])
+  // Get menu items - use new simplified menu_config or fallback to defaults
+  const defaultMenuItems = [
+    { id: 'info', label: 'Info', enabled: true, order: 0 },
+    { id: 'courses', label: 'Courses & Fees', enabled: true, order: 1 },
+    { id: 'gallery', label: 'Gallery', enabled: true, order: 2 },
+    { id: 'reviews', label: 'Reviews', enabled: true, order: 3 },
+    { id: 'admission', label: 'Admissions', enabled: true, order: 4 },
+    { id: 'cutoff', label: 'Cutoff', enabled: true, order: 5 },
+    { id: 'placement', label: 'Placement', enabled: true, order: 6 },
+    { id: 'ranking', label: 'Ranking', enabled: true, order: 7 },
+    { id: 'scholarship', label: 'Scholarship', enabled: true, order: 8 },
+    { id: 'facilities', label: 'Facilities', enabled: true, order: 9 }
+  ];
+  
+  const menuItems = (college.menu_config?.items?.length > 0 ? college.menu_config.items : defaultMenuItems)
     .filter(item => item.enabled)
     .sort((a, b) => (a.order || 0) - (b.order || 0));
 
