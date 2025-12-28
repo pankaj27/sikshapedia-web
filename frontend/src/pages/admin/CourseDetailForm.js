@@ -852,6 +852,16 @@ const CourseDetailForm = () => {
         </div>
       </div>
 
+      {/* Draft Restore Banner - Only show for new entries */}
+      {!id && showDraftBanner && (
+        <DraftRestoreBanner
+          onRestore={handleRestoreCourseDraft}
+          onDiscard={handleDiscardCourseDraft}
+          savedAt={getCourseDraftInfo()?.savedAt}
+          isVisible={showDraftBanner}
+        />
+      )}
+
       {/* Content Team Info - Show only when editing */}
       {id && (formData.created_at || formData.updated_at) && (
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
