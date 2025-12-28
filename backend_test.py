@@ -7477,6 +7477,13 @@ class APITester:
         self.test_course_details_entry_form()  # Test the specific functionality requested
         
         print("\n" + "=" * 80)
+        print("🔗 STREAM → SUB-STREAM → COURSE CONNECTION TESTING")
+        print("=" * 80)
+        
+        # **NEW: Stream → Sub-Stream → Course Connection Testing**
+        self.test_stream_substream_course_connection()  # Test hierarchical relationship APIs
+        
+        print("\n" + "=" * 80)
         print("🔄 DEPLOYMENT HEALTH CHECK - BACKEND API TESTING")
         print("=" * 80)
         
