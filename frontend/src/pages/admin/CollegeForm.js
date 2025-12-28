@@ -1996,6 +1996,15 @@ const CollegeForm = () => {
             meta_keywords: formData.meta_keywords
           };
           break;
+        case 'seo-content':
+          sectionData = {
+            seo_intro: formData.seo_intro,
+            seo_full_content: formData.seo_full_content,
+            seo_toc: formData.seo_toc,
+            seo_faqs: formData.seo_faqs,
+            custom_tables: formData.custom_tables
+          };
+          break;
         default:
           return;
       }
