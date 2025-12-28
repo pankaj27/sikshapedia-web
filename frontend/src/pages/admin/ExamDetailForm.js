@@ -277,6 +277,36 @@ const ExamDetailForm = () => {
   });
 
   const [formData, setFormData] = useState(getDefaultFormData());
+  const [showDraftBanner, setShowDraftBanner] = useState(false);
+
+  // Auto-save draft hook - only enabled for new entries (not editing)
+  const {
+    saveDraft: saveExamDraft,
+    clearDraft: clearExamDraft,
+    restoreDraft: restoreExamDraft,
+    getDraftInfo: getExamDraftInfo,
+    lastSaved: examDraftLastSaved,
+    hasDraft: hasExamDraft
+  } = useAutoSaveDraft('exam_detail_draft_new', formData, setFormData, 30000, !id);
+
+  // Check for existing draft on mount
+  useEffect(() => {
+    if (!id && hasExamDraft) {
+      setShowDraftBanner(true);
+    }
+  }, [id, hasExamDraft]);
+
+  // Handle draft restore
+  const handleRestoreExamDraft = () => {
+    restoreExamDraft();
+    setShowDraftBanner(false);
+  };
+
+  // Handle draft discard
+  const handleDiscardExamDraft = () => {
+    clearExamDraft();
+    setShowDraftBanner(false);
+  };
 
   useEffect(() => {
     if (id) {
