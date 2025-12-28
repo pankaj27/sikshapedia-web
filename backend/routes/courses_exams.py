@@ -450,6 +450,10 @@ async def get_course_detail(course_id: str):
     if isinstance(course.get('created_at'), str):
         course['created_at'] = datetime.fromisoformat(course['created_at'])
     
+    # Fix meta_keywords if it's a string instead of list
+    if isinstance(course.get('meta_keywords'), str):
+        course['meta_keywords'] = [kw.strip() for kw in course['meta_keywords'].split(',') if kw.strip()] if course['meta_keywords'] else []
+    
     return CourseDetail(**course)
 
 
