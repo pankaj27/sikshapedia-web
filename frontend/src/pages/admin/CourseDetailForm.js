@@ -525,6 +525,38 @@ const CourseDetailForm = () => {
     }
   };
 
+  // Auto-save draft state
+  const [showDraftBanner, setShowDraftBanner] = useState(false);
+  
+  // Auto-save draft hook - only enabled for new entries (not editing)
+  const {
+    saveDraft: saveCourseDraft,
+    clearDraft: clearCourseDraft,
+    restoreDraft: restoreCourseDraft,
+    getDraftInfo: getCourseDraftInfo,
+    lastSaved: courseDraftLastSaved,
+    hasDraft: hasCourseDraft
+  } = useAutoSaveDraft('course_detail_draft_new', formData, setFormData, 30000, !id);
+
+  // Check for existing draft on mount
+  useEffect(() => {
+    if (!id && hasCourseDraft) {
+      setShowDraftBanner(true);
+    }
+  }, [id, hasCourseDraft]);
+
+  // Handle draft restore
+  const handleRestoreCourseDraft = () => {
+    restoreCourseDraft();
+    setShowDraftBanner(false);
+  };
+
+  // Handle draft discard
+  const handleDiscardCourseDraft = () => {
+    clearCourseDraft();
+    setShowDraftBanner(false);
+  };
+
   const fetchDropdownData = async () => {
     try {
       const [streamsRes, subStreamsRes, examsRes, coursesRes] = await Promise.all([
