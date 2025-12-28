@@ -4892,6 +4892,18 @@ const CollegeForm = () => {
               </Button>
             </div>
           </div>
+          
+          {/* SEO Content Section Save Button */}
+          {id && (
+            <div className="mt-6 pt-4 border-t flex justify-end">
+              <SectionSaveButton 
+                section="seo-content"
+                onSave={handleSectionSave}
+                isSaving={sectionSaving['seo-content']}
+                isSaved={sectionSaved['seo-content']}
+              />
+            </div>
+          )}
         </CollapsibleSection>
 
         {/* Accreditation */}
