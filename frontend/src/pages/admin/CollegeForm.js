@@ -22,6 +22,8 @@ import { HiOutlineAcademicCap, HiOutlineOfficeBuilding, HiOutlineCurrencyRupee, 
 import api from '../../api/axios';
 import { useAuth } from '../../contexts/AuthContext';
 import { useToast } from '../../hooks/use-toast';
+import useAutoSaveDraft from '../../hooks/useAutoSaveDraft';
+import DraftRestoreBanner, { AutoSaveIndicator } from '../../components/admin/DraftRestoreBanner';
 
 // Image/Video Insert Modal Component
 const MediaInsertModal = ({ type, isOpen, onClose, onInsert, collegeName }) => {
