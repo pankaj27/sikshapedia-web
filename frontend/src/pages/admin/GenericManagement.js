@@ -19,10 +19,33 @@ const GenericManagement = ({
   const [editingItem, setEditingItem] = useState(null);
   const [formData, setFormData] = useState({});
   const [deleteConfirm, setDeleteConfirm] = useState(null);
+  const [dynamicOptions, setDynamicOptions] = useState({}); // For fields with fetchOptions
 
   useEffect(() => {
     fetchItems();
+    fetchDynamicOptions();
   }, []);
+
+  const fetchDynamicOptions = async () => {
+    // Fetch dynamic options for fields that have fetchOptions config
+    const optionsToFetch = fields.filter(f => f.fetchOptions);
+    const newOptions = {};
+    
+    for (const field of optionsToFetch) {
+      try {
+        const response = await api.get(field.fetchOptions.endpoint);
+        newOptions[field.key] = response.data.map(item => ({
+          value: item[field.fetchOptions.valueKey || 'id'],
+          label: item[field.fetchOptions.labelKey || 'name']
+        }));
+      } catch (error) {
+        console.error(`Error fetching options for ${field.key}:`, error);
+        newOptions[field.key] = [];
+      }
+    }
+    
+    setDynamicOptions(newOptions);
+  };
 
   const fetchItems = async () => {
     try {
