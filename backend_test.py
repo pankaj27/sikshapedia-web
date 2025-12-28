@@ -16,7 +16,7 @@ BASE_URL = "https://institute-editor.preview.emergentagent.com/api"
 # Test credentials
 ADMIN_CREDENTIALS = {
     "email": "admin@admissionbuddy.co",
-    "password": "Admin@123"  # Updated to match working credentials
+    "password": "admin123"  # Updated to match review request credentials
 }
 
 USER_CREDENTIALS = {
