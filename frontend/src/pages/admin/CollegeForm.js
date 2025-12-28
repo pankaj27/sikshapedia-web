@@ -2153,19 +2153,84 @@ const CollegeForm = () => {
         });
         navigate('/admin/colleges');
       } else {
-        // NEW COLLEGE: Create minimal draft first, then redirect to edit for section-wise saves
-        // This prevents timeout by only sending basic info initially
+        // NEW COLLEGE: Create with all filled data, not just minimal
+        // Include all fields that user has filled
         const basicData = {
           name: formData.name,
           slug: formData.slug,
           institution_type: formData.institution_type || 'College',
           type: formData.type || 'Private',
-          state: formData.location?.state || formData.state,
-          city: formData.location?.city || formData.city,
+          // Location fields
+          state: formData.location?.state || formData.state || '',
+          city: formData.location?.city || formData.city || '',
+          address: formData.location?.address || formData.address || '',
+          pincode: formData.location?.pincode || formData.pincode || '',
+          latitude: formData.location?.latitude || formData.latitude || '',
+          longitude: formData.location?.longitude || formData.longitude || '',
+          location: formData.location || {},
+          // Basic info
+          established_year: formData.established_year || null,
+          campus_size: formData.campus_size || '',
+          total_students: formData.total_students || 0,
+          // Affiliations & Recognitions
+          affiliated_to: formData.affiliated_to_list?.length > 0 
+            ? formData.affiliated_to_list 
+            : (formData.affiliated_to ? (Array.isArray(formData.affiliated_to) ? formData.affiliated_to : formData.affiliated_to.split(', ').filter(Boolean)) : []),
+          recognized_by: formData.recognized_by || [],
+          memberships: formData.memberships || [],
+          board: formData.board || '',
+          // Rankings
+          nirf_ranking: formData.nirf_ranking || null,
+          india_today_ranking: formData.india_today_ranking || null,
+          outlook_ranking: formData.outlook_ranking || null,
+          rankings: formData.rankings || [],
+          // Accreditations - convert object to string format
+          accreditations: (formData.accreditations || []).map(accr => {
+            if (typeof accr === 'string') return accr;
+            const parts = [accr.name];
+            if (accr.level) parts.push(accr.level);
+            return parts.join(' ');
+          }).filter(Boolean),
+          // Contact info
+          website: formData.contact_info?.website || formData.website || '',
+          email: formData.contact_info?.email || formData.email || '',
+          phone: formData.contact_info?.phone || formData.phone || '',
+          contact_info: formData.contact_info || {},
+          // Courses & Fees
+          courses: formData.courses || [],
+          average_fees: formData.average_fees || 0,
+          // Facilities
+          facilities: formData.facilities || [],
+          // Media
+          logo_url: formData.logo_url || '',
+          logo_title: formData.logo_title || '',
+          logo_alt: formData.logo_alt || '',
+          banner_url: formData.banner_url || '',
+          banner_title: formData.banner_title || '',
+          banner_alt: formData.banner_alt || '',
+          campus_images: formData.campus_images || [],
+          brochure_url: formData.brochure_url || '',
+          // Content
+          description: formData.description || '',
+          highlights: formData.highlights || [],
+          // Status
           status: 'draft'
         };
         
-        console.log('[CollegeForm] Creating new college with basic data:', JSON.stringify(basicData).length, 'bytes');
+        // Remove empty/null values to reduce payload
+        Object.keys(basicData).forEach(key => {
+          const val = basicData[key];
+          if (val === null || val === undefined || val === '' || 
+              (Array.isArray(val) && val.length === 0) ||
+              (typeof val === 'object' && !Array.isArray(val) && Object.keys(val).length === 0)) {
+            // Keep essential fields even if empty
+            if (!['name', 'slug', 'status', 'type', 'institution_type'].includes(key)) {
+              delete basicData[key];
+            }
+          }
+        });
+        
+        console.log('[CollegeForm] Creating new college with data:', JSON.stringify(basicData).length, 'bytes');
         
         const response = await api.post('/colleges', basicData);
         const newCollegeId = response.data.id;
