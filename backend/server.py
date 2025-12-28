@@ -3969,7 +3969,7 @@ async def create_college(college_data: CollegeCreate, background_tasks: Backgrou
     )
     if existing_by_name:
         raise HTTPException(
-            status_code=400, 
+            status_code=409, 
             detail=f"College with name '{name}' already exists (ID: {existing_by_name.get('id')}, Slug: {existing_by_name.get('slug')})"
         )
     
@@ -3981,7 +3981,7 @@ async def create_college(college_data: CollegeCreate, background_tasks: Backgrou
         )
         if existing_by_slug:
             raise HTTPException(
-                status_code=400, 
+                status_code=409, 
                 detail=f"College with slug '{slug}' already exists (Name: {existing_by_slug.get('name')})"
             )
     
