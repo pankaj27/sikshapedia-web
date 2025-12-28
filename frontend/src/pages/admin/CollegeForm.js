@@ -5844,6 +5844,17 @@ const CollegeForm = () => {
               </div>
             </div>
           </div>
+          {/* Media Section Save Button */}
+          {id && (
+            <div className="mt-4 pt-4 border-t flex justify-end">
+              <SectionSaveButton 
+                section="media"
+                onSave={handleSectionSave}
+                isSaving={sectionSaving.media}
+                isSaved={sectionSaved.media}
+              />
+            </div>
+          )}
         </CollapsibleSection>
 
         {/* Bottom Save Button (Duplicate for convenience) */}
