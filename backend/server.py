@@ -7054,6 +7054,104 @@ async def delete_static_page(slug: str):
     await db.static_pages.delete_one({"slug": slug})
     return {"success": True}
 
+# ============================================
+# MIGRATION APIs - Download & Upload
+# ============================================
+
+@api_router.get("/migration/download")
+async def download_migration_data():
+    """Download all streams, sub-streams, and courses as JSON for migration"""
+    streams = await db.streams.find({}, {"_id": 0}).to_list(100)
+    sub_streams = await db.sub_streams.find({}, {"_id": 0}).to_list(500)
+    courses = await db.courses.find({}, {"_id": 0}).to_list(1000)
+    
+    migration_data = {
+        "version": "1.0",
+        "exported_at": datetime.now(timezone.utc).isoformat(),
+        "counts": {
+            "streams": len(streams),
+            "sub_streams": len(sub_streams),
+            "courses": len(courses)
+        },
+        "data": {
+            "streams": streams,
+            "sub_streams": sub_streams,
+            "courses": courses
+        }
+    }
+    
+    # Convert datetime objects to strings
+    def convert_dates(obj):
+        if isinstance(obj, datetime):
+            return obj.isoformat()
+        elif isinstance(obj, dict):
+            return {k: convert_dates(v) for k, v in obj.items()}
+        elif isinstance(obj, list):
+            return [convert_dates(i) for i in obj]
+        return obj
+    
+    migration_data = convert_dates(migration_data)
+    
+    json_str = json.dumps(migration_data, indent=2, ensure_ascii=False)
+    
+    return Response(
+        content=json_str,
+        media_type="application/json",
+        headers={
+            "Content-Disposition": "attachment; filename=migration_data.json"
+        }
+    )
+
+@api_router.post("/migration/upload")
+async def upload_migration_data(file: UploadFile = File(...)):
+    """Upload and import migration JSON file"""
+    try:
+        content = await file.read()
+        data = json.loads(content.decode('utf-8'))
+        
+        results = {
+            "streams": {"added": 0, "skipped": 0},
+            "sub_streams": {"added": 0, "skipped": 0},
+            "courses": {"added": 0, "skipped": 0}
+        }
+        
+        # Import streams
+        for stream in data.get("data", {}).get("streams", []):
+            existing = await db.streams.find_one({"id": stream.get("id")})
+            if not existing:
+                await db.streams.insert_one(stream)
+                results["streams"]["added"] += 1
+            else:
+                results["streams"]["skipped"] += 1
+        
+        # Import sub-streams
+        for sub in data.get("data", {}).get("sub_streams", []):
+            existing = await db.sub_streams.find_one({"id": sub.get("id")})
+            if not existing:
+                await db.sub_streams.insert_one(sub)
+                results["sub_streams"]["added"] += 1
+            else:
+                results["sub_streams"]["skipped"] += 1
+        
+        # Import courses
+        for course in data.get("data", {}).get("courses", []):
+            existing = await db.courses.find_one({"id": course.get("id")})
+            if not existing:
+                await db.courses.insert_one(course)
+                results["courses"]["added"] += 1
+            else:
+                results["courses"]["skipped"] += 1
+        
+        return {
+            "success": True,
+            "message": "Migration completed",
+            "results": results
+        }
+    except json.JSONDecodeError:
+        raise HTTPException(status_code=400, detail="Invalid JSON file")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 app.include_router(api_router)
 
 # Include modular routes
