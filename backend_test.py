@@ -7,6 +7,7 @@ Tests both old monolithic routes and new modular architecture routes
 import requests
 import json
 import sys
+import time
 from typing import Dict, Any, Optional
 
 # Backend URL from frontend .env
