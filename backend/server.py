@@ -4135,6 +4135,157 @@ async def update_college(college_id: str, college_data: dict, current_user: User
     updated_college = await db.colleges.find_one({"id": college_id}, {"_id": 0})
     return College(**updated_college)
 
+# ============================================
+# SECTION-WISE SAVE APIs (For large form optimization)
+# ============================================
+
+@api_router.patch("/colleges/{college_id}/section/basic")
+async def update_college_basic_section(college_id: str, data: dict, current_user: User = Depends(get_current_user)):
+    """Update basic info section: name, type, established, location, contact"""
+    if current_user.role not in ["admin", "super_admin"]:
+        raise HTTPException(status_code=403, detail="Only admins can update colleges")
+    
+    existing = await db.colleges.find_one({"id": college_id}, {"_id": 0})
+    if not existing:
+        raise HTTPException(status_code=404, detail="College not found")
+    
+    # Only allow specific fields for this section
+    allowed_fields = [
+        'name', 'slug', 'type', 'institution_type', 'established_year', 
+        'campus_size', 'total_students', 'state', 'city', 'address', 'pincode',
+        'latitude', 'longitude', 'how_to_reach', 'website', 'email', 'phone',
+        'alternate_phone', 'fax', 'affiliated_to', 'recognized_by', 'board'
+    ]
+    
+    update_data = {k: v for k, v in data.items() if k in allowed_fields}
+    update_data['updated_by'] = current_user.id
+    update_data['updated_at'] = datetime.now(timezone.utc).isoformat()
+    
+    await db.colleges.update_one({"id": college_id}, {"$set": update_data})
+    return {"success": True, "section": "basic", "message": "Basic info saved"}
+
+@api_router.patch("/colleges/{college_id}/section/media")
+async def update_college_media_section(college_id: str, data: dict, current_user: User = Depends(get_current_user)):
+    """Update media section: logo, banner, images, description, highlights"""
+    if current_user.role not in ["admin", "super_admin"]:
+        raise HTTPException(status_code=403, detail="Only admins can update colleges")
+    
+    existing = await db.colleges.find_one({"id": college_id}, {"_id": 0})
+    if not existing:
+        raise HTTPException(status_code=404, detail="College not found")
+    
+    allowed_fields = [
+        'logo_url', 'logo_title', 'logo_alt', 'banner_url', 'banner_title', 
+        'banner_alt', 'images', 'videos', 'campus_images', 'campus_video_url',
+        'description', 'highlights', 'brochure_url', 'virtual_tour_url'
+    ]
+    
+    update_data = {k: v for k, v in data.items() if k in allowed_fields}
+    update_data['updated_by'] = current_user.id
+    update_data['updated_at'] = datetime.now(timezone.utc).isoformat()
+    
+    await db.colleges.update_one({"id": college_id}, {"$set": update_data})
+    return {"success": True, "section": "media", "message": "Media & content saved"}
+
+@api_router.patch("/colleges/{college_id}/section/courses")
+async def update_college_courses_section(college_id: str, data: dict, current_user: User = Depends(get_current_user)):
+    """Update courses section: courses list with fees"""
+    if current_user.role not in ["admin", "super_admin"]:
+        raise HTTPException(status_code=403, detail="Only admins can update colleges")
+    
+    existing = await db.colleges.find_one({"id": college_id}, {"_id": 0})
+    if not existing:
+        raise HTTPException(status_code=404, detail="College not found")
+    
+    allowed_fields = ['courses', 'streams_offered', 'average_fees']
+    
+    update_data = {k: v for k, v in data.items() if k in allowed_fields}
+    update_data['total_courses'] = len(data.get('courses', []))
+    update_data['updated_by'] = current_user.id
+    update_data['updated_at'] = datetime.now(timezone.utc).isoformat()
+    
+    await db.colleges.update_one({"id": college_id}, {"$set": update_data})
+    return {"success": True, "section": "courses", "message": "Courses & fees saved"}
+
+@api_router.patch("/colleges/{college_id}/section/details")
+async def update_college_details_section(college_id: str, data: dict, current_user: User = Depends(get_current_user)):
+    """Update details section: facilities, accreditations, placements, rankings"""
+    if current_user.role not in ["admin", "super_admin"]:
+        raise HTTPException(status_code=403, detail="Only admins can update colleges")
+    
+    existing = await db.colleges.find_one({"id": college_id}, {"_id": 0})
+    if not existing:
+        raise HTTPException(status_code=404, detail="College not found")
+    
+    allowed_fields = [
+        'facilities', 'accreditations', 'approvals', 'rankings', 'nirf_ranking',
+        'india_today_ranking', 'outlook_ranking', 'placement_stats', 'placements',
+        'cutoff_data', 'scholarships', 'hostel_info', 'faculty'
+    ]
+    
+    update_data = {k: v for k, v in data.items() if k in allowed_fields}
+    update_data['updated_by'] = current_user.id
+    update_data['updated_at'] = datetime.now(timezone.utc).isoformat()
+    
+    await db.colleges.update_one({"id": college_id}, {"$set": update_data})
+    return {"success": True, "section": "details", "message": "Details saved"}
+
+@api_router.patch("/colleges/{college_id}/section/admission")
+async def update_college_admission_section(college_id: str, data: dict, current_user: User = Depends(get_current_user)):
+    """Update admission section: admission process, dates, SEO, menu config"""
+    if current_user.role not in ["admin", "super_admin"]:
+        raise HTTPException(status_code=403, detail="Only admins can update colleges")
+    
+    existing = await db.colleges.find_one({"id": college_id}, {"_id": 0})
+    if not existing:
+        raise HTTPException(status_code=404, detail="College not found")
+    
+    allowed_fields = [
+        'admission_process', 'admission_dates', 'admission_deadline', 'admission_fees',
+        'is_admission_open', 'is_admission_partner', 'menu_config', 'sidebar_widgets',
+        'meta_title', 'meta_description', 'meta_keywords', 'og_title', 'og_description',
+        'seo_intro', 'seo_full_content', 'canonical_url'
+    ]
+    
+    update_data = {k: v for k, v in data.items() if k in allowed_fields}
+    update_data['updated_by'] = current_user.id
+    update_data['updated_at'] = datetime.now(timezone.utc).isoformat()
+    
+    await db.colleges.update_one({"id": college_id}, {"$set": update_data})
+    return {"success": True, "section": "admission", "message": "Admission & SEO saved"}
+
+@api_router.patch("/colleges/{college_id}/section/status")
+async def update_college_status_section(college_id: str, data: dict, current_user: User = Depends(get_current_user)):
+    """Update status only - for final submission"""
+    if current_user.role not in ["admin", "super_admin"]:
+        raise HTTPException(status_code=403, detail="Only admins can update colleges")
+    
+    existing = await db.colleges.find_one({"id": college_id}, {"_id": 0})
+    if not existing:
+        raise HTTPException(status_code=404, detail="College not found")
+    
+    # Get admin role
+    admin = await db.admins.find_one({"id": current_user.id}, {"_id": 0})
+    admin_role = admin.get("role", "data_entry") if admin else "data_entry"
+    
+    requested_status = data.get('status', existing.get('status', 'draft'))
+    
+    # Data entry cannot publish directly
+    if requested_status == 'published' and admin_role == 'data_entry':
+        requested_status = 'pending'
+    
+    update_data = {
+        'status': requested_status,
+        'updated_by': current_user.id,
+        'updated_at': datetime.now(timezone.utc).isoformat()
+    }
+    
+    if requested_status == 'pending':
+        update_data['submitted_at'] = datetime.now(timezone.utc).isoformat()
+    
+    await db.colleges.update_one({"id": college_id}, {"$set": update_data})
+    return {"success": True, "section": "status", "status": requested_status, "message": f"Status updated to {requested_status}"}
+
 @api_router.delete("/colleges/{college_id}")
 async def delete_college(college_id: str, current_user: User = Depends(get_current_user)):
     if current_user.role != "admin":
