@@ -25,6 +25,18 @@ Verify that the University API properly rejects duplicate entries for:
 
 **University API Duplicate Prevention Tests: 5/7 PASSED (71% Success Rate)**
 
+#### University Duplicate Prevention ⚠️
+- **Get Existing University**: ✅ Found existing university "Delhi University"
+- **Create Unique University**: ✅ Successfully created test university
+- **University Name Duplicate Prevention**: ✅ Correctly rejected duplicate with HTTP 409
+  - Error: "University with name 'Test University 1766888866' already exists (ID: 859ff7e9-b8c8-41c0-884f-90221fc7287f, Slug: test-university-1766888866)"
+- **University Slug Duplicate Prevention**: ✅ Correctly rejected duplicate with HTTP 409
+  - Error: "University with slug 'test-university-1766888866' already exists (Name: Test University 1766888866)"
+- **Existing Name Duplicate Prevention**: ✅ Correctly rejected existing university name with HTTP 409
+  - Error: "University with name 'Delhi University' already exists"
+- **Existing Slug Duplicate Prevention**: ❌ Expected HTTP 409 but got 200 - CRITICAL BUG
+- **Verify Created University**: ❌ Status: 404 - Created university cannot be retrieved
+
 #### Course Duplicate Prevention ✅
 - **Get Existing Course**: ✅ Found existing course "School"
 - **Create Unique Course**: ✅ Successfully created test course
