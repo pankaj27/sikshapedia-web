@@ -407,11 +407,24 @@ async def get_courses_detail(
 async def get_college_count_for_course(course_name: str):
     """Get count of colleges offering a specific course"""
     # Search in colleges collection for colleges that offer this course
-    # Course name can be partial match (e.g., "B.Tech" matches "B.Tech Computer Science")
+    # Extract base course name (e.g., "B.Tech Computer Science" -> "B.Tech")
+    # Common patterns: "B.Tech", "MBA", "M.Tech", "BCA", "MCA", "B.Com", etc.
+    
+    base_patterns = ["B.Tech", "M.Tech", "MBA", "BBA", "BCA", "MCA", "B.Com", "M.Com", 
+                     "BA", "MA", "BSc", "MSc", "B.Ed", "M.Ed", "LLB", "LLM", "MBBS", 
+                     "PhD", "B.Arch", "M.Arch", "BDS", "MDS", "B.Pharm", "M.Pharm"]
+    
+    search_term = course_name
+    # Try to find base pattern in course name
+    for pattern in base_patterns:
+        if pattern.lower() in course_name.lower():
+            search_term = pattern
+            break
+    
     count = await db.colleges.count_documents({
-        "courses.name": {"$regex": course_name, "$options": "i"}
+        "courses.name": {"$regex": search_term, "$options": "i"}
     })
-    return {"course_name": course_name, "total_colleges": count}
+    return {"course_name": course_name, "base_search": search_term, "total_colleges": count}
 
 
 @router.get("/courses-detail/{course_id}", response_model=CourseDetail)
