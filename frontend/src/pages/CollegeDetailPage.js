@@ -1296,13 +1296,13 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
                         <tbody>
                           {college.courses.map((course, idx) => {
                             const courseName = typeof course === 'string' ? course : course.name;
-                            const duration = typeof course === 'object' ? course.duration : '';
-                            const firstYearFee = typeof course === 'object' ? (course.first_year_fee || college.average_fees) : college.average_fees;
-                            const totalFee = typeof course === 'object' ? (course.total_fee || firstYearFee * 4) : college.average_fees * 4;
+                            const duration = typeof course === 'object' ? (course.duration || course.course_duration || '4 Years') : '4 Years';
+                            const firstYearFee = typeof course === 'object' ? (course.fee || course.first_year_fee || college.average_fees || 0) : (college.average_fees || 0);
+                            const totalFee = typeof course === 'object' ? (course.total_fee || firstYearFee * 4) : ((college.average_fees || 0) * 4);
                             return (
                               <tr key={idx} className="hover:bg-gray-50">
                                 <td className="border px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm"><span className="text-blue-600 font-medium break-words">{courseName}</span></td>
-                                <td className="border px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm">{duration || '-'}</td>
+                                <td className="border px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm">{duration}</td>
                                 <td className="border px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm font-semibold">₹{(firstYearFee / 100000).toFixed(1)}L</td>
                                 <td className="border px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm font-semibold">₹{(totalFee / 100000).toFixed(1)}L</td>
                               </tr>
