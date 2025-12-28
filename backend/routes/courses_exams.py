@@ -201,6 +201,19 @@ async def get_exam(exam_id: str):
 @router.post("/exams", response_model=Exam)
 async def create_exam(exam_data: dict):
     """Create a new exam (admin only)"""
+    # Check for duplicate by name (case-insensitive)
+    exam_name = exam_data.get('name', '').strip()
+    if exam_name:
+        existing_exam = await db.exams.find_one(
+            {"name": {"$regex": f"^{exam_name}$", "$options": "i"}},
+            {"_id": 0, "id": 1, "name": 1}
+        )
+        if existing_exam:
+            raise HTTPException(
+                status_code=409,
+                detail=f"Exam with name '{exam_name}' already exists (ID: {existing_exam.get('id')})"
+            )
+    
     if 'id' not in exam_data:
         exam_data['id'] = str(uuid.uuid4())
     
@@ -293,6 +306,19 @@ async def get_course(course_id: str):
 @router.post("/courses", response_model=Course)
 async def create_course(course_data: dict):
     """Create a new course (admin only)"""
+    # Check for duplicate by name (case-insensitive)
+    course_name = course_data.get('name', '').strip()
+    if course_name:
+        existing_course = await db.courses.find_one(
+            {"name": {"$regex": f"^{course_name}$", "$options": "i"}},
+            {"_id": 0, "id": 1, "name": 1}
+        )
+        if existing_course:
+            raise HTTPException(
+                status_code=409,
+                detail=f"Course with name '{course_name}' already exists (ID: {existing_course.get('id')})"
+            )
+    
     if 'id' not in course_data:
         course_data['id'] = str(uuid.uuid4())
     

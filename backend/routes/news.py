@@ -112,6 +112,19 @@ async def create_news(news: News, current_user: dict = Depends(get_current_user)
     """Create a new news article"""
     news_dict = news.model_dump()
     
+    # Check for duplicate by title (case-insensitive)
+    news_title = news_dict.get('title', '').strip()
+    if news_title:
+        existing_news = await db.news.find_one(
+            {"title": {"$regex": f"^{news_title}$", "$options": "i"}},
+            {"_id": 0, "id": 1, "title": 1}
+        )
+        if existing_news:
+            raise HTTPException(
+                status_code=409,
+                detail=f"News article with title '{news_title}' already exists (ID: {existing_news.get('id')})"
+            )
+    
     # Auto-assign author from current user if not provided
     if not news_dict.get("author") or news_dict["author"] == "":
         news_dict["author"] = current_user.get("name", "Admin")
