@@ -7945,6 +7945,7 @@ class APITester:
         
         # **MAIN FOCUS: Section-wise College Creation Workflow**
         self.test_authentication()  # Ensure we have admin token
+        self.test_section_wise_save_functionality()  # Test sequential section-wise save functionality
         self.test_section_wise_college_creation()  # Test the specific functionality requested
         
         print("\n" + "=" * 80)
