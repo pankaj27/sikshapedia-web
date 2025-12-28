@@ -1,0 +1,152 @@
+[
+  {
+    "id": "5ac596a1-b55c-4716-a53a-c19ecb90c8cd",
+    "name": "Engineering & Technology",
+    "slug": "engineering-and-technology",
+    "description": null,
+    "icon": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:52.066000"
+  },
+  {
+    "id": "77de90bb-cb58-4420-8d66-ab342d1cde9c",
+    "name": "Medical & Health Sciences",
+    "slug": "medical-and-health-sciences",
+    "description": null,
+    "icon": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:52.108000"
+  },
+  {
+    "id": "36fd6f2f-3781-4ff4-8b18-10d6a6ad9698",
+    "name": "Management & Business",
+    "slug": "management-and-business",
+    "description": null,
+    "icon": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:52.140000"
+  },
+  {
+    "id": "2691e8bc-b889-449c-88c1-e9e3610026fa",
+    "name": "Arts & Humanities",
+    "slug": "arts-and-humanities",
+    "description": null,
+    "icon": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:52.171000"
+  },
+  {
+    "id": "1f8a5a4c-68e8-4c75-89e8-d8f57215e953",
+    "name": "Science",
+    "slug": "science",
+    "description": null,
+    "icon": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:52.242000"
+  },
+  {
+    "id": "da037263-13d0-4bee-ac8f-4d42f7ebccb1",
+    "name": "Commerce",
+    "slug": "commerce",
+    "description": null,
+    "icon": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:52.279000"
+  },
+  {
+    "id": "3465b9f3-d62d-41a5-a748-be3dab367f69",
+    "name": "Computer Applications",
+    "slug": "computer-applications",
+    "description": null,
+    "icon": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:52.312000"
+  },
+  {
+    "id": "030fd5ce-8618-4909-a0ec-f57c097de18c",
+    "name": "Law",
+    "slug": "law",
+    "description": null,
+    "icon": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:52.386000"
+  },
+  {
+    "id": "2fd1eaaa-cebc-4cd6-997b-af957430f144",
+    "name": "Education",
+    "slug": "education",
+    "description": null,
+    "icon": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:52.459000"
+  },
+  {
+    "id": "088a3adb-a076-45ce-9ba6-bd078f61676e",
+    "name": "Architecture & Planning",
+    "slug": "architecture-and-planning",
+    "description": null,
+    "icon": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:52.491000"
+  },
+  {
+    "id": "d4299149-6623-4013-859a-c476f8b245b0",
+    "name": "Agriculture",
+    "slug": "agriculture",
+    "description": null,
+    "icon": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:52.527000"
+  },
+  {
+    "id": "d9028333-36bd-4cff-ba2f-8d3537056d72",
+    "name": "Design",
+    "slug": "design",
+    "description": null,
+    "icon": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:52.563000"
+  },
+  {
+    "id": "6041bbe6-79d8-466d-9107-a590164e9dd3",
+    "name": "Hotel Management",
+    "slug": "hotel-management",
+    "description": null,
+    "icon": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:52.597000"
+  },
+  {
+    "id": "4ff48c1a-eadb-4426-a5a3-ece02796ec6f",
+    "name": "Mass Communication",
+    "slug": "mass-communication",
+    "description": null,
+    "icon": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:52.632000"
+  },
+  {
+    "id": "f12971be-a6c9-4323-8ee7-838a12e1ef67",
+    "name": "Aviation",
+    "slug": "aviation",
+    "description": null,
+    "icon": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:52.663000"
+  }
+]

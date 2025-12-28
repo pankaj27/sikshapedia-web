@@ -1,0 +1,1940 @@
+[
+  {
+    "id": "df9ac65a-710f-4365-b8ee-e9b26bba5366",
+    "stream_id": "5ac596a1-b55c-4716-a53a-c19ecb90c8cd",
+    "name": "Computer Science Engineering",
+    "slug": "computer-science-engineering",
+    "description": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:52.698000"
+  },
+  {
+    "id": "4e902ea3-3c64-498a-9db3-fce745fdfb1c",
+    "stream_id": "5ac596a1-b55c-4716-a53a-c19ecb90c8cd",
+    "name": "Mechanical Engineering",
+    "slug": "mechanical-engineering",
+    "description": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:52.745000"
+  },
+  {
+    "id": "93d13661-d1e5-4d18-bde5-dbe99424e4c9",
+    "stream_id": "5ac596a1-b55c-4716-a53a-c19ecb90c8cd",
+    "name": "Civil Engineering",
+    "slug": "civil-engineering",
+    "description": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:52.818000"
+  },
+  {
+    "id": "e958b395-62d6-47d4-836e-3cb19ff3b0be",
+    "stream_id": "5ac596a1-b55c-4716-a53a-c19ecb90c8cd",
+    "name": "Electrical Engineering",
+    "slug": "electrical-engineering",
+    "description": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:52.850000"
+  },
+  {
+    "id": "eac0ba00-b6c0-4271-b772-c331b190bb34",
+    "stream_id": "5ac596a1-b55c-4716-a53a-c19ecb90c8cd",
+    "name": "Electronics & Communication",
+    "slug": "electronics-and-communication",
+    "description": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:52.882000"
+  },
+  {
+    "id": "397d6116-1cb7-476f-886c-634be5d85dba",
+    "stream_id": "5ac596a1-b55c-4716-a53a-c19ecb90c8cd",
+    "name": "Information Technology",
+    "slug": "information-technology",
+    "description": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:52.916000"
+  },
+  {
+    "id": "990f110d-837e-4246-b9c3-2093c2a2c214",
+    "stream_id": "77de90bb-cb58-4420-8d66-ab342d1cde9c",
+    "name": "MBBS",
+    "slug": "mbbs",
+    "description": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:52.989000"
+  },
+  {
+    "id": "9260337a-06e4-4c99-87d3-b93523fee189",
+    "stream_id": "77de90bb-cb58-4420-8d66-ab342d1cde9c",
+    "name": "BDS (Dental)",
+    "slug": "bds-dental",
+    "description": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:53.061000"
+  },
+  {
+    "id": "ea65e8c6-06cf-420b-b7d8-73325d872e3e",
+    "stream_id": "77de90bb-cb58-4420-8d66-ab342d1cde9c",
+    "name": "BAMS (Ayurveda)",
+    "slug": "bams-ayurveda",
+    "description": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:53.095000"
+  },
+  {
+    "id": "00994ed0-e53f-40f2-82ad-1b653f5afad7",
+    "stream_id": "77de90bb-cb58-4420-8d66-ab342d1cde9c",
+    "name": "BHMS (Homeopathy)",
+    "slug": "bhms-homeopathy",
+    "description": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:53.128000"
+  },
+  {
+    "id": "eb91cffa-b76b-4ec1-9075-584a281154dc",
+    "stream_id": "77de90bb-cb58-4420-8d66-ab342d1cde9c",
+    "name": "B.Pharmacy",
+    "slug": "bpharmacy",
+    "description": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:53.169000"
+  },
+  {
+    "id": "56df20a7-ca2d-48b5-b5ce-58cf6f7af860",
+    "stream_id": "77de90bb-cb58-4420-8d66-ab342d1cde9c",
+    "name": "Nursing (B.Sc Nursing)",
+    "slug": "nursing-bsc-nursing",
+    "description": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:53.202000"
+  },
+  {
+    "id": "30a0e8cc-6fc1-4d38-9430-cab7edc0409c",
+    "stream_id": "77de90bb-cb58-4420-8d66-ab342d1cde9c",
+    "name": "Physiotherapy",
+    "slug": "physiotherapy",
+    "description": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:53.238000"
+  },
+  {
+    "id": "8242a664-0ab2-4d6e-bede-f2bac32f68c4",
+    "stream_id": "36fd6f2f-3781-4ff4-8b18-10d6a6ad9698",
+    "name": "MBA",
+    "slug": "mba",
+    "description": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:53.274000"
+  },
+  {
+    "id": "c3f6a47f-e816-4e2c-b4b4-962afe159919",
+    "stream_id": "36fd6f2f-3781-4ff4-8b18-10d6a6ad9698",
+    "name": "BBA",
+    "slug": "bba",
+    "description": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:53.308000"
+  },
+  {
+    "id": "5afe8e63-75c4-4b5c-a3cf-fe79a84eb729",
+    "stream_id": "36fd6f2f-3781-4ff4-8b18-10d6a6ad9698",
+    "name": "PGDM",
+    "slug": "pgdm",
+    "description": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:53.341000"
+  },
+  {
+    "id": "6c6b8867-eeaa-44d8-90aa-78221bf5c45d",
+    "stream_id": "2691e8bc-b889-449c-88c1-e9e3610026fa",
+    "name": "BA English",
+    "slug": "ba-english",
+    "description": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:53.375000"
+  },
+  {
+    "id": "60bf0f28-6f9b-4415-92f3-5c6d5f967ecd",
+    "stream_id": "2691e8bc-b889-449c-88c1-e9e3610026fa",
+    "name": "BA Psychology",
+    "slug": "ba-psychology",
+    "description": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:53.409000"
+  },
+  {
+    "id": "f8998158-b785-4eb3-a402-c2db500e69f6",
+    "stream_id": "2691e8bc-b889-449c-88c1-e9e3610026fa",
+    "name": "BA History",
+    "slug": "ba-history",
+    "description": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:53.482000"
+  },
+  {
+    "id": "c2dfead4-1b46-4fe8-b92f-caa98fe496d9",
+    "stream_id": "2691e8bc-b889-449c-88c1-e9e3610026fa",
+    "name": "BA Sociology",
+    "slug": "ba-sociology",
+    "description": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:53.518000"
+  },
+  {
+    "id": "507a97f7-4d67-4b59-bf80-16de7adc6659",
+    "stream_id": "2691e8bc-b889-449c-88c1-e9e3610026fa",
+    "name": "BA Political Science",
+    "slug": "ba-political-science",
+    "description": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:53.554000"
+  },
+  {
+    "id": "9cfd9304-345b-4fd8-8de1-b9ac6ae4f068",
+    "stream_id": "1f8a5a4c-68e8-4c75-89e8-d8f57215e953",
+    "name": "B.Sc Physics",
+    "slug": "bsc-physics",
+    "description": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:53.628000"
+  },
+  {
+    "id": "02ea09bc-558f-4936-bf47-d26932f3ca2e",
+    "stream_id": "1f8a5a4c-68e8-4c75-89e8-d8f57215e953",
+    "name": "B.Sc Chemistry",
+    "slug": "bsc-chemistry",
+    "description": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:53.667000"
+  },
+  {
+    "id": "dc6c9f5a-bd1f-4b2d-98f6-2ba45e6a3d25",
+    "stream_id": "1f8a5a4c-68e8-4c75-89e8-d8f57215e953",
+    "name": "B.Sc Mathematics",
+    "slug": "bsc-mathematics",
+    "description": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:53.702000"
+  },
+  {
+    "id": "1502b627-835f-4a2c-9553-a877ee404693",
+    "stream_id": "1f8a5a4c-68e8-4c75-89e8-d8f57215e953",
+    "name": "B.Sc Biology",
+    "slug": "bsc-biology",
+    "description": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:53.737000"
+  },
+  {
+    "id": "f5dfee7a-0bab-4d5f-a184-8f258f80c6b7",
+    "stream_id": "1f8a5a4c-68e8-4c75-89e8-d8f57215e953",
+    "name": "B.Sc Biotechnology",
+    "slug": "bsc-biotechnology",
+    "description": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:53.769000"
+  },
+  {
+    "id": "97c3d91b-806f-4000-83fc-8a9206ad0ce3",
+    "stream_id": "da037263-13d0-4bee-ac8f-4d42f7ebccb1",
+    "name": "B.Com",
+    "slug": "bcom",
+    "description": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:53.844000"
+  },
+  {
+    "id": "e34baccc-971b-4317-bc7e-b0529a9bb6d4",
+    "stream_id": "da037263-13d0-4bee-ac8f-4d42f7ebccb1",
+    "name": "B.Com Honours",
+    "slug": "bcom-honours",
+    "description": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:53.876000"
+  },
+  {
+    "id": "42da540e-8fa6-4d50-9102-6226e7187fab",
+    "stream_id": "da037263-13d0-4bee-ac8f-4d42f7ebccb1",
+    "name": "CA (Chartered Accountancy)",
+    "slug": "ca-chartered-accountancy",
+    "description": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:53.913000"
+  },
+  {
+    "id": "f320839b-91c6-41ea-a9d5-db98d30de239",
+    "stream_id": "da037263-13d0-4bee-ac8f-4d42f7ebccb1",
+    "name": "CS (Company Secretary)",
+    "slug": "cs-company-secretary",
+    "description": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:53.946000"
+  },
+  {
+    "id": "1070aecb-1e30-4f1b-bc56-a2c752f196a7",
+    "stream_id": "3465b9f3-d62d-41a5-a748-be3dab367f69",
+    "name": "BCA",
+    "slug": "bca",
+    "description": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:53.981000"
+  },
+  {
+    "id": "a3fa68b3-3f98-4652-a0dc-7589d2fa77fb",
+    "stream_id": "3465b9f3-d62d-41a5-a748-be3dab367f69",
+    "name": "MCA",
+    "slug": "mca",
+    "description": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:54.013000"
+  },
+  {
+    "id": "5a841f1c-e1a8-4f41-82c7-d0a30aec0090",
+    "stream_id": "3465b9f3-d62d-41a5-a748-be3dab367f69",
+    "name": "B.Sc Computer Science",
+    "slug": "bsc-computer-science",
+    "description": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:54.046000"
+  },
+  {
+    "id": "c86e6084-c044-4549-944c-0d93eddf9e3f",
+    "stream_id": "030fd5ce-8618-4909-a0ec-f57c097de18c",
+    "name": "LLB (3 Year)",
+    "slug": "llb-3-year",
+    "description": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:54.080000"
+  },
+  {
+    "id": "37371522-7cc6-4969-87f1-a740dca87f4c",
+    "stream_id": "030fd5ce-8618-4909-a0ec-f57c097de18c",
+    "name": "BA LLB (5 Year)",
+    "slug": "ba-llb-5-year",
+    "description": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:54.114000"
+  },
+  {
+    "id": "cc50f85c-3f69-4e9c-9d67-740db51279c7",
+    "stream_id": "030fd5ce-8618-4909-a0ec-f57c097de18c",
+    "name": "BBA LLB (5 Year)",
+    "slug": "bba-llb-5-year",
+    "description": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:54.148000"
+  },
+  {
+    "id": "dfbb934b-3c45-4859-950c-31d0a3c6b09d",
+    "stream_id": "030fd5ce-8618-4909-a0ec-f57c097de18c",
+    "name": "LLM",
+    "slug": "llm",
+    "description": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:54.180000"
+  },
+  {
+    "id": "37de940a-5c47-4e3f-9e5a-0c635e17e67f",
+    "stream_id": "2fd1eaaa-cebc-4cd6-997b-af957430f144",
+    "name": "B.Ed",
+    "slug": "bed",
+    "description": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:54.214000"
+  },
+  {
+    "id": "c140440c-4d0c-452d-b6a8-34c7ce128fda",
+    "stream_id": "2fd1eaaa-cebc-4cd6-997b-af957430f144",
+    "name": "M.Ed",
+    "slug": "med",
+    "description": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:54.249000"
+  },
+  {
+    "id": "6dd873e3-c844-4d41-b0a5-df10d43f3f33",
+    "stream_id": "2fd1eaaa-cebc-4cd6-997b-af957430f144",
+    "name": "D.El.Ed",
+    "slug": "deled",
+    "description": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:54.282000"
+  },
+  {
+    "id": "85e5b7b1-efaa-4440-85be-cab120b3d3b0",
+    "stream_id": "088a3adb-a076-45ce-9ba6-bd078f61676e",
+    "name": "B.Arch",
+    "slug": "barch",
+    "description": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:54.315000"
+  },
+  {
+    "id": "3b68b4f8-da2f-4799-b22c-65698f946368",
+    "stream_id": "088a3adb-a076-45ce-9ba6-bd078f61676e",
+    "name": "M.Arch",
+    "slug": "march",
+    "description": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:54.388000"
+  },
+  {
+    "id": "27053f89-7702-453f-8cd4-3bfb71d7fc83",
+    "stream_id": "088a3adb-a076-45ce-9ba6-bd078f61676e",
+    "name": "Urban Planning",
+    "slug": "urban-planning",
+    "description": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:54.421000"
+  },
+  {
+    "id": "1268906a-f74c-48bf-b157-530faad12ee1",
+    "stream_id": "d4299149-6623-4013-859a-c476f8b245b0",
+    "name": "B.Sc Agriculture",
+    "slug": "bsc-agriculture",
+    "description": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:54.455000"
+  },
+  {
+    "id": "da788c2c-50d0-4c57-94b6-a539eeb1f395",
+    "stream_id": "d4299149-6623-4013-859a-c476f8b245b0",
+    "name": "B.Sc Horticulture",
+    "slug": "bsc-horticulture",
+    "description": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:54.530000"
+  },
+  {
+    "id": "b4c553ba-355f-4f72-a304-88fac46ebc04",
+    "stream_id": "d4299149-6623-4013-859a-c476f8b245b0",
+    "name": "Agricultural Engineering",
+    "slug": "agricultural-engineering",
+    "description": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:54.566000"
+  },
+  {
+    "id": "18c9bcf5-e93a-4bb4-8318-4b5035a2d54f",
+    "stream_id": "d9028333-36bd-4cff-ba2f-8d3537056d72",
+    "name": "Fashion Design",
+    "slug": "fashion-design",
+    "description": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:54.599000"
+  },
+  {
+    "id": "874bc288-bb16-4d7c-8d70-aca13cbef60e",
+    "stream_id": "d9028333-36bd-4cff-ba2f-8d3537056d72",
+    "name": "Interior Design",
+    "slug": "interior-design",
+    "description": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:54.632000"
+  },
+  {
+    "id": "e9570cac-4a6c-46b8-b982-95500cf0e513",
+    "stream_id": "d9028333-36bd-4cff-ba2f-8d3537056d72",
+    "name": "Graphic Design",
+    "slug": "graphic-design",
+    "description": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:54.667000"
+  },
+  {
+    "id": "4db4182b-9486-4bd0-ad44-5e482050434e",
+    "stream_id": "d9028333-36bd-4cff-ba2f-8d3537056d72",
+    "name": "Product Design",
+    "slug": "product-design",
+    "description": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:54.700000"
+  },
+  {
+    "id": "7276bb00-b2a1-4f13-9b3b-7bb19611aad5",
+    "stream_id": "4ff48c1a-eadb-4426-a5a3-ece02796ec6f",
+    "name": "Journalism",
+    "slug": "journalism",
+    "description": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:54.738000"
+  },
+  {
+    "id": "bc515f93-c178-4e35-b2ac-094c828f8d94",
+    "stream_id": "4ff48c1a-eadb-4426-a5a3-ece02796ec6f",
+    "name": "Mass Media",
+    "slug": "mass-media",
+    "description": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:54.774000"
+  },
+  {
+    "id": "f33798f2-2dc6-49ef-a4af-8ee458d05d19",
+    "stream_id": "4ff48c1a-eadb-4426-a5a3-ece02796ec6f",
+    "name": "Advertising",
+    "slug": "advertising",
+    "description": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:54.807000"
+  },
+  {
+    "id": "3eb9127e-6103-49c8-b735-8c601f2ce70c",
+    "stream_id": "4ff48c1a-eadb-4426-a5a3-ece02796ec6f",
+    "name": "Public Relations",
+    "slug": "public-relations",
+    "description": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:54.840000"
+  },
+  {
+    "id": "b3a82c0d-8c20-4618-a533-8474770be2f9",
+    "stream_id": "f12971be-a6c9-4323-8ee7-838a12e1ef67",
+    "name": "Commercial Pilot License",
+    "slug": "commercial-pilot-license",
+    "description": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:54.876000"
+  },
+  {
+    "id": "8ce3d023-641c-4409-8708-39f7c681c59f",
+    "stream_id": "f12971be-a6c9-4323-8ee7-838a12e1ef67",
+    "name": "Aviation Management",
+    "slug": "aviation-management",
+    "description": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:54.908000"
+  },
+  {
+    "id": "104e2f8a-3e49-46d3-be1d-e843dcc424c0",
+    "stream_id": "f12971be-a6c9-4323-8ee7-838a12e1ef67",
+    "name": "Aircraft Maintenance",
+    "slug": "aircraft-maintenance",
+    "description": null,
+    "display_order": 0,
+    "is_active": true,
+    "created_at": "2025-12-15 11:03:54.984000"
+  },
+  {
+    "id": "c284c1c9-3460-4804-9355-c909fdaef955",
+    "name": "Automobile Engineering",
+    "slug": "automobile-engineering",
+    "stream_id": "5ac596a1-b55c-4716-a53a-c19ecb90c8cd",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:20.671000"
+  },
+  {
+    "id": "38051c71-1e34-47f8-ae98-5b2b0a948a00",
+    "name": "Aerospace Engineering",
+    "slug": "aerospace-engineering",
+    "stream_id": "5ac596a1-b55c-4716-a53a-c19ecb90c8cd",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:20.723000"
+  },
+  {
+    "id": "74180ce4-04e9-4697-8cef-b55a085f67a7",
+    "name": "Chemical Engineering",
+    "slug": "chemical-engineering",
+    "stream_id": "5ac596a1-b55c-4716-a53a-c19ecb90c8cd",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:20.767000"
+  },
+  {
+    "id": "44c234da-1b2c-490a-900c-49cbf2dc3cac",
+    "name": "Biomedical Engineering",
+    "slug": "biomedical-engineering",
+    "stream_id": "5ac596a1-b55c-4716-a53a-c19ecb90c8cd",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:20.815000"
+  },
+  {
+    "id": "a9b24488-0671-410f-95b7-e857130c8f57",
+    "name": "Petroleum Engineering",
+    "slug": "petroleum-engineering",
+    "stream_id": "5ac596a1-b55c-4716-a53a-c19ecb90c8cd",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:20.864000"
+  },
+  {
+    "id": "48cd97ba-c7e1-4673-abd0-a42489f29fd4",
+    "name": "Mining Engineering",
+    "slug": "mining-engineering",
+    "stream_id": "5ac596a1-b55c-4716-a53a-c19ecb90c8cd",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:20.907000"
+  },
+  {
+    "id": "5e9933f8-1a0a-4375-ae82-d61b3499fabd",
+    "name": "Robotics Engineering",
+    "slug": "robotics-engineering",
+    "stream_id": "5ac596a1-b55c-4716-a53a-c19ecb90c8cd",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:20.951000"
+  },
+  {
+    "id": "d1368b44-50ee-43f0-8f3d-e0359446d119",
+    "name": "AI & Machine Learning",
+    "slug": "ai-machine-learning",
+    "stream_id": "5ac596a1-b55c-4716-a53a-c19ecb90c8cd",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:20.994000"
+  },
+  {
+    "id": "98f8fe30-5903-40d0-b884-68cbca7bdc4a",
+    "name": "Data Science",
+    "slug": "data-science",
+    "stream_id": "5ac596a1-b55c-4716-a53a-c19ecb90c8cd",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:21.037000"
+  },
+  {
+    "id": "69b307c7-4dec-4720-9b86-d111b7d63e4f",
+    "name": "Cyber Security",
+    "slug": "cyber-security",
+    "stream_id": "5ac596a1-b55c-4716-a53a-c19ecb90c8cd",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:21.084000"
+  },
+  {
+    "id": "bdf6329d-b7cb-4778-93c6-8626d789f8e1",
+    "name": "Environmental Engineering",
+    "slug": "environmental-engineering",
+    "stream_id": "5ac596a1-b55c-4716-a53a-c19ecb90c8cd",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:21.134000"
+  },
+  {
+    "id": "4182a79b-024e-4c1b-ad27-e41e0e575761",
+    "name": "Textile Engineering",
+    "slug": "textile-engineering",
+    "stream_id": "5ac596a1-b55c-4716-a53a-c19ecb90c8cd",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:21.182000"
+  },
+  {
+    "id": "7b6ab4b4-5604-4394-815e-21192371c498",
+    "name": "Marine Engineering",
+    "slug": "marine-engineering",
+    "stream_id": "5ac596a1-b55c-4716-a53a-c19ecb90c8cd",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:21.225000"
+  },
+  {
+    "id": "da7df1fc-3017-4c04-8ceb-3f6cedf7fddf",
+    "name": "Agricultural Engineering",
+    "slug": "agri-engineering",
+    "stream_id": "5ac596a1-b55c-4716-a53a-c19ecb90c8cd",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:21.268000"
+  },
+  {
+    "id": "804b50fb-b8c2-4a35-bc59-38b6698a8a8d",
+    "name": "Food Technology",
+    "slug": "food-technology",
+    "stream_id": "5ac596a1-b55c-4716-a53a-c19ecb90c8cd",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:21.352000"
+  },
+  {
+    "id": "5843f9c5-ee4a-4357-b6c3-0cbeec429f21",
+    "name": "BPT (Physiotherapy)",
+    "slug": "bpt-physiotherapy",
+    "stream_id": "77de90bb-cb58-4420-8d66-ab342d1cde9c",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:21.704000"
+  },
+  {
+    "id": "e4c240ea-2153-4853-9d04-6b51cb184a03",
+    "name": "BOT (Occupational Therapy)",
+    "slug": "bot-occupational-therapy",
+    "stream_id": "77de90bb-cb58-4420-8d66-ab342d1cde9c",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:21.749000"
+  },
+  {
+    "id": "65d39cb7-f183-4ac1-8b6c-95f0c17de18f",
+    "name": "B.Sc Radiology",
+    "slug": "bsc-radiology",
+    "stream_id": "77de90bb-cb58-4420-8d66-ab342d1cde9c",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:21.792000"
+  },
+  {
+    "id": "26cb44d1-4575-41a3-8e84-8f995ca1e947",
+    "name": "B.Sc Medical Lab Technology",
+    "slug": "bsc-mlt",
+    "stream_id": "77de90bb-cb58-4420-8d66-ab342d1cde9c",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:21.833000"
+  },
+  {
+    "id": "18a74a79-e9c3-4a75-8ad9-c98086d175b3",
+    "name": "BUMS (Unani)",
+    "slug": "bums-unani",
+    "stream_id": "77de90bb-cb58-4420-8d66-ab342d1cde9c",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:21.876000"
+  },
+  {
+    "id": "078c72ad-3779-484f-9137-c4d35322762f",
+    "name": "BNYS (Naturopathy)",
+    "slug": "bnys-naturopathy",
+    "stream_id": "77de90bb-cb58-4420-8d66-ab342d1cde9c",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:21.923000"
+  },
+  {
+    "id": "38284e0c-c0a7-46a7-8c39-26d935a5f061",
+    "name": "M.Pharmacy",
+    "slug": "m-pharmacy",
+    "stream_id": "77de90bb-cb58-4420-8d66-ab342d1cde9c",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:21.966000"
+  },
+  {
+    "id": "ac44f52a-bc33-4640-b3c6-fd9fbe4deced",
+    "name": "MPT (Physiotherapy)",
+    "slug": "mpt-physiotherapy",
+    "stream_id": "77de90bb-cb58-4420-8d66-ab342d1cde9c",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:22.011000"
+  },
+  {
+    "id": "7425baba-80e7-4f82-947d-5865455991d5",
+    "name": "MD/MS",
+    "slug": "md-ms",
+    "stream_id": "77de90bb-cb58-4420-8d66-ab342d1cde9c",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:22.053000"
+  },
+  {
+    "id": "c23279a8-9cec-43c5-92f0-0cdd28b193d9",
+    "name": "MDS (Dental)",
+    "slug": "mds-dental",
+    "stream_id": "77de90bb-cb58-4420-8d66-ab342d1cde9c",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:22.096000"
+  },
+  {
+    "id": "084615e1-705b-4a3d-ae7b-2689b8cdebbc",
+    "name": "GNM Nursing",
+    "slug": "gnm-nursing",
+    "stream_id": "77de90bb-cb58-4420-8d66-ab342d1cde9c",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:22.137000"
+  },
+  {
+    "id": "b4972100-d687-435d-b49c-7872fa38759d",
+    "name": "ANM Nursing",
+    "slug": "anm-nursing",
+    "stream_id": "77de90bb-cb58-4420-8d66-ab342d1cde9c",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:22.220000"
+  },
+  {
+    "id": "95678c0b-277f-437b-9112-41530e1293bb",
+    "name": "Paramedical",
+    "slug": "paramedical",
+    "stream_id": "77de90bb-cb58-4420-8d66-ab342d1cde9c",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:22.262000"
+  },
+  {
+    "id": "6d84198e-7d47-4e39-afaf-e78acc1b07fe",
+    "name": "Veterinary (BVSc)",
+    "slug": "veterinary-bvsc",
+    "stream_id": "77de90bb-cb58-4420-8d66-ab342d1cde9c",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:22.306000"
+  },
+  {
+    "id": "68cd8869-6168-4164-beec-ad69abd2b361",
+    "name": "BMS (Management Studies)",
+    "slug": "bms-management-studies",
+    "stream_id": "36fd6f2f-3781-4ff4-8b18-10d6a6ad9698",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:40.428000"
+  },
+  {
+    "id": "a1b9279f-38c4-4193-a621-358911ea31de",
+    "name": "BBM (Business Management)",
+    "slug": "bbm-business-management",
+    "stream_id": "36fd6f2f-3781-4ff4-8b18-10d6a6ad9698",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:40.473000"
+  },
+  {
+    "id": "221277f9-94f7-4c84-be5c-1181d296ee1d",
+    "name": "Executive MBA",
+    "slug": "executive-mba",
+    "stream_id": "36fd6f2f-3781-4ff4-8b18-10d6a6ad9698",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:40.516000"
+  },
+  {
+    "id": "53fbe838-559d-4ea2-8b75-a2d93d77253b",
+    "name": "MBA Finance",
+    "slug": "mba-finance",
+    "stream_id": "36fd6f2f-3781-4ff4-8b18-10d6a6ad9698",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:40.560000"
+  },
+  {
+    "id": "df31e2a3-f1f9-45fa-a4e2-4bb0db373a2b",
+    "name": "MBA Marketing",
+    "slug": "mba-marketing",
+    "stream_id": "36fd6f2f-3781-4ff4-8b18-10d6a6ad9698",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:40.609000"
+  },
+  {
+    "id": "4b29300c-f974-429b-8f19-a9cbf8365de1",
+    "name": "MBA HR",
+    "slug": "mba-hr",
+    "stream_id": "36fd6f2f-3781-4ff4-8b18-10d6a6ad9698",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:40.656000"
+  },
+  {
+    "id": "9f5b2afb-e6e6-4161-9ed6-fd38620dbcdd",
+    "name": "MBA Operations",
+    "slug": "mba-operations",
+    "stream_id": "36fd6f2f-3781-4ff4-8b18-10d6a6ad9698",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:40.700000"
+  },
+  {
+    "id": "7a49c569-8c61-45ae-b984-adc0a612c3dd",
+    "name": "MBA IT",
+    "slug": "mba-it",
+    "stream_id": "36fd6f2f-3781-4ff4-8b18-10d6a6ad9698",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:40.784000"
+  },
+  {
+    "id": "2265de16-a592-437e-a006-4f73d4638074",
+    "name": "MBA Healthcare",
+    "slug": "mba-healthcare",
+    "stream_id": "36fd6f2f-3781-4ff4-8b18-10d6a6ad9698",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:40.827000"
+  },
+  {
+    "id": "f54ce6ac-8c98-4596-938b-fe735dbd6d8a",
+    "name": "MBA International Business",
+    "slug": "mba-international-business",
+    "stream_id": "36fd6f2f-3781-4ff4-8b18-10d6a6ad9698",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:40.870000"
+  },
+  {
+    "id": "6592242e-493b-4383-979c-fae01a18f2b4",
+    "name": "BHM (Hotel Management)",
+    "slug": "bhm-hotel-management",
+    "stream_id": "36fd6f2f-3781-4ff4-8b18-10d6a6ad9698",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:40.912000"
+  },
+  {
+    "id": "b829c699-0808-4319-a642-abea69b3d0ab",
+    "name": "Event Management",
+    "slug": "event-management",
+    "stream_id": "36fd6f2f-3781-4ff4-8b18-10d6a6ad9698",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:40.954000"
+  },
+  {
+    "id": "28aad98c-40be-4c01-bc22-c7a5fc65fcf3",
+    "name": "Sports Management",
+    "slug": "sports-management",
+    "stream_id": "36fd6f2f-3781-4ff4-8b18-10d6a6ad9698",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:40.996000"
+  },
+  {
+    "id": "3e1692d2-9f02-48c6-ba25-ba982bde8a86",
+    "name": "Retail Management",
+    "slug": "retail-management",
+    "stream_id": "36fd6f2f-3781-4ff4-8b18-10d6a6ad9698",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:41.082000"
+  },
+  {
+    "id": "a93e70d4-f37d-43f1-8a96-55ce4a6b98f5",
+    "name": "BA Economics",
+    "slug": "ba-economics",
+    "stream_id": "2691e8bc-b889-449c-88c1-e9e3610026fa",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:41.125000"
+  },
+  {
+    "id": "76954cf3-3935-468f-96e2-3c870323bf7e",
+    "name": "BA Philosophy",
+    "slug": "ba-philosophy",
+    "stream_id": "2691e8bc-b889-449c-88c1-e9e3610026fa",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:41.167000"
+  },
+  {
+    "id": "ff3fa4f8-fc6a-4449-b6c8-9bd0e06eb1df",
+    "name": "BA Geography",
+    "slug": "ba-geography",
+    "stream_id": "2691e8bc-b889-449c-88c1-e9e3610026fa",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:41.211000"
+  },
+  {
+    "id": "bd60d94b-a789-4d6f-8c28-a295cf4afb03",
+    "name": "BA Hindi",
+    "slug": "ba-hindi",
+    "stream_id": "2691e8bc-b889-449c-88c1-e9e3610026fa",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:41.258000"
+  },
+  {
+    "id": "a2d5d5d9-3f71-43e8-8c2c-fc7626b8dac7",
+    "name": "BA Bengali",
+    "slug": "ba-bengali",
+    "stream_id": "2691e8bc-b889-449c-88c1-e9e3610026fa",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:41.301000"
+  },
+  {
+    "id": "21f5cc3a-c1e4-499b-80e6-2ec5bcba523f",
+    "name": "BA Sanskrit",
+    "slug": "ba-sanskrit",
+    "stream_id": "2691e8bc-b889-449c-88c1-e9e3610026fa",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:41.384000"
+  },
+  {
+    "id": "4600ce8f-d887-4cbf-ae7f-d4beaeeae70c",
+    "name": "BA Music",
+    "slug": "ba-music",
+    "stream_id": "2691e8bc-b889-449c-88c1-e9e3610026fa",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:41.428000"
+  },
+  {
+    "id": "3c1e4a45-827f-480c-9211-6907633d878e",
+    "name": "BA Fine Arts",
+    "slug": "ba-fine-arts",
+    "stream_id": "2691e8bc-b889-449c-88c1-e9e3610026fa",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:41.472000"
+  },
+  {
+    "id": "4af9a535-eec0-4ef8-9aef-e23600490926",
+    "name": "BA Social Work",
+    "slug": "ba-social-work",
+    "stream_id": "2691e8bc-b889-449c-88c1-e9e3610026fa",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:41.516000"
+  },
+  {
+    "id": "6305ddd5-a6fa-4055-b4d0-56fe7d43048a",
+    "name": "BA Journalism",
+    "slug": "ba-journalism",
+    "stream_id": "2691e8bc-b889-449c-88c1-e9e3610026fa",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:41.560000"
+  },
+  {
+    "id": "64b89096-27f7-4c2a-95e9-e188c9494681",
+    "name": "MA English",
+    "slug": "ma-english",
+    "stream_id": "2691e8bc-b889-449c-88c1-e9e3610026fa",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:41.644000"
+  },
+  {
+    "id": "405ba0d5-6dfa-4d96-9a7b-20c9a70fc762",
+    "name": "MA History",
+    "slug": "ma-history",
+    "stream_id": "2691e8bc-b889-449c-88c1-e9e3610026fa",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:41.686000"
+  },
+  {
+    "id": "f2aca167-204c-4a67-87f6-e4ce5cae648a",
+    "name": "MA Political Science",
+    "slug": "ma-political-science",
+    "stream_id": "2691e8bc-b889-449c-88c1-e9e3610026fa",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:41.727000"
+  },
+  {
+    "id": "186b3421-e9d9-4e8a-a801-2dfccdfe80c5",
+    "name": "MA Economics",
+    "slug": "ma-economics",
+    "stream_id": "2691e8bc-b889-449c-88c1-e9e3610026fa",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:41.773000"
+  },
+  {
+    "id": "39d97dd3-b3c1-4577-bac9-3819d192f1f2",
+    "name": "MSW (Social Work)",
+    "slug": "msw-social-work",
+    "stream_id": "2691e8bc-b889-449c-88c1-e9e3610026fa",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:41.814000"
+  },
+  {
+    "id": "a4c5a31e-72d2-4cf5-bee6-3eef580e72e9",
+    "name": "B.Sc Zoology",
+    "slug": "bsc-zoology",
+    "stream_id": "1f8a5a4c-68e8-4c75-89e8-d8f57215e953",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:41.855000"
+  },
+  {
+    "id": "a6fa9c92-57e8-4bac-814e-27b95b337aa8",
+    "name": "B.Sc Botany",
+    "slug": "bsc-botany",
+    "stream_id": "1f8a5a4c-68e8-4c75-89e8-d8f57215e953",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:41.899000"
+  },
+  {
+    "id": "e723988a-3d82-4c47-b342-d54141c329f7",
+    "name": "B.Sc Microbiology",
+    "slug": "bsc-microbiology",
+    "stream_id": "1f8a5a4c-68e8-4c75-89e8-d8f57215e953",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:41.942000"
+  },
+  {
+    "id": "a8e1b6a3-6f10-47b9-bc16-72a1a0793e26",
+    "name": "B.Sc Biochemistry",
+    "slug": "bsc-biochemistry",
+    "stream_id": "1f8a5a4c-68e8-4c75-89e8-d8f57215e953",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:41.984000"
+  },
+  {
+    "id": "63c7ab91-8451-410d-9a13-ac1e86e9e7b8",
+    "name": "B.Sc Environmental Science",
+    "slug": "bsc-environmental-science",
+    "stream_id": "1f8a5a4c-68e8-4c75-89e8-d8f57215e953",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:42.027000"
+  },
+  {
+    "id": "4e069baa-ce79-47bc-b9e7-8e5f05f9be33",
+    "name": "B.Sc Statistics",
+    "slug": "bsc-statistics",
+    "stream_id": "1f8a5a4c-68e8-4c75-89e8-d8f57215e953",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:42.069000"
+  },
+  {
+    "id": "48f84e1c-33b6-4dc2-8f02-fe1a96f134a6",
+    "name": "B.Sc Geology",
+    "slug": "bsc-geology",
+    "stream_id": "1f8a5a4c-68e8-4c75-89e8-d8f57215e953",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:42.113000"
+  },
+  {
+    "id": "fc6e5c25-db69-4e5f-a36e-cdfa836c866d",
+    "name": "B.Sc Electronics",
+    "slug": "bsc-electronics",
+    "stream_id": "1f8a5a4c-68e8-4c75-89e8-d8f57215e953",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:42.158000"
+  },
+  {
+    "id": "c5f72720-fa24-45b0-b6fa-a8cba806fc9d",
+    "name": "B.Sc Forensic Science",
+    "slug": "bsc-forensic-science",
+    "stream_id": "1f8a5a4c-68e8-4c75-89e8-d8f57215e953",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:42.203000"
+  },
+  {
+    "id": "5b553c34-0c21-4df7-9716-53b8f48f4537",
+    "name": "M.Sc Physics",
+    "slug": "msc-physics",
+    "stream_id": "1f8a5a4c-68e8-4c75-89e8-d8f57215e953",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:42.282000"
+  },
+  {
+    "id": "ae7747a1-e7a8-475e-9e15-88f10fad7db8",
+    "name": "M.Sc Chemistry",
+    "slug": "msc-chemistry",
+    "stream_id": "1f8a5a4c-68e8-4c75-89e8-d8f57215e953",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:42.326000"
+  },
+  {
+    "id": "fa1523fe-c78f-427a-a379-3a5c419c24c6",
+    "name": "M.Sc Mathematics",
+    "slug": "msc-mathematics",
+    "stream_id": "1f8a5a4c-68e8-4c75-89e8-d8f57215e953",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:42.368000"
+  },
+  {
+    "id": "11840b68-9648-46d8-8fb0-e863005d7f19",
+    "name": "M.Sc Biology",
+    "slug": "msc-biology",
+    "stream_id": "1f8a5a4c-68e8-4c75-89e8-d8f57215e953",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:42.411000"
+  },
+  {
+    "id": "0454dc64-5519-4a3a-888c-151c45fa44a0",
+    "name": "M.Sc Biotechnology",
+    "slug": "msc-biotechnology",
+    "stream_id": "1f8a5a4c-68e8-4c75-89e8-d8f57215e953",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:42.456000"
+  },
+  {
+    "id": "25a0acb1-4adc-45fa-8a77-f704ecdde173",
+    "name": "PhD Science",
+    "slug": "phd-science",
+    "stream_id": "1f8a5a4c-68e8-4c75-89e8-d8f57215e953",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:18:42.499000"
+  },
+  {
+    "id": "033720ad-2060-4117-a171-1301f9c7f86a",
+    "name": "B.Com Accounting",
+    "slug": "bcom-accounting",
+    "stream_id": "da037263-13d0-4bee-ac8f-4d42f7ebccb1",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:01.306000"
+  },
+  {
+    "id": "e17ee92e-ea05-4422-9236-39912a685cb5",
+    "name": "B.Com Banking",
+    "slug": "bcom-banking",
+    "stream_id": "da037263-13d0-4bee-ac8f-4d42f7ebccb1",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:01.350000"
+  },
+  {
+    "id": "e1b3c78c-c270-4620-8a60-061c00092031",
+    "name": "B.Com Taxation",
+    "slug": "bcom-taxation",
+    "stream_id": "da037263-13d0-4bee-ac8f-4d42f7ebccb1",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:01.394000"
+  },
+  {
+    "id": "10cca456-1511-48ce-a463-327ac2d4ce50",
+    "name": "M.Com",
+    "slug": "mcom",
+    "stream_id": "da037263-13d0-4bee-ac8f-4d42f7ebccb1",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:01.440000"
+  },
+  {
+    "id": "e5dffb08-8546-4150-8135-0e53b1c1aa31",
+    "name": "CFA (Finance Analyst)",
+    "slug": "cfa-finance-analyst",
+    "stream_id": "da037263-13d0-4bee-ac8f-4d42f7ebccb1",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:01.484000"
+  },
+  {
+    "id": "c432246c-b824-4710-9ff4-3399a9008676",
+    "name": "CMA (Cost Accountant)",
+    "slug": "cma-cost-accountant",
+    "stream_id": "da037263-13d0-4bee-ac8f-4d42f7ebccb1",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:01.531000"
+  },
+  {
+    "id": "6b81e6f0-0724-4150-88eb-935fe968f5a0",
+    "name": "ACCA",
+    "slug": "acca",
+    "stream_id": "da037263-13d0-4bee-ac8f-4d42f7ebccb1",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:01.575000"
+  },
+  {
+    "id": "6c6bde29-59f9-4a2c-9a13-e835c8ce5c46",
+    "name": "BBI (Banking & Insurance)",
+    "slug": "bbi-banking-insurance",
+    "stream_id": "da037263-13d0-4bee-ac8f-4d42f7ebccb1",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:01.620000"
+  },
+  {
+    "id": "d82bf64b-7734-46f8-861a-93a912c7e681",
+    "name": "BAF (Accounting & Finance)",
+    "slug": "baf-accounting-finance",
+    "stream_id": "da037263-13d0-4bee-ac8f-4d42f7ebccb1",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:01.663000"
+  },
+  {
+    "id": "4e04b790-d8d8-4661-993b-14c04a753b18",
+    "name": "BFM (Financial Markets)",
+    "slug": "bfm-financial-markets",
+    "stream_id": "da037263-13d0-4bee-ac8f-4d42f7ebccb1",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:01.707000"
+  },
+  {
+    "id": "2df6c331-1200-4510-879c-d06759f871f8",
+    "name": "B.Sc IT",
+    "slug": "bsc-it",
+    "stream_id": "3465b9f3-d62d-41a5-a748-be3dab367f69",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:01.751000"
+  },
+  {
+    "id": "7c6692dd-640e-4276-a125-132aea0f6264",
+    "name": "PGDCA",
+    "slug": "pgdca",
+    "stream_id": "3465b9f3-d62d-41a5-a748-be3dab367f69",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:01.796000"
+  },
+  {
+    "id": "1e5f6696-67a6-4a4e-a247-34635394d281",
+    "name": "DCA",
+    "slug": "dca",
+    "stream_id": "3465b9f3-d62d-41a5-a748-be3dab367f69",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:01.841000"
+  },
+  {
+    "id": "5536f6d2-7806-41f1-ac15-8983dc0e7379",
+    "name": "B.Sc Data Science",
+    "slug": "bsc-data-science",
+    "stream_id": "3465b9f3-d62d-41a5-a748-be3dab367f69",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:01.883000"
+  },
+  {
+    "id": "3e348645-3b30-4848-b07e-1e5b1fb77104",
+    "name": "B.Sc Cyber Security",
+    "slug": "bsc-cyber-security",
+    "stream_id": "3465b9f3-d62d-41a5-a748-be3dab367f69",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:01.969000"
+  },
+  {
+    "id": "b688499c-7213-430f-8c03-65af54d656db",
+    "name": "B.Sc AI",
+    "slug": "bsc-ai",
+    "stream_id": "3465b9f3-d62d-41a5-a748-be3dab367f69",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:02.015000"
+  },
+  {
+    "id": "71b7f6d0-fcf0-45eb-91b3-313901373419",
+    "name": "M.Sc Computer Science",
+    "slug": "msc-computer-science",
+    "stream_id": "3465b9f3-d62d-41a5-a748-be3dab367f69",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:02.059000"
+  },
+  {
+    "id": "3e4040cf-8467-463f-863c-18c72f60e2f4",
+    "name": "M.Sc IT",
+    "slug": "msc-it",
+    "stream_id": "3465b9f3-d62d-41a5-a748-be3dab367f69",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:02.103000"
+  },
+  {
+    "id": "bf616bec-363f-4408-be3a-fd11ad06ad2b",
+    "name": "M.Sc Data Science",
+    "slug": "msc-data-science",
+    "stream_id": "3465b9f3-d62d-41a5-a748-be3dab367f69",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:02.149000"
+  },
+  {
+    "id": "2adc7200-a4e0-47b1-8514-6880e547240e",
+    "name": "B.Com LLB (5 Year)",
+    "slug": "bcom-llb",
+    "stream_id": "030fd5ce-8618-4909-a0ec-f57c097de18c",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:02.197000"
+  },
+  {
+    "id": "f09f3800-2b94-4f9c-837d-76328c6a0edc",
+    "name": "B.Sc LLB (5 Year)",
+    "slug": "bsc-llb",
+    "stream_id": "030fd5ce-8618-4909-a0ec-f57c097de18c",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:02.240000"
+  },
+  {
+    "id": "36f943a9-4e73-479f-aad6-17e37728740c",
+    "name": "Diploma in Cyber Law",
+    "slug": "diploma-cyber-law",
+    "stream_id": "030fd5ce-8618-4909-a0ec-f57c097de18c",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:02.285000"
+  },
+  {
+    "id": "b93abede-df4a-43aa-b7b4-83cbb4298019",
+    "name": "Diploma in Corporate Law",
+    "slug": "diploma-corporate-law",
+    "stream_id": "030fd5ce-8618-4909-a0ec-f57c097de18c",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:02.336000"
+  },
+  {
+    "id": "9f2580d1-4e9c-4a3c-8863-89f41fb32372",
+    "name": "Diploma in Taxation Law",
+    "slug": "diploma-taxation-law",
+    "stream_id": "030fd5ce-8618-4909-a0ec-f57c097de18c",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:02.381000"
+  },
+  {
+    "id": "16641a23-f2b7-4f7e-a8ec-948392e7fe19",
+    "name": "PhD Law",
+    "slug": "phd-law",
+    "stream_id": "030fd5ce-8618-4909-a0ec-f57c097de18c",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:02.424000"
+  },
+  {
+    "id": "2c129606-3964-417f-873b-a38fc811a517",
+    "name": "BA B.Ed (Integrated)",
+    "slug": "ba-bed-integrated",
+    "stream_id": "2fd1eaaa-cebc-4cd6-997b-af957430f144",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:02.470000"
+  },
+  {
+    "id": "cbb764df-e769-43fb-ad3a-9a56233f4db4",
+    "name": "B.Sc B.Ed (Integrated)",
+    "slug": "bsc-bed-integrated",
+    "stream_id": "2fd1eaaa-cebc-4cd6-997b-af957430f144",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:02.517000"
+  },
+  {
+    "id": "71e34a04-93a4-4467-99b2-adb3ad210e4c",
+    "name": "B.P.Ed (Physical Education)",
+    "slug": "bped-physical-education",
+    "stream_id": "2fd1eaaa-cebc-4cd6-997b-af957430f144",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:02.560000"
+  },
+  {
+    "id": "24e1f5c7-15ba-4142-aa10-73a9d65f4f46",
+    "name": "M.P.Ed",
+    "slug": "mped",
+    "stream_id": "2fd1eaaa-cebc-4cd6-997b-af957430f144",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:02.604000"
+  },
+  {
+    "id": "c02f497f-9215-4a39-ac48-5c8e6c28f0db",
+    "name": "NTT (Nursery Teacher Training)",
+    "slug": "ntt-nursery-teacher",
+    "stream_id": "2fd1eaaa-cebc-4cd6-997b-af957430f144",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:02.647000"
+  },
+  {
+    "id": "3e917bdd-5b22-4b39-b322-a3abb015f620",
+    "name": "Special Education",
+    "slug": "special-education",
+    "stream_id": "2fd1eaaa-cebc-4cd6-997b-af957430f144",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:02.735000"
+  },
+  {
+    "id": "086269dc-7f48-47aa-889b-5abea873dcb2",
+    "name": "PhD Education",
+    "slug": "phd-education",
+    "stream_id": "2fd1eaaa-cebc-4cd6-997b-af957430f144",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:02.780000"
+  },
+  {
+    "id": "f875f57d-10f4-4d9d-88ff-9861d5e90f96",
+    "name": "B.Planning",
+    "slug": "b-planning",
+    "stream_id": "088a3adb-a076-45ce-9ba6-bd078f61676e",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:27.920000"
+  },
+  {
+    "id": "a96b18a0-e774-4127-a565-038fa73d373f",
+    "name": "Landscape Architecture",
+    "slug": "landscape-architecture",
+    "stream_id": "088a3adb-a076-45ce-9ba6-bd078f61676e",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:27.968000"
+  },
+  {
+    "id": "288640a7-6545-4d3b-a9ac-e5ca0a234854",
+    "name": "M.Planning",
+    "slug": "m-planning",
+    "stream_id": "088a3adb-a076-45ce-9ba6-bd078f61676e",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:28.013000"
+  },
+  {
+    "id": "8bf8b934-d574-440a-8488-46c3a0e2aa40",
+    "name": "Sustainable Architecture",
+    "slug": "sustainable-architecture",
+    "stream_id": "088a3adb-a076-45ce-9ba6-bd078f61676e",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:28.059000"
+  },
+  {
+    "id": "47354663-52f7-481f-a834-98df3b6f5f65",
+    "name": "Interior Architecture",
+    "slug": "interior-architecture",
+    "stream_id": "088a3adb-a076-45ce-9ba6-bd078f61676e",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:28.102000"
+  },
+  {
+    "id": "edcc979d-bed3-4d6b-b992-aa5f9d708fde",
+    "name": "B.Sc Forestry",
+    "slug": "bsc-forestry",
+    "stream_id": "d4299149-6623-4013-859a-c476f8b245b0",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:28.145000"
+  },
+  {
+    "id": "40e12994-5621-4f45-966f-da43bd18e3c6",
+    "name": "B.Sc Fisheries",
+    "slug": "bsc-fisheries",
+    "stream_id": "d4299149-6623-4013-859a-c476f8b245b0",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:28.190000"
+  },
+  {
+    "id": "44163eef-c22c-4ec9-9545-fb504dfd1760",
+    "name": "B.Sc Dairy Technology",
+    "slug": "bsc-dairy-technology",
+    "stream_id": "d4299149-6623-4013-859a-c476f8b245b0",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:28.235000"
+  },
+  {
+    "id": "6336a634-3c62-48f9-8688-62a338002785",
+    "name": "B.Sc Food Science",
+    "slug": "bsc-food-science",
+    "stream_id": "d4299149-6623-4013-859a-c476f8b245b0",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:28.277000"
+  },
+  {
+    "id": "1e364b1c-b80c-4d31-9e08-d5267f6cc121",
+    "name": "M.Sc Agriculture",
+    "slug": "msc-agriculture",
+    "stream_id": "d4299149-6623-4013-859a-c476f8b245b0",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:28.319000"
+  },
+  {
+    "id": "50a3a2d9-ac71-4bd0-bea5-7ee36cfd4f0d",
+    "name": "B.Tech Agricultural Engineering",
+    "slug": "btech-agricultural-engineering",
+    "stream_id": "d4299149-6623-4013-859a-c476f8b245b0",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:28.360000"
+  },
+  {
+    "id": "9defb87c-b954-4b60-962f-0bf55ca71792",
+    "name": "B.Sc Sericulture",
+    "slug": "bsc-sericulture",
+    "stream_id": "d4299149-6623-4013-859a-c476f8b245b0",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:28.400000"
+  },
+  {
+    "id": "0d058384-0903-44a0-8cf5-45933554cd9b",
+    "name": "B.Sc Soil Science",
+    "slug": "bsc-soil-science",
+    "stream_id": "d4299149-6623-4013-859a-c476f8b245b0",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:28.452000"
+  },
+  {
+    "id": "e2a3840c-8882-4a97-a06e-82d2093093b3",
+    "name": "B.Des (Bachelor of Design)",
+    "slug": "bdes-bachelor-of-design",
+    "stream_id": "d9028333-36bd-4cff-ba2f-8d3537056d72",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:28.499000"
+  },
+  {
+    "id": "d75bd581-b979-4abf-8c33-4c1c5eb89d88",
+    "name": "M.Des (Master of Design)",
+    "slug": "mdes-master-of-design",
+    "stream_id": "d9028333-36bd-4cff-ba2f-8d3537056d72",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:28.542000"
+  },
+  {
+    "id": "8c2bb9cb-b2f7-409d-8d0d-e428931ccff8",
+    "name": "Animation & Multimedia",
+    "slug": "animation-multimedia",
+    "stream_id": "d9028333-36bd-4cff-ba2f-8d3537056d72",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:28.584000"
+  },
+  {
+    "id": "a868eb97-bda8-4343-a599-9d50d9e11b6a",
+    "name": "Game Design",
+    "slug": "game-design",
+    "stream_id": "d9028333-36bd-4cff-ba2f-8d3537056d72",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:28.626000"
+  },
+  {
+    "id": "faef470c-ef27-412b-afe6-46d1ff2cec37",
+    "name": "UI/UX Design",
+    "slug": "ui-ux-design",
+    "stream_id": "d9028333-36bd-4cff-ba2f-8d3537056d72",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:28.667000"
+  },
+  {
+    "id": "96b14de3-b252-490c-8ddc-33e2840fd62b",
+    "name": "Textile Design",
+    "slug": "textile-design",
+    "stream_id": "d9028333-36bd-4cff-ba2f-8d3537056d72",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:28.708000"
+  },
+  {
+    "id": "75256ff9-c0d2-4b50-91f9-343f76bb3a89",
+    "name": "Jewellery Design",
+    "slug": "jewellery-design",
+    "stream_id": "d9028333-36bd-4cff-ba2f-8d3537056d72",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:28.752000"
+  },
+  {
+    "id": "d284d782-1e4f-49b2-bdf0-4cd23343e6b8",
+    "name": "Communication Design",
+    "slug": "communication-design",
+    "stream_id": "d9028333-36bd-4cff-ba2f-8d3537056d72",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:28.796000"
+  },
+  {
+    "id": "b1b5be05-766c-458a-a77c-7cec09a17212",
+    "name": "B.Sc Hospitality",
+    "slug": "bsc-hospitality",
+    "stream_id": "6041bbe6-79d8-466d-9107-a590164e9dd3",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:28.841000"
+  },
+  {
+    "id": "bdfe6c93-faa3-45db-8093-7dafc27acedc",
+    "name": "B.Sc Culinary Arts",
+    "slug": "bsc-culinary-arts",
+    "stream_id": "6041bbe6-79d8-466d-9107-a590164e9dd3",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:28.891000"
+  },
+  {
+    "id": "a6f1d8a3-fa49-4e42-8f6d-ee3438fe27af",
+    "name": "Diploma in Hotel Management",
+    "slug": "diploma-hotel-management",
+    "stream_id": "6041bbe6-79d8-466d-9107-a590164e9dd3",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:28.938000"
+  },
+  {
+    "id": "b4a5f1fc-9dbd-469d-af18-42793ce64a5c",
+    "name": "Diploma in Food Production",
+    "slug": "diploma-food-production",
+    "stream_id": "6041bbe6-79d8-466d-9107-a590164e9dd3",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:28.982000"
+  },
+  {
+    "id": "a22bb799-c8d0-46ec-8f26-aa30e3568517",
+    "name": "Diploma in Bakery",
+    "slug": "diploma-bakery",
+    "stream_id": "6041bbe6-79d8-466d-9107-a590164e9dd3",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:29.024000"
+  },
+  {
+    "id": "97e71a80-d88f-474b-a02f-c233f70e3b10",
+    "name": "M.Sc Hospitality",
+    "slug": "msc-hospitality",
+    "stream_id": "6041bbe6-79d8-466d-9107-a590164e9dd3",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:29.067000"
+  },
+  {
+    "id": "2e6b0577-6713-4589-b0e7-f7926e8b8a24",
+    "name": "Tourism Management",
+    "slug": "tourism-management",
+    "stream_id": "6041bbe6-79d8-466d-9107-a590164e9dd3",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:29.108000"
+  },
+  {
+    "id": "ecae9143-d6c6-4edb-9cb7-dba7cc29456c",
+    "name": "Travel & Tourism",
+    "slug": "travel-tourism",
+    "stream_id": "6041bbe6-79d8-466d-9107-a590164e9dd3",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:29.154000"
+  },
+  {
+    "id": "85e7cba9-bcc4-426d-b7c3-df0a3e0a9a76",
+    "name": "Cruise Management",
+    "slug": "cruise-management",
+    "stream_id": "6041bbe6-79d8-466d-9107-a590164e9dd3",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:29.197000"
+  },
+  {
+    "id": "5ec95622-cf93-4765-b30f-31c3c9e9dd4c",
+    "name": "BJMC (Mass Communication)",
+    "slug": "bjmc-mass-communication",
+    "stream_id": "4ff48c1a-eadb-4426-a5a3-ece02796ec6f",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:29.240000"
+  },
+  {
+    "id": "bf3cb5ec-1dda-4c6b-8953-3a554de99b90",
+    "name": "MJMC",
+    "slug": "mjmc",
+    "stream_id": "4ff48c1a-eadb-4426-a5a3-ece02796ec6f",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:29.285000"
+  },
+  {
+    "id": "56caf76d-1843-4574-b146-a0d7eed4f9de",
+    "name": "Film Making",
+    "slug": "film-making",
+    "stream_id": "4ff48c1a-eadb-4426-a5a3-ece02796ec6f",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:29.326000"
+  },
+  {
+    "id": "e36a7c53-d80b-4729-9b47-5d25d5c1ccb0",
+    "name": "Digital Marketing",
+    "slug": "digital-marketing",
+    "stream_id": "4ff48c1a-eadb-4426-a5a3-ece02796ec6f",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:29.371000"
+  },
+  {
+    "id": "4c1f3648-e718-4377-ba86-ee2e55c2f1fa",
+    "name": "Content Writing",
+    "slug": "content-writing",
+    "stream_id": "4ff48c1a-eadb-4426-a5a3-ece02796ec6f",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:29.426000"
+  },
+  {
+    "id": "1021a912-2f03-4b07-a727-49b6054da2f7",
+    "name": "Radio Jockey",
+    "slug": "radio-jockey",
+    "stream_id": "4ff48c1a-eadb-4426-a5a3-ece02796ec6f",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:29.470000"
+  },
+  {
+    "id": "d4ba9870-5fe2-4650-ad33-fa74e2aabfa4",
+    "name": "TV Anchoring",
+    "slug": "tv-anchoring",
+    "stream_id": "4ff48c1a-eadb-4426-a5a3-ece02796ec6f",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:29.512000"
+  },
+  {
+    "id": "96b324c7-d689-4f91-b2a2-08786e643403",
+    "name": "Photography",
+    "slug": "photography",
+    "stream_id": "4ff48c1a-eadb-4426-a5a3-ece02796ec6f",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:29.554000"
+  },
+  {
+    "id": "eefae376-e146-4bb0-b2b6-5e3f9166c02a",
+    "name": "Video Editing",
+    "slug": "video-editing",
+    "stream_id": "4ff48c1a-eadb-4426-a5a3-ece02796ec6f",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:29.598000"
+  },
+  {
+    "id": "48dc3c80-901e-41a9-a561-baeaaa7ace20",
+    "name": "B.Sc Aviation",
+    "slug": "bsc-aviation",
+    "stream_id": "f12971be-a6c9-4323-8ee7-838a12e1ef67",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:29.641000"
+  },
+  {
+    "id": "0859734d-aa6a-4088-b3af-d62ca979524c",
+    "name": "Air Hostess Training",
+    "slug": "air-hostess-training",
+    "stream_id": "f12971be-a6c9-4323-8ee7-838a12e1ef67",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:29.685000"
+  },
+  {
+    "id": "b2d5e4fc-b73c-4891-a90c-1c43c58d5932",
+    "name": "Ground Staff Training",
+    "slug": "ground-staff-training",
+    "stream_id": "f12971be-a6c9-4323-8ee7-838a12e1ef67",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:29.729000"
+  },
+  {
+    "id": "df7a6b91-f297-4267-b0ce-bb7d8cb5cc6c",
+    "name": "Airport Management",
+    "slug": "airport-management",
+    "stream_id": "f12971be-a6c9-4323-8ee7-838a12e1ef67",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:29.769000"
+  },
+  {
+    "id": "b4a0b728-de4b-4382-93ef-40e296f7593e",
+    "name": "Aeronautical Engineering",
+    "slug": "aeronautical-engineering",
+    "stream_id": "f12971be-a6c9-4323-8ee7-838a12e1ef67",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:29.810000"
+  },
+  {
+    "id": "74038f24-1a9d-4ce0-b33e-3e6d4b08b35e",
+    "name": "Private Pilot License",
+    "slug": "private-pilot-license",
+    "stream_id": "f12971be-a6c9-4323-8ee7-838a12e1ef67",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:29.853000"
+  },
+  {
+    "id": "88baf30d-4311-4a1a-91d3-fd23e575923a",
+    "name": "Cabin Crew",
+    "slug": "cabin-crew",
+    "stream_id": "f12971be-a6c9-4323-8ee7-838a12e1ef67",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:29.894000"
+  },
+  {
+    "id": "ada0d24c-1301-4ad8-9a49-17733ebeb222",
+    "name": "Flight Dispatcher",
+    "slug": "flight-dispatcher",
+    "stream_id": "f12971be-a6c9-4323-8ee7-838a12e1ef67",
+    "stream_name": null,
+    "description": null,
+    "created_at": "2025-12-28 10:19:29.938000"
+  }
+]
