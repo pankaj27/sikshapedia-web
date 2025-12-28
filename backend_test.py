@@ -234,14 +234,6 @@ class APITester:
         # Test 5: PATCH /api/colleges/{id}/section/details
         if self.created_college_id:
             details_section_data = {
-                "description": "Test Engineering College Mumbai is a premier institution offering quality technical education. Established in 2010, the college has been consistently ranked among the top engineering colleges in Maharashtra.",
-                "highlights": [
-                    "NAAC A+ Accredited",
-                    "100% Placement Record",
-                    "State-of-the-art Infrastructure",
-                    "Industry Partnerships",
-                    "Research Excellence"
-                ],
                 "facilities": [
                     "Modern Laboratories",
                     "Digital Library",
@@ -250,7 +242,12 @@ class APITester:
                     "Wi-Fi Campus",
                     "Cafeteria",
                     "Medical Center"
-                ]
+                ],
+                "accreditations": [
+                    "NAAC A+ Accredited",
+                    "NBA Accredited"
+                ],
+                "nirf_ranking": 45
             }
             
             success, response, status = self.make_request("PATCH", f"/colleges/{self.created_college_id}/section/details", 
