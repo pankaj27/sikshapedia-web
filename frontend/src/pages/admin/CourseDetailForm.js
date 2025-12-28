@@ -732,6 +732,8 @@ const CourseDetailForm = () => {
         alert('Draft saved successfully!');
       } else {
         const response = await api.post('/courses-detail', dataToSave);
+        // Clear auto-save draft after successful save
+        clearCourseDraft();
         alert('Draft saved successfully!');
         // Navigate to edit the newly created draft
         navigate(`/admin/courses-detail/edit/${response.data.id}`);
