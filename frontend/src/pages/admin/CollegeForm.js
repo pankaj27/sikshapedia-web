@@ -691,6 +691,7 @@ const CollegeForm = () => {
     affiliation: '',
     recognized_by: [],
     affiliated_to: '',
+    affiliated_to_list: [], // Multiple affiliations support
     board: '', // For schools - CBSE, ICSE, State Board, etc.
     medium: '', // For schools - English, Hindi, Regional
     classes_offered: [], // For schools - Nursery, KG, 1-12
