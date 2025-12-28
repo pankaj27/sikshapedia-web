@@ -2082,21 +2082,51 @@ const CollegeForm = () => {
       console.log('[CollegeForm] Submitting data size:', JSON.stringify(transformedFormData).length, 'bytes');
 
       if (id) {
+        // EXISTING COLLEGE: Use section-wise save for large forms
+        // If form is very large, suggest using section save buttons
+        const payloadSize = JSON.stringify(transformedFormData).length;
+        if (payloadSize > 50000) {
+          toast({
+            title: "⚠️ Large Form",
+            description: "Form is large. Consider using 'Save Section' buttons for each section to avoid timeout.",
+            variant: "warning"
+          });
+        }
         await api.put(`/colleges/${id}`, transformedFormData);
         toast({
           title: "✅ Success!",
           description: "College updated successfully!",
         });
+        navigate('/admin/colleges');
       } else {
-        await api.post('/colleges', transformedFormData);
+        // NEW COLLEGE: Create minimal draft first, then redirect to edit for section-wise saves
+        // This prevents timeout by only sending basic info initially
+        const basicData = {
+          name: formData.name,
+          slug: formData.slug,
+          institution_type: formData.institution_type || 'College',
+          type: formData.type || 'Private',
+          state: formData.state,
+          city: formData.city,
+          status: 'draft'
+        };
+        
+        console.log('[CollegeForm] Creating new college with basic data:', JSON.stringify(basicData).length, 'bytes');
+        
+        const response = await api.post('/colleges', basicData);
+        const newCollegeId = response.data.id;
+        
         // Clear draft after successful creation
         clearDraft();
+        
         toast({
-          title: "✅ Success!",
-          description: "New College created successfully!",
+          title: "✅ Draft Created!",
+          description: "Basic info saved. Now use 'Save Section' buttons to save remaining data.",
         });
+        
+        // Redirect to edit page where section-wise save buttons are available
+        navigate(`/admin/colleges/edit/${newCollegeId}`);
       }
-      navigate('/admin/colleges');
     } catch (error) {
       console.error('Error saving college:', error);
       
