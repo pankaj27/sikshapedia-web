@@ -485,3 +485,40 @@ The recurring "Network Error" issue should now be fully resolved with:
 1. State and City fields correctly mapped from location object
 2. Section-wise save mechanism preventing large payload timeouts
 3. Draft-first workflow enabling incremental data entry
+
+---
+
+## Test Session: Network Error Fix - Section-wise Save All (Dec 28, 2025)
+
+### Fix Applied
+**Problem**: "Save Draft", "Submit for Review", and "Save & Publish" buttons were submitting the entire form at once, causing Network Error/timeout on large forms.
+
+**Solution**: 
+1. Added `handleSequentialSaveAll(targetStatus)` function that saves all 6 sections one by one sequentially
+2. Modified "Save All & Publish" and "Save All & Submit" buttons to use section-wise saving
+3. Added `status` field to backend's allowed_fields for basic section
+
+### Changes Made
+- **CollegeForm.js**: Added `getSectionData()`, `saveSectionData()`, and `handleSequentialSaveAll()` functions
+- **server.py**: Added 'status' to allowed_fields in basic section PATCH endpoint
+
+### New Button Behavior
+- **Save Draft**: Still saves minimal data for new entry (unchanged)
+- **Save All & Publish**: For existing entries, saves all 6 sections sequentially then sets status to 'published'
+- **Save All & Submit**: For existing entries, saves all 6 sections sequentially then sets status to 'pending'
+
+### Testing Required
+1. Open an existing college/school/university in edit mode
+2. Make changes to multiple sections
+3. Click "Save All & Publish" or "Save All & Submit"
+4. Verify all sections save without Network Error
+5. Verify status updates correctly
+
+### Section Save Endpoints (all 6)
+1. PATCH /api/colleges/{id}/section/basic
+2. PATCH /api/colleges/{id}/section/media
+3. PATCH /api/colleges/{id}/section/courses
+4. PATCH /api/colleges/{id}/section/details
+5. PATCH /api/colleges/{id}/section/admission
+6. PATCH /api/colleges/{id}/section/seo-content
+
