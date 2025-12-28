@@ -739,6 +739,16 @@ class College(BaseModel):
     slug: Optional[str] = None
     serial_number: Optional[int] = None  # Unique sequential number for URL (001, 002, etc.)
     location: Optional[Dict] = None
+    state: Optional[str] = None  # State name
+    city: Optional[str] = None  # City name
+    address: Optional[str] = None  # Full address
+    pincode: Optional[str] = None  # Postal code
+    latitude: Optional[str] = None  # GPS latitude
+    longitude: Optional[str] = None  # GPS longitude
+    how_to_reach: Optional[str] = None  # Directions to reach
+    website: Optional[str] = None  # Institution website
+    email: Optional[str] = None  # Contact email
+    phone: Optional[str] = None  # Contact phone
     established: Optional[str] = None
     established_year: Optional[int] = None
     type: Optional[str] = None  # Government, Private, Deemed
