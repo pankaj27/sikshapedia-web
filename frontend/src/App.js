@@ -118,6 +118,7 @@ const ExamsManagement = lazy(() => import('./pages/admin/ExamsManagement'));
 const AdvertisementsManagement = lazy(() => import('./pages/admin/AdvertisementsManagement'));
 const AdvertisementReports = lazy(() => import('./pages/admin/AdvertisementReports'));
 const CourseDetailForm = lazy(() => import('./pages/admin/CourseDetailForm'));
+const MigrationTool = lazy(() => import('./pages/admin/MigrationTool'));
 const CoursesDetailManagement = lazy(() => import('./pages/admin/CoursesDetailManagement'));
 const ExamDetailForm = lazy(() => import('./pages/admin/ExamDetailForm'));
 const ExamsDetailManagement = lazy(() => import('./pages/admin/ExamsDetailManagement'));
