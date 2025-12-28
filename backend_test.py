@@ -197,7 +197,15 @@ class APITester:
                     {"url": "https://example.com/campus1.jpg", "alt": "Campus View 1"},
                     {"url": "https://example.com/campus2.jpg", "alt": "Campus View 2"}
                 ],
-                "brochure_url": "https://example.com/brochure.pdf"
+                "brochure_url": "https://example.com/brochure.pdf",
+                "description": "Test Engineering College Mumbai is a premier institution offering quality technical education. Established in 2010, the college has been consistently ranked among the top engineering colleges in Maharashtra.",
+                "highlights": [
+                    "NAAC A+ Accredited",
+                    "100% Placement Record",
+                    "State-of-the-art Infrastructure",
+                    "Industry Partnerships",
+                    "Research Excellence"
+                ]
             }
             
             success, response, status = self.make_request("PATCH", f"/colleges/{self.created_college_id}/section/media", 
