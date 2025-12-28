@@ -892,7 +892,44 @@ const CollegeForm = () => {
 
   // Handle draft restore
   const handleRestoreDraft = () => {
-    restoreDraft();
+    // Get draft data from localStorage
+    try {
+      const savedDraft = localStorage.getItem(draftKey);
+      if (savedDraft) {
+        const parsed = JSON.parse(savedDraft);
+        if (parsed.formData) {
+          // Merge draft data with default form data to ensure all arrays exist
+          const defaultData = getDefaultFormData();
+          const mergedData = {
+            ...defaultData,
+            ...parsed.formData,
+            // Ensure arrays are properly merged
+            location: { ...defaultData.location, ...parsed.formData.location },
+            courses: parsed.formData.courses || defaultData.courses,
+            facilities: parsed.formData.facilities || defaultData.facilities,
+            accreditations: parsed.formData.accreditations || defaultData.accreditations,
+            recognitions: parsed.formData.recognitions || defaultData.recognitions,
+            campus_images: parsed.formData.campus_images || defaultData.campus_images,
+            faqs: parsed.formData.faqs || defaultData.faqs,
+            key_highlights: parsed.formData.key_highlights || defaultData.key_highlights,
+            scholarships: parsed.formData.scholarships || defaultData.scholarships,
+            placement_stats: parsed.formData.placement_stats || defaultData.placement_stats,
+            notable_alumni: parsed.formData.notable_alumni || defaultData.notable_alumni,
+            admission_info: { ...defaultData.admission_info, ...parsed.formData.admission_info },
+            contact_info: { ...defaultData.contact_info, ...parsed.formData.contact_info },
+            social_links: { ...defaultData.social_links, ...parsed.formData.social_links },
+            seo: { ...defaultData.seo, ...parsed.formData.seo },
+            meta_keywords: parsed.formData.meta_keywords || defaultData.meta_keywords,
+            table_of_contents: parsed.formData.table_of_contents || defaultData.table_of_contents,
+            page_widgets: parsed.formData.page_widgets || defaultData.page_widgets,
+            menu_config: parsed.formData.menu_config || defaultData.menu_config,
+          };
+          setFormData(mergedData);
+        }
+      }
+    } catch (error) {
+      console.error('Error restoring draft:', error);
+    }
     setShowDraftBanner(false);
   };
 
