@@ -1845,6 +1845,8 @@ const CollegeForm = () => {
         });
       } else {
         await api.post('/colleges', transformedFormData);
+        // Clear draft after successful creation
+        clearDraft();
         toast({
           title: "✅ Success!",
           description: "New College created successfully!",
