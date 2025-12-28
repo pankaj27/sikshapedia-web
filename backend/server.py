@@ -4231,7 +4231,9 @@ async def update_college_media_section(college_id: str, data: dict, current_user
     allowed_fields = [
         'logo_url', 'logo_title', 'logo_alt', 'banner_url', 'banner_title', 
         'banner_alt', 'images', 'videos', 'campus_images', 'campus_video_url',
-        'description', 'highlights', 'brochure_url', 'virtual_tour_url'
+        'campus_video_title', 'campus_video_description',
+        'description', 'highlights', 'brochure_url', 
+        'virtual_tour_url', 'virtual_tour_title', 'virtual_tour_description'
     ]
     
     update_data = {k: v for k, v in data.items() if k in allowed_fields}
