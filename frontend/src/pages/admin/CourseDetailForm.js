@@ -15,6 +15,7 @@ import StatusBadge from '../../components/admin/StatusBadge';
 import { useAuth } from '../../contexts/AuthContext';
 import AdminLayout from '../../components/admin/AdminLayout';
 import { SeoMetaSection } from '../../components/admin/college-form';
+import { CourseMenuConfigSection } from '../../components/admin/course-form';
 
 // Simple Rich Text Toolbar for Short Description
 const SimpleRichTextToolbar = ({ editor }) => {
