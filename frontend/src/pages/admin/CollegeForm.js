@@ -1944,19 +1944,39 @@ const CollegeForm = () => {
             established_year: formData.established_year,
             campus_size: formData.campus_size,
             total_students: formData.total_students,
-            state: formData.location?.state || formData.state,
-            city: formData.location?.city || formData.city,
-            address: formData.location?.address || formData.address,
-            pincode: formData.location?.pincode || formData.pincode,
-            latitude: formData.location?.latitude || formData.latitude,
-            longitude: formData.location?.longitude || formData.longitude,
+            // Location fields - map from nested location object
+            state: formData.location?.state || formData.state || '',
+            city: formData.location?.city || formData.city || '',
+            address: formData.location?.address || formData.address || '',
+            pincode: formData.location?.pincode || formData.pincode || '',
+            latitude: formData.location?.latitude || formData.latitude || '',
+            longitude: formData.location?.longitude || formData.longitude || '',
+            location: formData.location || {},
             how_to_reach: formData.how_to_reach,
-            website: formData.contact_info?.website || formData.website,
-            email: formData.contact_info?.email || formData.email,
-            phone: formData.contact_info?.phone || formData.phone,
-            affiliated_to: formData.affiliated_to,
-            recognized_by: formData.recognized_by,
-            board: formData.board
+            // Contact info
+            website: formData.contact_info?.website || formData.website || '',
+            email: formData.contact_info?.email || formData.email || '',
+            phone: formData.contact_info?.phone || formData.phone || '',
+            contact_info: formData.contact_info || {},
+            // Affiliations & Recognitions - handle both string and array formats
+            affiliated_to: formData.affiliated_to_list?.length > 0 
+              ? formData.affiliated_to_list 
+              : (formData.affiliated_to ? (Array.isArray(formData.affiliated_to) ? formData.affiliated_to : formData.affiliated_to.split(', ').filter(Boolean)) : []),
+            recognized_by: formData.recognized_by || [],
+            memberships: formData.memberships || [],
+            board: formData.board || '',
+            // Rankings
+            nirf_ranking: formData.nirf_ranking,
+            india_today_ranking: formData.india_today_ranking,
+            outlook_ranking: formData.outlook_ranking,
+            rankings: formData.rankings || [],
+            // Accreditations
+            accreditations: (formData.accreditations || []).map(accr => {
+              if (typeof accr === 'string') return accr;
+              const parts = [accr.name];
+              if (accr.level) parts.push(accr.level);
+              return parts.join(' ');
+            }).filter(Boolean)
           };
           break;
         case 'media':
@@ -1969,6 +1989,13 @@ const CollegeForm = () => {
             banner_alt: formData.banner_alt,
             images: formData.images,
             videos: formData.videos,
+            campus_images: formData.campus_images || [],
+            campus_video_url: formData.campus_video_url,
+            campus_video_title: formData.campus_video_title,
+            campus_video_description: formData.campus_video_description,
+            virtual_tour_url: formData.virtual_tour_url,
+            virtual_tour_title: formData.virtual_tour_title,
+            virtual_tour_description: formData.virtual_tour_description,
             description: formData.description,
             highlights: formData.highlights,
             brochure_url: formData.brochure_url
