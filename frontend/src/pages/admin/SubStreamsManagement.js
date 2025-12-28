@@ -3,7 +3,17 @@ import GenericManagement from './GenericManagement';
 
 const SubStreamsManagement = () => {
   const fields = [
-    { key: 'stream_id', label: 'Parent Stream ID', type: 'text', required: true },
+    { 
+      key: 'stream_id', 
+      label: 'Parent Stream', 
+      type: 'select', 
+      required: true,
+      fetchOptions: {
+        endpoint: '/streams?limit=100',
+        valueKey: 'id',
+        labelKey: 'name'
+      }
+    },
     { key: 'name', label: 'Sub-Stream Name', type: 'text', required: true },
     { key: 'slug', label: 'Slug', type: 'text', required: true },
     { key: 'description', label: 'Description', type: 'textarea' },
@@ -14,7 +24,11 @@ const SubStreamsManagement = () => {
   const displayFields = [
     { key: 'name', label: 'Name' },
     { key: 'slug', label: 'Slug' },
-    { key: 'stream_id', label: 'Parent Stream' },
+    { 
+      key: 'stream_name', 
+      label: 'Parent Stream',
+      render: (value, item) => value || item.stream_id?.substring(0, 8) + '...' || '-'
+    },
     { key: 'display_order', label: 'Order' },
     { 
       key: 'is_active', 
