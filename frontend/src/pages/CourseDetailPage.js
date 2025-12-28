@@ -23,13 +23,22 @@ const CourseDetailPage = () => {
   useEffect(() => {
     const fetchCourse = async () => {
       try {
-        const detailResponse = await api.get('/courses-detail');
+        // First try to get published courses only
+        const detailResponse = await api.get('/courses-detail?status=published');
         const detailCourses = detailResponse.data || [];
-        let foundCourse = detailCourses.find(c => 
-          c.slug === slug || c.id === slug ||
-          c.name?.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') === slug
-        );
         
+        // Find course by slug, prioritizing exact slug match
+        let foundCourse = detailCourses.find(c => c.slug === slug);
+        
+        // If not found by slug, try other matching methods
+        if (!foundCourse) {
+          foundCourse = detailCourses.find(c => 
+            c.id === slug ||
+            c.name?.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') === slug
+          );
+        }
+        
+        // Fallback: if still not found, try quick courses endpoint
         if (!foundCourse) {
           const quickResponse = await api.get('/courses');
           const quickCourses = quickResponse.data || [];
@@ -40,6 +49,7 @@ const CourseDetailPage = () => {
           );
         }
         
+        console.log('Found course:', foundCourse?.name, 'Status:', foundCourse?.status);
         if (foundCourse) setCourse(foundCourse);
       } catch (error) {
         console.error('Error fetching course:', error);
