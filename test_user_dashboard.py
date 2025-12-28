@@ -7,7 +7,7 @@ import requests
 import json
 
 # Backend URL from frontend .env
-BASE_URL = "https://institute-editor.preview.emergentagent.com/api"
+BASE_URL = "https://course-mgmt-system.preview.emergentagent.com/api"
 
 def make_request(method, endpoint, data=None, token=None):
     """Make HTTP request and return (success, response_data, status_code)"""
