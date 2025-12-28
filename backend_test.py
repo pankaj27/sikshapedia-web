@@ -134,6 +134,186 @@ class APITester:
             self.log_test("GET /auth/me (no token - should fail)", False, 
                          f"Should have been rejected but got status {status}", response)
 
+    def test_section_wise_save_functionality(self):
+        """Test sequential section-wise save functionality for college form to prevent Network Error"""
+        print("🏫 Testing Sequential Section-wise Save Functionality...")
+        
+        # Store created college ID for cleanup
+        self.created_college_id = None
+        
+        # First, get an existing college to test section-wise updates
+        success, response, status = self.make_request("GET", "/colleges?limit=1")
+        if success and isinstance(response, list) and len(response) > 0:
+            existing_college = response[0]
+            self.existing_college_id = existing_college.get("id")
+            self.log_test("Get Existing College for Testing", True, 
+                         f"Using college: {existing_college.get('name')} (ID: {self.existing_college_id})")
+        else:
+            self.log_test("Get Existing College for Testing", False, "No existing colleges found")
+            self.existing_college_id = None
+        
+        # Test all 6 section endpoints with existing college
+        if self.existing_college_id:
+            self.test_all_section_endpoints(self.existing_college_id)
+        
+        # Test status update via basic section
+        if self.existing_college_id:
+            self.test_status_update_via_section(self.existing_college_id)
+
+    def test_all_section_endpoints(self, college_id):
+        """Test all 6 section-wise PATCH endpoints"""
+        print("📝 Testing All 6 Section-wise PATCH Endpoints...")
+        
+        # Test 1: PATCH /api/colleges/{id}/section/basic
+        basic_section_data = {
+            "established_year": 2010,
+            "type": "Private",
+            "affiliated_to": "Mumbai University",
+            "recognized_by": ["AICTE", "UGC"],
+            "institution_type": "College",
+            "campus_size": "100 acres",
+            "total_students": 8000
+        }
+        
+        success, response, status = self.make_request("PATCH", f"/colleges/{college_id}/section/basic", 
+                                                    basic_section_data, token=self.admin_token)
+        if success:
+            self.log_test("PATCH /api/colleges/{id}/section/basic", True, 
+                         f"Basic section updated: {response.get('message', 'Success')}")
+        else:
+            self.log_test("PATCH /api/colleges/{id}/section/basic", False, f"Status: {status}", response)
+        
+        # Test 2: PATCH /api/colleges/{id}/section/media
+        media_section_data = {
+            "logo_url": "https://example.com/logo.png",
+            "banner_url": "https://example.com/banner.jpg",
+            "campus_images": [
+                {"url": "https://example.com/campus1.jpg", "alt": "Campus View 1"},
+                {"url": "https://example.com/campus2.jpg", "alt": "Campus View 2"}
+            ],
+            "brochure_url": "https://example.com/brochure.pdf",
+            "virtual_tour_url": "https://example.com/virtual-tour",
+            "campus_video_url": "https://youtube.com/watch?v=example"
+        }
+        
+        success, response, status = self.make_request("PATCH", f"/colleges/{college_id}/section/media", 
+                                                    media_section_data, token=self.admin_token)
+        if success:
+            self.log_test("PATCH /api/colleges/{id}/section/media", True, 
+                         f"Media section updated: {response.get('message', 'Success')}")
+        else:
+            self.log_test("PATCH /api/colleges/{id}/section/media", False, f"Status: {status}", response)
+        
+        # Test 3: PATCH /api/colleges/{id}/section/courses
+        courses_section_data = {
+            "courses": [
+                {"name": "B.Tech Computer Science", "fees": 150000, "duration": "4 Years"},
+                {"name": "B.Tech Mechanical", "fees": 140000, "duration": "4 Years"},
+                {"name": "B.Tech Electronics", "fees": 145000, "duration": "4 Years"},
+                {"name": "M.Tech Computer Science", "fees": 180000, "duration": "2 Years"},
+                {"name": "MBA", "fees": 200000, "duration": "2 Years"}
+            ]
+        }
+        
+        success, response, status = self.make_request("PATCH", f"/colleges/{college_id}/section/courses", 
+                                                    courses_section_data, token=self.admin_token)
+        if success:
+            self.log_test("PATCH /api/colleges/{id}/section/courses", True, 
+                         f"Courses section updated with {len(courses_section_data['courses'])} courses")
+        else:
+            self.log_test("PATCH /api/colleges/{id}/section/courses", False, f"Status: {status}", response)
+        
+        # Test 4: PATCH /api/colleges/{id}/section/details
+        details_section_data = {
+            "facilities": [
+                "Modern Laboratories",
+                "Digital Library", 
+                "Sports Complex",
+                "Hostel Accommodation",
+                "Wi-Fi Campus"
+            ],
+            "accreditations": [
+                "NAAC A+ Accredited",
+                "NBA Accredited"
+            ],
+            "nirf_ranking": 45
+        }
+        
+        success, response, status = self.make_request("PATCH", f"/colleges/{college_id}/section/details", 
+                                                    details_section_data, token=self.admin_token)
+        if success:
+            self.log_test("PATCH /api/colleges/{id}/section/details", True, 
+                         f"Details section updated: {response.get('message', 'Success')}")
+        else:
+            self.log_test("PATCH /api/colleges/{id}/section/details", False, f"Status: {status}", response)
+        
+        # Test 5: PATCH /api/colleges/{id}/section/admission
+        admission_section_data = {
+            "admission_process": "Admission is based on JEE Main scores for B.Tech programs and GATE scores for M.Tech programs.",
+            "admission_dates": [
+                {"event": "Application Start", "date": "2025-04-01"},
+                {"event": "Application End", "date": "2025-06-30"},
+                {"event": "Counseling Start", "date": "2025-07-15"}
+            ],
+            "meta_title": "Test Engineering College - Top Engineering College",
+            "meta_description": "Test Engineering College offers quality technical education with excellent placement record."
+        }
+        
+        success, response, status = self.make_request("PATCH", f"/colleges/{college_id}/section/admission", 
+                                                    admission_section_data, token=self.admin_token)
+        if success:
+            self.log_test("PATCH /api/colleges/{id}/section/admission", True, 
+                         f"Admission section updated: {response.get('message', 'Success')}")
+        else:
+            self.log_test("PATCH /api/colleges/{id}/section/admission", False, f"Status: {status}", response)
+        
+        # Test 6: PATCH /api/colleges/{id}/section/seo-content
+        seo_content_data = {
+            "seo_full_content": "This is a premier engineering college offering quality technical education with state-of-the-art facilities and experienced faculty.",
+            "seo_intro": "Premier engineering college offering quality technical education since 2010.",
+            "seo_toc": [
+                {"title": "About the College", "anchor": "about"},
+                {"title": "Courses Offered", "anchor": "courses"},
+                {"title": "Admission Process", "anchor": "admission"}
+            ]
+        }
+        
+        success, response, status = self.make_request("PATCH", f"/colleges/{college_id}/section/seo-content", 
+                                                    seo_content_data, token=self.admin_token)
+        if success:
+            self.log_test("PATCH /api/colleges/{id}/section/seo-content", True, 
+                         f"SEO Content section updated: {response.get('message', 'Success')}")
+        else:
+            self.log_test("PATCH /api/colleges/{id}/section/seo-content", False, f"Status: {status}", response)
+
+    def test_status_update_via_section(self, college_id):
+        """Test that status field can be updated via basic section"""
+        print("📊 Testing Status Update via Basic Section...")
+        
+        # Test updating status to 'published' via basic section
+        status_update_data = {
+            "status": "published",
+            "type": "Private",
+            "established_year": 2010
+        }
+        
+        success, response, status = self.make_request("PATCH", f"/colleges/{college_id}/section/basic", 
+                                                    status_update_data, token=self.admin_token)
+        if success:
+            self.log_test("Update Status to Published via Basic Section", True, 
+                         f"Status update successful: {response.get('message', 'Success')}")
+            
+            # Verify the status was actually updated
+            success, response, status = self.make_request("GET", f"/colleges/{college_id}")
+            if success and response.get("status") == "published":
+                self.log_test("Verify Status Update Persistence", True, 
+                             f"Status correctly updated to: {response.get('status')}")
+            else:
+                self.log_test("Verify Status Update Persistence", False, 
+                             f"Status not updated correctly. Current status: {response.get('status')}")
+        else:
+            self.log_test("Update Status to Published via Basic Section", False, f"Status: {status}", response)
+
     def test_section_wise_college_creation(self):
         """Test section-wise college creation workflow to prevent Network Error"""
         print("🏫 Testing Section-wise College Creation Workflow...")
