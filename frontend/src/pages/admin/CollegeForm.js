@@ -3279,6 +3279,17 @@ const CollegeForm = () => {
             handleChange={handleChange}
             entityType="college"
           />
+          {/* Admission & SEO Section Save Button */}
+          {id && (
+            <div className="mt-4 pt-4 border-t flex justify-end">
+              <SectionSaveButton 
+                section="admission"
+                onSave={handleSectionSave}
+                isSaving={sectionSaving.admission}
+                isSaved={sectionSaved.admission}
+              />
+            </div>
+          )}
         </CollapsibleSection>
 
         {/* SEO Content Section */}
