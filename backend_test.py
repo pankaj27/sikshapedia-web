@@ -318,7 +318,7 @@ class APITester:
                 # Check basic section
                 if (response.get("established_year") == 2010 and 
                     response.get("type") == "Private" and 
-                    response.get("affiliation") == "Mumbai University"):
+                    "Mumbai University" in str(response.get("affiliated_to", ""))):
                     verification_results.append("Basic section ✓")
                 else:
                     verification_results.append("Basic section ✗")
@@ -326,7 +326,9 @@ class APITester:
                 # Check media section
                 if (response.get("logo_url") and 
                     response.get("banner_url") and 
-                    response.get("campus_images")):
+                    response.get("campus_images") and
+                    response.get("description") and
+                    response.get("highlights")):
                     verification_results.append("Media section ✓")
                 else:
                     verification_results.append("Media section ✗")
@@ -339,24 +341,24 @@ class APITester:
                     verification_results.append(f"Courses section ✗ ({len(courses)} courses)")
                 
                 # Check details section
-                if (response.get("description") and 
-                    response.get("highlights") and 
-                    response.get("facilities")):
+                if (response.get("facilities") and 
+                    response.get("accreditations")):
                     verification_results.append("Details section ✓")
                 else:
                     verification_results.append("Details section ✗")
                 
                 # Check admission section
                 if (response.get("admission_process") and 
-                    response.get("admission_dates")):
+                    response.get("admission_dates") and
+                    response.get("meta_title") and
+                    response.get("meta_description")):
                     verification_results.append("Admission section ✓")
                 else:
                     verification_results.append("Admission section ✗")
                 
                 # Check SEO content section
-                if (response.get("meta_title") and 
-                    response.get("meta_description") and 
-                    response.get("seo_full_content")):
+                if (response.get("seo_full_content") and 
+                    response.get("seo_intro")):
                     verification_results.append("SEO Content section ✓")
                 else:
                     verification_results.append("SEO Content section ✗")
