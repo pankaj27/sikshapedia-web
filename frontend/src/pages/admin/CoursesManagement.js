@@ -399,14 +399,43 @@ const CoursesManagement = () => {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1.5">Stream *</label>
-                  <input
-                    type="text"
-                    value={formData.stream || ''}
-                    onChange={(e) => setFormData({ ...formData, stream: e.target.value })}
-                    placeholder="e.g., Engineering, Medical"
+                  <select
+                    value={formData.stream_id || ''}
+                    onChange={(e) => {
+                      const selectedStream = allStreams.find(s => s.id === e.target.value);
+                      setFormData({ 
+                        ...formData, 
+                        stream_id: e.target.value,
+                        stream: selectedStream?.name || '',
+                        sub_stream_id: '' // Reset sub-stream when stream changes
+                      });
+                    }}
                     className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     required
-                  />
+                  >
+                    <option value="">Select Stream</option>
+                    {allStreams.map(s => (
+                      <option key={s.id} value={s.id}>{s.name}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">Sub-Stream</label>
+                  <select
+                    value={formData.sub_stream_id || ''}
+                    onChange={(e) => setFormData({ ...formData, sub_stream_id: e.target.value })}
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    disabled={!formData.stream_id}
+                  >
+                    <option value="">{formData.stream_id ? 'Select Sub-Stream' : 'First select a stream'}</option>
+                    {filteredSubStreams.map(s => (
+                      <option key={s.id} value={s.id}>{s.name}</option>
+                    ))}
+                  </select>
+                  {formData.stream_id && filteredSubStreams.length === 0 && (
+                    <p className="text-xs text-amber-600 mt-1">No sub-streams available for this stream</p>
+                  )}
                 </div>
 
                 <div>
