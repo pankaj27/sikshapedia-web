@@ -7,6 +7,7 @@ const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  timeout: 60000, // 60 seconds timeout for large form submissions
 });
 
 // Helper function to safely get current path without causing React re-renders
