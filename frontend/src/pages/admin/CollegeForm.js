@@ -1972,6 +1972,201 @@ const CollegeForm = () => {
   const { toast } = useToast();
   
   // Section-wise save handler for optimized saving (smaller payloads = faster saves)
+  // Helper function to save a single section's data (used by both handleSectionSave and handleSequentialSaveAll)
+  const saveSectionData = async (section, sectionData) => {
+    // Remove null/undefined values
+    Object.keys(sectionData).forEach(key => {
+      if (sectionData[key] === null || sectionData[key] === undefined) {
+        delete sectionData[key];
+      }
+    });
+    
+    console.log(`[CollegeForm] Saving ${section} section:`, JSON.stringify(sectionData).length, 'bytes');
+    await api.patch(`/colleges/${id}/section/${section}`, sectionData);
+  };
+
+  // Get section data based on section name
+  const getSectionData = (section) => {
+    switch (section) {
+      case 'basic':
+        return {
+          name: formData.name,
+          slug: formData.slug,
+          type: formData.type,
+          institution_type: formData.institution_type,
+          established_year: formData.established_year,
+          campus_size: formData.campus_size,
+          total_students: formData.total_students,
+          state: formData.location?.state || formData.state || '',
+          city: formData.location?.city || formData.city || '',
+          address: formData.location?.address || formData.address || '',
+          pincode: formData.location?.pincode || formData.pincode || '',
+          latitude: formData.location?.latitude || formData.latitude || '',
+          longitude: formData.location?.longitude || formData.longitude || '',
+          location: formData.location || {},
+          how_to_reach: formData.how_to_reach,
+          website: formData.contact_info?.website || formData.website || '',
+          email: formData.contact_info?.email || formData.email || '',
+          phone: formData.contact_info?.phone || formData.phone || '',
+          contact_info: formData.contact_info || {},
+          affiliated_to: formData.affiliated_to_list?.length > 0 
+            ? formData.affiliated_to_list 
+            : (formData.affiliated_to ? (Array.isArray(formData.affiliated_to) ? formData.affiliated_to : formData.affiliated_to.split(', ').filter(Boolean)) : []),
+          recognized_by: formData.recognized_by || [],
+          memberships: formData.memberships || [],
+          board: formData.board || '',
+          medium: formData.medium || '',
+          classes_offered: formData.classes_offered || [],
+          streams_offered: formData.streams_offered || [],
+          nirf_ranking: formData.nirf_ranking,
+          india_today_ranking: formData.india_today_ranking,
+          outlook_ranking: formData.outlook_ranking,
+          rankings: formData.rankings || [],
+          accreditations: (formData.accreditations || []).map(accr => {
+            if (typeof accr === 'string') return accr;
+            const parts = [accr.name];
+            if (accr.level) parts.push(accr.level);
+            return parts.join(' ');
+          }).filter(Boolean),
+          // Badges
+          is_verified: formData.is_verified,
+          is_featured: formData.is_featured,
+          is_preferred: formData.is_preferred,
+          is_trending: formData.is_trending,
+          is_top_rated: formData.is_top_rated,
+          is_sponsored: formData.is_sponsored,
+          display_priority: formData.display_priority
+        };
+      case 'media':
+        return {
+          logo_url: formData.logo_url,
+          logo_title: formData.logo_title,
+          logo_alt: formData.logo_alt,
+          banner_url: formData.banner_url,
+          banner_title: formData.banner_title,
+          banner_alt: formData.banner_alt,
+          images: formData.images,
+          videos: formData.videos,
+          campus_images: formData.campus_images || [],
+          campus_video_url: formData.campus_video_url,
+          campus_video_title: formData.campus_video_title,
+          campus_video_description: formData.campus_video_description,
+          virtual_tour_url: formData.virtual_tour_url,
+          virtual_tour_title: formData.virtual_tour_title,
+          virtual_tour_description: formData.virtual_tour_description,
+          description: formData.description,
+          highlights: formData.highlights,
+          brochure_url: formData.brochure_url
+        };
+      case 'courses':
+        return {
+          courses: formData.courses,
+          streams_offered: formData.streams_offered,
+          average_fees: formData.average_fees
+        };
+      case 'details':
+        return {
+          facilities: formData.facilities,
+          accreditations: formData.accreditations?.map(accr => {
+            if (typeof accr === 'string') return accr;
+            const parts = [accr.name];
+            if (accr.level) parts.push(accr.level);
+            return parts.join(' ');
+          }).filter(Boolean),
+          rankings: formData.rankings,
+          nirf_ranking: formData.nirf_ranking,
+          placement_stats: formData.placement_stats,
+          placements: formData.placements,
+          cutoff_data: formData.cutoff_data,
+          scholarships: formData.scholarships,
+          hostel_info: formData.hostel_info
+        };
+      case 'admission':
+        return {
+          admission_process: formData.admission_process,
+          admission_dates: formData.admission_dates,
+          admission_deadline: formData.admission_deadline,
+          admission_fees: formData.admission_fees,
+          is_admission_open: formData.is_admission_open,
+          is_admission_partner: formData.is_admission_partner,
+          menu_config: formData.menu_config,
+          sidebar_widgets: formData.sidebar_widgets,
+          meta_title: formData.meta_title,
+          meta_description: formData.meta_description,
+          meta_keywords: formData.meta_keywords
+        };
+      case 'seo-content':
+        return {
+          seo_intro: formData.seo_intro,
+          seo_full_content: formData.seo_full_content,
+          seo_toc: formData.seo_toc,
+          seo_faqs: formData.seo_faqs,
+          custom_tables: formData.custom_tables
+        };
+      default:
+        return {};
+    }
+  };
+
+  // Save all sections sequentially (one by one to avoid timeout)
+  const handleSequentialSaveAll = async (targetStatus) => {
+    if (!id) {
+      toast({
+        title: "⚠️ Error",
+        description: "Please save the form as draft first.",
+        variant: "destructive"
+      });
+      return false;
+    }
+
+    const sections = ['basic', 'media', 'courses', 'details', 'admission', 'seo-content'];
+    let allSaved = true;
+
+    for (const section of sections) {
+      try {
+        setSectionSaving(prev => ({ ...prev, [section]: true }));
+        const sectionData = getSectionData(section);
+        await saveSectionData(section, sectionData);
+        setSectionSaved(prev => ({ ...prev, [section]: true }));
+      } catch (error) {
+        console.error(`[CollegeForm] Error saving ${section}:`, error);
+        allSaved = false;
+        toast({
+          title: `❌ ${section} Save Failed`,
+          description: error.response?.data?.detail || `Failed to save ${section} section.`,
+          variant: "destructive"
+        });
+        break;
+      } finally {
+        setSectionSaving(prev => ({ ...prev, [section]: false }));
+      }
+    }
+
+    if (allSaved) {
+      // Now update the status
+      try {
+        await api.patch(`/colleges/${id}/section/basic`, { status: targetStatus });
+        toast({
+          title: targetStatus === 'published' ? "✅ Published!" : "✅ Submitted for Review!",
+          description: targetStatus === 'published' 
+            ? "All sections saved and college published successfully!" 
+            : "All sections saved and submitted for review.",
+        });
+        navigate('/admin/colleges');
+        return true;
+      } catch (error) {
+        toast({
+          title: "❌ Status Update Failed",
+          description: error.response?.data?.detail || "Failed to update status.",
+          variant: "destructive"
+        });
+        return false;
+      }
+    }
+
+    return false;
+  };
+
   const handleSectionSave = async (section) => {
     if (!id) {
       toast({
