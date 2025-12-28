@@ -1159,6 +1159,13 @@ const CollegeForm = () => {
         ...getDefaultFormData(),
         ...collegeData,
         recognized_by: Array.isArray(collegeData.recognized_by) ? collegeData.recognized_by : [],
+        // Handle affiliated_to - can be string or array from backend
+        affiliated_to: Array.isArray(collegeData.affiliated_to) 
+          ? collegeData.affiliated_to.join(', ')
+          : (collegeData.affiliated_to || ''),
+        affiliated_to_list: Array.isArray(collegeData.affiliated_to) 
+          ? collegeData.affiliated_to 
+          : (collegeData.affiliated_to ? collegeData.affiliated_to.split(', ').filter(Boolean) : []),
         memberships: Array.isArray(collegeData.memberships) ? collegeData.memberships : [],
         rankings: Array.isArray(collegeData.rankings) ? collegeData.rankings : [],
         streams: Array.isArray(collegeData.streams) ? collegeData.streams : [],
