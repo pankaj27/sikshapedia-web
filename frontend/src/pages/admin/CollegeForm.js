@@ -2466,9 +2466,17 @@ const CollegeForm = () => {
                 type="button"
                 variant="outline"
                 disabled={saving}
-                onClick={() => {
-                  setFormData(prev => ({...prev, status: 'draft'}));
-                  setTimeout(() => document.getElementById('institution-form').requestSubmit(), 100);
+                onClick={async () => {
+                  if (!id) {
+                    // New entry - use form submit
+                    setFormData(prev => ({...prev, status: 'draft'}));
+                    setTimeout(() => document.getElementById('institution-form').requestSubmit(), 100);
+                  } else {
+                    // Edit mode - use section-wise saving to avoid Network Error
+                    setSaving(true);
+                    await handleSequentialSaveAll('draft');
+                    setSaving(false);
+                  }
                 }}
                 className="border-orange-300 text-orange-600 hover:bg-orange-50"
               >
