@@ -2601,33 +2601,56 @@ const CollegeForm = () => {
             {/* Recognized By - Hidden for Schools */}
             {!isSchool && (
               <div className="col-span-2">
-                <label className="block text-sm font-medium mb-2">Recognized By</label>
-                {formData.recognized_by.map((org, index) => (
-                  <div key={index} className="flex gap-2 mb-2">
-                    <select
-                      value={org}
-                      onChange={(e) => handleArrayChange('recognized_by', index, e.target.value)}
-                      className="flex-1 border rounded px-3 py-2"
-                    >
-                      <option value="">Select Recognition</option>
-                      {recognitions.map((recognition) => (
-                        <option key={recognition.id} value={recognition.name}>
-                          {recognition.name}
-                        </option>
-                      ))}
-                    </select>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => removeArrayItem('recognized_by', index)}
-                    >
-                      <FiTrash2 />
-                    </Button>
-                  </div>
-                ))}
-                <Button type="button" onClick={() => addArrayItem('recognized_by', '')} size="sm" variant="outline">
-                  <FiPlus className="mr-2" /> Add Recognition
-                </Button>
+                <label className="block text-sm font-medium mb-2">
+                  Recognized By <span className="text-xs text-gray-500">(Select multiple if applicable)</span>
+                </label>
+                <div className="border rounded p-3 max-h-48 overflow-y-auto bg-white">
+                  {recognitions.length === 0 ? (
+                    <p className="text-sm text-gray-400">Loading recognitions...</p>
+                  ) : (
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                      {recognitions.map((recognition) => {
+                        const isSelected = (formData.recognized_by || []).includes(recognition.name);
+                        return (
+                          <label 
+                            key={recognition.id} 
+                            className={`flex items-center gap-2 p-2 rounded cursor-pointer hover:bg-gray-50 ${
+                              isSelected ? 'bg-blue-50 border border-blue-200' : ''
+                            }`}
+                          >
+                            <input
+                              type="checkbox"
+                              checked={isSelected}
+                              onChange={(e) => {
+                                const currentList = formData.recognized_by || [];
+                                if (e.target.checked) {
+                                  setFormData({ 
+                                    ...formData, 
+                                    recognized_by: [...currentList, recognition.name]
+                                  });
+                                } else {
+                                  setFormData({ 
+                                    ...formData, 
+                                    recognized_by: currentList.filter(r => r !== recognition.name)
+                                  });
+                                }
+                              }}
+                              className="w-4 h-4 text-blue-500 rounded border-gray-300 focus:ring-blue-500"
+                            />
+                            <span className={`text-sm ${isSelected ? 'font-medium text-blue-700' : 'text-gray-700'}`}>
+                              {recognition.name}
+                            </span>
+                          </label>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+                {(formData.recognized_by?.length > 0) && (
+                  <p className="text-xs text-green-600 mt-1">
+                    ✓ Selected: {formData.recognized_by.join(', ')}
+                  </p>
+                )}
               </div>
             )}
             <div>
