@@ -95,14 +95,43 @@ const CourseDetailPage = () => {
   const description = course.description || '';
 
   // Dynamic navigation tabs - only show tabs that have data
+  // Debug: Log course data to verify what's available
+  console.log('Course data for tabs:', {
+    admission_process: course.admission_process,
+    selection_criteria: course.selection_criteria,
+    syllabus: course.syllabus,
+    top_colleges: course.top_colleges,
+    job_opportunities: course.job_opportunities,
+    career_prospects: course.career_prospects,
+    career_options: course.career_options,
+    faqs: course.faqs,
+    description_toc: course.description_toc
+  });
+
+  // Check if syllabus has valid data (not just empty arrays)
+  const hasSyllabus = course.syllabus && Array.isArray(course.syllabus) && course.syllabus.length > 0;
+  
+  // Check if top_colleges has valid data (not just empty objects)
+  const hasTopColleges = course.top_colleges && Array.isArray(course.top_colleges) && 
+    course.top_colleges.length > 0 && course.top_colleges.some(c => c.name && c.name.trim());
+  
+  // Check for career data - any of these fields
+  const hasCareerData = (course.job_opportunities && Array.isArray(course.job_opportunities) && course.job_opportunities.length > 0) ||
+    (course.career_prospects && course.career_prospects.trim()) ||
+    (course.career_options && Array.isArray(course.career_options) && course.career_options.length > 0) ||
+    (course.job_roles && Array.isArray(course.job_roles) && course.job_roles.length > 0);
+  
+  // Check for FAQs
+  const hasFaqs = course.faqs && Array.isArray(course.faqs) && course.faqs.length > 0;
+
   const navTabs = [
     { id: 'overview', label: 'Overview', icon: FiBook, show: true },
     { id: 'eligibility', label: 'Eligibility', icon: FiCheckCircle, show: !!eligibility },
-    { id: 'admission', label: 'Admission', icon: FiCalendar, show: !!course.admission_process || !!course.selection_criteria },
-    { id: 'syllabus', label: 'Syllabus', icon: HiOutlineDocumentText, show: course.syllabus && course.syllabus.length > 0 },
-    { id: 'colleges', label: 'Top Colleges', icon: HiOutlineOfficeBuilding, show: course.top_colleges && course.top_colleges.length > 0 },
-    { id: 'career', label: 'Career & Jobs', icon: FiBriefcase, show: (course.job_opportunities && course.job_opportunities.length > 0) || course.career_prospects || (course.career_options && course.career_options.length > 0) },
-    { id: 'faqs', label: 'FAQs', icon: HiOutlineLightBulb, show: course.faqs && course.faqs.length > 0 },
+    { id: 'admission', label: 'Admission', icon: FiCalendar, show: !!(course.admission_process && course.admission_process.trim()) || !!(course.selection_criteria && course.selection_criteria.trim()) },
+    { id: 'syllabus', label: 'Syllabus', icon: HiOutlineDocumentText, show: hasSyllabus },
+    { id: 'colleges', label: 'Top Colleges', icon: HiOutlineOfficeBuilding, show: hasTopColleges },
+    { id: 'career', label: 'Career & Jobs', icon: FiBriefcase, show: hasCareerData },
+    { id: 'faqs', label: 'FAQs', icon: HiOutlineLightBulb, show: hasFaqs },
   ].filter(tab => tab.show);
 
   // Syllabus data - only from database, no fallback
