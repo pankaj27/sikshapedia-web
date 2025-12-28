@@ -288,8 +288,18 @@ const CourseDetailPage = () => {
                 />
               </div>
               <div className="prose prose-gray max-w-none">
-                {description && <p className="text-gray-700 leading-relaxed mb-4">{description}</p>}
-                {course.overview && <p className="text-gray-700 leading-relaxed">{course.overview}</p>}
+                {description && (
+                  <div 
+                    className="text-gray-700 leading-relaxed mb-4"
+                    dangerouslySetInnerHTML={{ __html: description }}
+                  />
+                )}
+                {course.overview && (
+                  <div 
+                    className="text-gray-700 leading-relaxed"
+                    dangerouslySetInnerHTML={{ __html: course.overview }}
+                  />
+                )}
               </div>
 
               {/* Highlights/Badges - Only show if data exists */}
