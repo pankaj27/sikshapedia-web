@@ -8,6 +8,7 @@ import LayoutWrapper from './components/LayoutWrapper';
 import ScrollToTop from './components/ScrollToTop';
 import SimpleAutoPopup from './components/SimpleAutoPopup';
 import TrackingScripts from './components/TrackingScripts';
+import { Toaster } from './components/ui/toaster';
 
 // Critical pages - loaded immediately
 import HomePage from './pages/HomePage';
