@@ -42,7 +42,8 @@ const CoursesDetailManagement = () => {
   };
 
   const filteredCourses = courses.filter(course =>
-    course.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    course.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    course.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     course.degree_type?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
