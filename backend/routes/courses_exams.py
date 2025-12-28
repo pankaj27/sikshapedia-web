@@ -32,7 +32,9 @@ class Course(BaseModel):
     degree_type: str
     duration: str
     description: Optional[str] = None
-    stream: Optional[str] = None
+    stream: Optional[str] = None  # Legacy field - text name
+    stream_id: Optional[str] = None  # New - linked to streams collection
+    sub_stream_id: Optional[str] = None  # New - linked to sub_streams collection
     full_name: Optional[str] = None
     slug: Optional[str] = None
     fees: Optional[float] = None
