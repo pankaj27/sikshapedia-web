@@ -1401,7 +1401,14 @@ class APITester:
             else:
                 self.log_test(f"Verify Created News {news_id}", False, f"Status: {status}")
         
-        # Test 5: Test case sensitivity (if names differ only by case, should they be considered duplicates?)
+        for university_id in self.created_test_ids['universities']:
+            success, response, status = self.make_request("GET", f"/universities/{university_id}")
+            if success and response.get("id") == university_id:
+                self.log_test(f"Verify Created University {university_id}", True, f"University retrieved: {response.get('name')}")
+            else:
+                self.log_test(f"Verify Created University {university_id}", False, f"Status: {status}")
+        
+        # Test 6: Test case sensitivity (if names differ only by case, should they be considered duplicates?)
         print("   Testing Case Sensitivity...")
         
         if self.created_test_ids['courses']:
