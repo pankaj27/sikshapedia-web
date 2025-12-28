@@ -1991,6 +1991,9 @@ const CollegeForm = () => {
         
         {/* Quick Badges */}
         <div className="max-w-7xl mx-auto px-6 py-2 bg-gray-50 border-t flex items-center gap-4 flex-wrap text-xs">
+          {/* Auto-save indicator */}
+          {!id && <AutoSaveIndicator lastSaved={draftLastSaved} />}
+          
           <label className="flex items-center gap-1.5 cursor-pointer">
             <input type="checkbox" checked={formData.is_verified} onChange={(e) => setFormData({...formData, is_verified: e.target.checked})} className="rounded text-blue-600" />
             <span>✅ Verified</span>
