@@ -239,7 +239,7 @@ const CollapsibleSection = ({ title, children, defaultOpen = false, icon = null,
 const CourseDetailForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user: authUser } = useAuth();
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [savingDraft, setSavingDraft] = useState(false);
@@ -251,6 +251,11 @@ const CourseDetailForm = () => {
   const [autoSaveStatus, setAutoSaveStatus] = useState(''); // 'saving', 'saved', 'error', ''
   const [lastAutoSave, setLastAutoSave] = useState(null);
   const autoSaveTimerRef = useRef(null);
+
+  // Get admin user from localStorage (admin login stores in adminUser)
+  const adminUserStr = localStorage.getItem('adminUser');
+  const adminUser = adminUserStr ? JSON.parse(adminUserStr) : null;
+  const user = adminUser || authUser;
 
   // Role checks
   const isDataEntry = user?.role === 'data_entry';
