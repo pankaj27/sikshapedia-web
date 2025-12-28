@@ -13,6 +13,8 @@ import StatusBadge from '../../components/admin/StatusBadge';
 import { useAuth } from '../../contexts/AuthContext';
 import AdminLayout from '../../components/admin/AdminLayout';
 import { SeoMetaSection } from '../../components/admin/college-form';
+import useAutoSaveDraft from '../../hooks/useAutoSaveDraft';
+import DraftRestoreBanner, { AutoSaveIndicator } from '../../components/admin/DraftRestoreBanner';
 
 // Collapsible Section Component
 const CollapsibleSection = ({ title, children, defaultOpen = false, icon = null, badge = null, color = 'indigo' }) => {
