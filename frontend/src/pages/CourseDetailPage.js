@@ -49,7 +49,6 @@ const CourseDetailPage = () => {
           );
         }
         
-        console.log('Found course:', foundCourse?.name, 'Status:', foundCourse?.status);
         if (foundCourse) setCourse(foundCourse);
       } catch (error) {
         console.error('Error fetching course:', error);
@@ -105,19 +104,6 @@ const CourseDetailPage = () => {
   const description = course.description || '';
 
   // Dynamic navigation tabs - only show tabs that have data
-  // Debug: Log course data to verify what's available
-  console.log('Course data for tabs:', {
-    admission_process: course.admission_process,
-    selection_criteria: course.selection_criteria,
-    syllabus: course.syllabus,
-    top_colleges: course.top_colleges,
-    job_opportunities: course.job_opportunities,
-    career_prospects: course.career_prospects,
-    career_options: course.career_options,
-    faqs: course.faqs,
-    description_toc: course.description_toc
-  });
-
   // Check if syllabus has valid data (not just empty arrays)
   const hasSyllabus = course.syllabus && Array.isArray(course.syllabus) && course.syllabus.length > 0;
   
