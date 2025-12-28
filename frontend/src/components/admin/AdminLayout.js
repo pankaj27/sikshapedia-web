@@ -157,6 +157,7 @@ const AdminLayout = ({ children }) => {
         { title: 'Rank Categories', path: '/admin/rank-categories', icon: FiGrid },
         { title: 'States & UTs', path: '/admin/states', icon: FiGlobe, highlight: true, badge: 'NEW' },
         { title: 'Cities', path: '/admin/cities', icon: FiGlobe, highlight: true, badge: 'NEW' },
+        { title: '🔄 Migration Tool', path: '/admin/migration', icon: FiDatabase, highlight: true, badge: 'NEW' },
       ]
     },
     {
