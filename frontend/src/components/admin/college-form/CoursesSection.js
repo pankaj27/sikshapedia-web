@@ -69,7 +69,7 @@ const CoursesSection = ({
       const newCourses = formData.courses.filter(c => c.course_id !== courseId && c.name !== course.name);
       setFormData({ ...formData, courses: newCourses });
     } else {
-      // Add course with pre-filled data
+      // Add course - fees will be entered manually, not auto-filled
       const newCourse = {
         course_id: course.id,
         name: course.name,
@@ -82,8 +82,8 @@ const CoursesSection = ({
         sub_stream_id: course.sub_stream_id || '',
         eligibility: course.eligibility || '',
         selection_criteria: (course.exams_accepted || []).join(', '),
-        first_year_fee: course.average_fees || 0,
-        total_fee: 0,
+        first_year_fee: '', // Manual input - not auto-filled
+        total_fee: '', // Manual input - not auto-filled
         brochure_url: ''
       };
       setFormData({ ...formData, courses: [...(formData.courses || []), newCourse] });
@@ -106,8 +106,8 @@ const CoursesSection = ({
         sub_stream_id: course.sub_stream_id || '',
         eligibility: course.eligibility || '',
         selection_criteria: (course.exams_accepted || []).join(', '),
-        first_year_fee: course.average_fees || 0,
-        total_fee: 0,
+        first_year_fee: '', // Manual input
+        total_fee: '', // Manual input
         brochure_url: ''
       }));
     
