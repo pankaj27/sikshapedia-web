@@ -705,6 +705,8 @@ const CourseDetailForm = () => {
         alert('Course updated successfully!');
       } else {
         await api.post('/courses-detail', dataToSave);
+        // Clear draft after successful creation
+        clearCourseDraft();
         alert('Course created successfully!');
       }
       navigate('/admin/courses-detail');
