@@ -2,26 +2,27 @@ import { useEffect, useRef, useCallback, useState } from 'react';
 
 /**
  * Custom hook for auto-saving form data to localStorage
- * @param {string} key - Unique key for localStorage (e.g., 'college_draft', 'course_draft')
- * @param {object} formData - The form data to save
- * @param {function} setFormData - Function to update form data
- * @param {number} interval - Auto-save interval in milliseconds (default: 30000 = 30 seconds)
- * @param {boolean} enabled - Whether auto-save is enabled (disable when editing existing entry)
  */
-const useAutoSaveDraft = (key, formData, setFormData, interval = 30000, enabled = true) => {
+const useAutoSaveDraft = (key, formData, setFormData, interval = 10000, enabled = true) => {
   const [lastSaved, setLastSaved] = useState(null);
   const [hasDraft, setHasDraft] = useState(false);
-  const [draftRestored, setDraftRestored] = useState(false);
   const timerRef = useRef(null);
   const isInitialMount = useRef(true);
+  const formDataRef = useRef(formData);
+  const isRestoringRef = useRef(false);
+
+  // Keep formDataRef updated
+  useEffect(() => {
+    formDataRef.current = formData;
+  }, [formData]);
 
   // Save draft to localStorage
   const saveDraft = useCallback(() => {
-    if (!enabled) return;
+    if (!enabled || isRestoringRef.current) return;
     
     try {
       const draftData = {
-        formData,
+        formData: formDataRef.current,
         savedAt: new Date().toISOString(),
         version: 1
       };
@@ -31,7 +32,7 @@ const useAutoSaveDraft = (key, formData, setFormData, interval = 30000, enabled 
     } catch (error) {
       console.error('[AutoSave] Error saving draft:', error);
     }
-  }, [key, formData, enabled]);
+  }, [key, enabled]);
 
   // Clear draft from localStorage
   const clearDraft = useCallback(() => {
@@ -45,57 +46,75 @@ const useAutoSaveDraft = (key, formData, setFormData, interval = 30000, enabled 
     }
   }, [key]);
 
-  // Check if draft exists on mount
-  const checkForDraft = useCallback(() => {
+  // Get draft info
+  const getDraftInfo = useCallback(() => {
     try {
       const savedDraft = localStorage.getItem(key);
       if (savedDraft) {
         const parsed = JSON.parse(savedDraft);
-        if (parsed.formData && parsed.savedAt) {
-          setHasDraft(true);
-          return parsed;
+        if (parsed.savedAt) {
+          return { savedAt: new Date(parsed.savedAt) };
         }
       }
     } catch (error) {
-      console.error('[AutoSave] Error checking draft:', error);
+      console.error('[AutoSave] Error getting draft info:', error);
     }
     return null;
   }, [key]);
 
   // Restore draft data
   const restoreDraft = useCallback(() => {
-    const draft = checkForDraft();
-    if (draft && draft.formData) {
-      setFormData(draft.formData);
-      setDraftRestored(true);
-      setLastSaved(new Date(draft.savedAt));
-      console.log(`[AutoSave] Draft restored for ${key}`);
-      return true;
+    try {
+      const savedDraft = localStorage.getItem(key);
+      if (savedDraft) {
+        const parsed = JSON.parse(savedDraft);
+        if (parsed.formData) {
+          isRestoringRef.current = true;
+          setFormData(parsed.formData);
+          setLastSaved(new Date(parsed.savedAt));
+          // Reset restoring flag after a short delay
+          setTimeout(() => {
+            isRestoringRef.current = false;
+          }, 1000);
+          console.log(`[AutoSave] Draft restored for ${key}`);
+          return true;
+        }
+      }
+    } catch (error) {
+      console.error('[AutoSave] Error restoring draft:', error);
     }
     return false;
-  }, [key, setFormData, checkForDraft]);
+  }, [key, setFormData]);
 
-  // Get draft info without restoring
-  const getDraftInfo = useCallback(() => {
-    const draft = checkForDraft();
-    if (draft) {
-      return {
-        savedAt: new Date(draft.savedAt),
-        timeAgo: getTimeAgo(new Date(draft.savedAt))
-      };
+  // Check for existing draft on mount (only once)
+  useEffect(() => {
+    if (enabled) {
+      try {
+        const savedDraft = localStorage.getItem(key);
+        if (savedDraft) {
+          const parsed = JSON.parse(savedDraft);
+          if (parsed.formData && parsed.savedAt) {
+            setHasDraft(true);
+          }
+        }
+      } catch (error) {
+        console.error('[AutoSave] Error checking draft:', error);
+      }
     }
-    return null;
-  }, [checkForDraft]);
+  }, [enabled, key]);
 
-  // Auto-save effect
+  // Auto-save effect with timer
   useEffect(() => {
     if (!enabled) return;
 
-    // Skip auto-save on initial mount
+    // Skip on initial mount
     if (isInitialMount.current) {
       isInitialMount.current = false;
       return;
     }
+
+    // Skip if currently restoring
+    if (isRestoringRef.current) return;
 
     // Clear existing timer
     if (timerRef.current) {
@@ -115,49 +134,28 @@ const useAutoSaveDraft = (key, formData, setFormData, interval = 30000, enabled 
     };
   }, [formData, interval, enabled, saveDraft]);
 
-  // Save draft on page unload/close - THIS IS THE KEY FIX!
+  // Save draft on page unload/close
   useEffect(() => {
     if (!enabled) return;
 
     const handleBeforeUnload = () => {
-      // Save immediately when user closes browser/tab
+      if (isRestoringRef.current) return;
       try {
         const draftData = {
-          formData,
+          formData: formDataRef.current,
           savedAt: new Date().toISOString(),
           version: 1
         };
         localStorage.setItem(key, JSON.stringify(draftData));
-        console.log(`[AutoSave] Draft saved on page unload for ${key}`);
       } catch (error) {
         console.error('[AutoSave] Error saving draft on unload:', error);
       }
     };
 
-    // Add event listener for page close/refresh
     window.addEventListener('beforeunload', handleBeforeUnload);
-
-    // Cleanup
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
-  }, [enabled, key, formData]);
-
-  // Check for existing draft on mount
-  useEffect(() => {
-    if (enabled) {
-      try {
-        const savedDraft = localStorage.getItem(key);
-        if (savedDraft) {
-          const parsed = JSON.parse(savedDraft);
-          if (parsed.formData && parsed.savedAt) {
-            setHasDraft(true);
-          }
-        }
-      } catch (error) {
-        console.error('[AutoSave] Error checking draft:', error);
-      }
-    }
   }, [enabled, key]);
 
   return {
@@ -166,20 +164,8 @@ const useAutoSaveDraft = (key, formData, setFormData, interval = 30000, enabled 
     restoreDraft,
     getDraftInfo,
     lastSaved,
-    hasDraft,
-    draftRestored
+    hasDraft
   };
-};
-
-// Helper function to format time ago
-const getTimeAgo = (date) => {
-  const now = new Date();
-  const diff = Math.floor((now - date) / 1000); // seconds
-
-  if (diff < 60) return 'just now';
-  if (diff < 3600) return `${Math.floor(diff / 60)} minutes ago`;
-  if (diff < 86400) return `${Math.floor(diff / 3600)} hours ago`;
-  return `${Math.floor(diff / 86400)} days ago`;
 };
 
 export default useAutoSaveDraft;
