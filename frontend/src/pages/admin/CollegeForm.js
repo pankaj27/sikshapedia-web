@@ -1839,6 +1839,10 @@ const CollegeForm = () => {
         }
       } else if (error.message) {
         errorMessage = error.message;
+        // Add more context for network errors
+        if (error.message === 'Network Error') {
+          errorMessage = 'Network Error - Please check your internet connection and try again. If the problem persists, try refreshing the page.';
+        }
       }
       
       toast({
