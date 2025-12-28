@@ -3371,6 +3371,24 @@ async def get_pending_approvals(current_user: User = Depends(get_current_user)):
         "items": pending_items
     }
 
+import re
+
+def generate_slug(text: str) -> str:
+    """Generate a URL-friendly slug from text"""
+    if not text:
+        return ""
+    
+    # Convert to lowercase and replace spaces with hyphens
+    slug = text.lower().strip()
+    # Remove special characters except hyphens and alphanumeric
+    slug = re.sub(r'[^a-z0-9\s-]', '', slug)
+    # Replace multiple spaces/hyphens with single hyphen
+    slug = re.sub(r'[\s-]+', '-', slug)
+    # Remove leading/trailing hyphens
+    slug = slug.strip('-')
+    
+    return slug
+
 @api_router.post("/admin/approve/{content_type}/{content_id}")
 async def approve_content(content_type: str, content_id: str, approval: ContentApproval, current_user: User = Depends(get_current_user)):
     """Approve or reject content"""
@@ -3413,6 +3431,18 @@ async def approve_content(content_type: str, content_id: str, approval: ContentA
             "reviewed_at": now,
             "rejection_reason": None
         }
+        
+        # Generate slug if not exists and content is being published
+        if not content.get("slug") and content.get("name"):
+            base_slug = generate_slug(content["name"])
+            # Ensure slug is unique
+            counter = 1
+            slug = base_slug
+            while await collection.find_one({"slug": slug, "id": {"$ne": content_id}}):
+                slug = f"{base_slug}-{counter}"
+                counter += 1
+            update_data["slug"] = slug
+        
         message = "Content approved and published"
     elif approval.action == "reject":
         update_data = {
