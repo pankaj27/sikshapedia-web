@@ -46,3 +46,22 @@ Verify that the hierarchical relationship between Stream, Sub-Stream, and Course
 ### Test Status: ✅ MOSTLY WORKING
 
 **Core functionality is working correctly. The hierarchical relationship APIs are functional with one minor issue in the individual course retrieval endpoint.**
+
+---
+
+## Test Session: College Form Network Error Test (Dec 28, 2025)
+
+### Test Objective
+Verify if the Institute/College form can successfully submit a large entry with multiple courses without encountering the recurring "Network Error".
+
+### Test Cases Required
+1. **Create college with 10+ courses** - Test UI submission with large payload
+2. **Verify courses & fees table** - Check multi-select modal and fee input
+3. **Verify auto-calculated streams** - Ensure streams section auto-populates from selected courses
+4. **Check multi-select affiliations** - Test Affiliated To and Recognized By checkbox groups
+5. **Test form save** - Submit via UI and verify if "Network Error" occurs
+
+### Admin Credentials
+- Email: admin@admissionbuddy.co
+- Password: admin123
+- URL: /admin/colleges/new
