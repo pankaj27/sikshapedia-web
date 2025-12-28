@@ -118,10 +118,19 @@ const useAutoSaveDraft = (key, formData, setFormData, interval = 30000, enabled 
   // Check for existing draft on mount
   useEffect(() => {
     if (enabled) {
-      const draft = checkForDraft();
-      setHasDraft(!!draft);
+      try {
+        const savedDraft = localStorage.getItem(key);
+        if (savedDraft) {
+          const parsed = JSON.parse(savedDraft);
+          if (parsed.formData && parsed.savedAt) {
+            setHasDraft(true);
+          }
+        }
+      } catch (error) {
+        console.error('[AutoSave] Error checking draft:', error);
+      }
     }
-  }, [enabled, checkForDraft]);
+  }, [enabled, key]);
 
   return {
     saveDraft,
