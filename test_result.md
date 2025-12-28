@@ -144,6 +144,31 @@ Verify that the College creation form in Admin Panel properly prevents duplicate
 
 #### ❌ Frontend Form Integration: CRITICAL ISSUES FOUND
 
+## Current Test Request - Course Details Entry Form Testing (Dec 28, 2025)
+
+### Test Scope:
+1. **Content Team Option** - Verify the Content Team info shows correctly when editing a course
+2. **Save as Draft** - Verify the Save as Draft button works correctly
+3. **Form Approval and Link Generation** - Verify Submit for Review → Approve → Published flow
+
+### Test Credentials:
+- Admin Login: admin@admissionbuddy.co / admin123
+- Course Detail Form URL: /admin/courses-detail/new
+- Course List URL: /admin/courses-detail
+
+### Testing Steps to Perform:
+1. Login to admin panel
+2. Navigate to /admin/courses-detail/new
+3. Select a course from dropdown
+4. Fill required fields (Stream, Duration etc.)
+5. Click "Save as Draft" - verify draft is saved
+6. Edit the saved course - verify Content Team info appears
+7. Click "Submit for Review" - verify status changes to pending
+8. Click "Approve" - verify status changes to published
+9. Verify link generation works with slug
+
+---
+
 **Issue 1: Form Validation Blocking Submission**
 - **Problem**: Frontend form has strict client-side validation requiring State and City fields
 - **Impact**: Form cannot be submitted to test backend duplicate prevention
