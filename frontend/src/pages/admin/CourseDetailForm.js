@@ -1,6 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { FiSave, FiX, FiPlus, FiTrash2, FiSend, FiCheck, FiChevronDown, FiChevronRight, FiBook, FiInfo, FiFileText, FiDollarSign, FiBriefcase, FiAward, FiUsers, FiMapPin, FiMail, FiHelpCircle, FiBookmark, FiHome, FiBarChart2, FiImage, FiCalendar, FiMessageSquare, FiVideo, FiUpload, FiLoader } from 'react-icons/fi';
+import { useEditor, EditorContent } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import Link from '@tiptap/extension-link';
+import { TextStyle } from '@tiptap/extension-text-style';
+import { Color } from '@tiptap/extension-color';
+import Underline from '@tiptap/extension-underline';
+import { FiSave, FiX, FiPlus, FiTrash2, FiSend, FiCheck, FiChevronDown, FiChevronRight, FiBook, FiInfo, FiFileText, FiDollarSign, FiBriefcase, FiAward, FiUsers, FiMapPin, FiMail, FiHelpCircle, FiBookmark, FiHome, FiBarChart2, FiImage, FiCalendar, FiMessageSquare, FiVideo, FiUpload, FiLoader, FiBold, FiItalic, FiUnderline as FiUnderlineIcon, FiLink, FiList } from 'react-icons/fi';
 import { HiOutlineAcademicCap, HiOutlineOfficeBuilding, HiOutlineCurrencyRupee, HiOutlineLibrary } from 'react-icons/hi';
 import api from '../../api/axios';
 import { Button } from '../../components/ui/button';
@@ -9,6 +15,118 @@ import StatusBadge from '../../components/admin/StatusBadge';
 import { useAuth } from '../../contexts/AuthContext';
 import AdminLayout from '../../components/admin/AdminLayout';
 import { SeoMetaSection } from '../../components/admin/college-form';
+
+// Simple Rich Text Toolbar for Short Description
+const SimpleRichTextToolbar = ({ editor }) => {
+  if (!editor) return null;
+
+  const addLink = () => {
+    const url = window.prompt('Enter URL:');
+    if (url) {
+      editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
+    }
+  };
+
+  const removeLink = () => {
+    editor.chain().focus().unsetLink().run();
+  };
+
+  const setColor = (color) => {
+    editor.chain().focus().setColor(color).run();
+  };
+
+  return (
+    <div className="flex flex-wrap gap-1 p-2 bg-gray-100 border-b border-gray-200 rounded-t-lg">
+      {/* Text Formatting */}
+      <button type="button" onClick={() => editor.chain().focus().toggleBold().run()}
+        className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('bold') ? 'bg-blue-100 text-blue-700' : ''}`}
+        title="Bold">
+        <FiBold size={16} />
+      </button>
+      <button type="button" onClick={() => editor.chain().focus().toggleItalic().run()}
+        className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('italic') ? 'bg-blue-100 text-blue-700' : ''}`}
+        title="Italic">
+        <FiItalic size={16} />
+      </button>
+      <button type="button" onClick={() => editor.chain().focus().toggleUnderline().run()}
+        className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('underline') ? 'bg-blue-100 text-blue-700' : ''}`}
+        title="Underline">
+        <FiUnderlineIcon size={16} />
+      </button>
+      
+      <div className="w-px h-6 bg-gray-300 mx-1 self-center" />
+      
+      {/* Colors */}
+      <div className="flex items-center gap-1">
+        <span className="text-xs text-gray-500 px-1">Color:</span>
+        {['#000000', '#ef4444', '#f59e0b', '#22c55e', '#3b82f6', '#8b5cf6', '#ec4899'].map(color => (
+          <button key={color} type="button" onClick={() => setColor(color)}
+            className="w-5 h-5 rounded border border-gray-300 hover:scale-110 transition-transform"
+            style={{ backgroundColor: color }} title={color} />
+        ))}
+      </div>
+      
+      <div className="w-px h-6 bg-gray-300 mx-1 self-center" />
+      
+      {/* Link */}
+      <button type="button" onClick={addLink}
+        className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('link') ? 'bg-blue-100 text-blue-700' : ''}`}
+        title="Add Link">
+        <FiLink size={16} />
+      </button>
+      {editor.isActive('link') && (
+        <button type="button" onClick={removeLink}
+          className="p-2 rounded hover:bg-gray-200 bg-red-50 text-red-600"
+          title="Remove Link">
+          <FiX size={16} />
+        </button>
+      )}
+      
+      <div className="w-px h-6 bg-gray-300 mx-1 self-center" />
+      
+      {/* Lists */}
+      <button type="button" onClick={() => editor.chain().focus().toggleBulletList().run()}
+        className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('bulletList') ? 'bg-blue-100 text-blue-700' : ''}`}
+        title="Bullet List">
+        <FiList size={16} />
+      </button>
+    </div>
+  );
+};
+
+// Simple Rich Text Editor Component for Short Description
+const SimpleRichTextEditor = ({ value, onChange, placeholder }) => {
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      Link.configure({ openOnClick: false }),
+      TextStyle,
+      Color,
+      Underline,
+    ],
+    content: value || '',
+    onUpdate: ({ editor }) => {
+      onChange(editor.getHTML());
+    },
+  });
+
+  // Update editor content when value changes externally
+  useEffect(() => {
+    if (editor && value !== editor.getHTML()) {
+      editor.commands.setContent(value || '');
+    }
+  }, [value, editor]);
+
+  return (
+    <div className="border-2 border-gray-200 rounded-lg overflow-hidden">
+      <SimpleRichTextToolbar editor={editor} />
+      <EditorContent 
+        editor={editor} 
+        className="prose prose-sm max-w-none p-3 min-h-[100px] focus:outline-none [&_.ProseMirror]:outline-none [&_.ProseMirror]:min-h-[80px]"
+      />
+    </div>
+  );
+};
 
 // Menu icon options
 const menuIconOptions = [
