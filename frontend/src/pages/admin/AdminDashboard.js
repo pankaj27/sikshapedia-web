@@ -47,8 +47,8 @@ const AdminDashboard = () => {
     { title: 'Total Universities', value: stats.total_universities, icon: FiAward, color: 'bg-purple-500', link: '/admin/universities' },
     { title: 'Total Users', value: stats.total_users, icon: FiUsers, color: 'bg-orange-500', link: '/admin/users' },
     { title: 'Total Reviews', value: stats.total_reviews, icon: FiEdit, color: 'bg-pink-500', link: '/admin/reviews' },
-    { title: 'Total Exams', value: stats.total_exams, subValue: `${stats.detailed_exams} detailed`, icon: FiFileText, color: 'bg-indigo-500', link: '/admin/exams' },
-    { title: 'Total Courses', value: stats.total_courses, subValue: `${stats.detailed_courses} detailed`, icon: FiBook, color: 'bg-teal-500', link: '/admin/courses' },
+    { title: 'Total Exams', value: stats.total_exams, icon: FiFileText, color: 'bg-indigo-500', link: '/admin/exams' },
+    { title: 'Total Courses', value: stats.total_courses, icon: FiBook, color: 'bg-teal-500', link: '/admin/courses' },
     { title: 'News Articles', value: stats.total_news, icon: FiFileText, color: 'bg-red-500', link: '/admin/news' }
   ];
 
