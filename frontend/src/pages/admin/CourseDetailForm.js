@@ -1007,7 +1007,7 @@ const CourseDetailForm = () => {
                 )}
               </div>
               <p className="text-xs text-gray-500 mt-1">
-                System থেকে auto-calculate হবে - কতগুলো college এই course offer করে
+                Auto-calculated from database - counts how many colleges offer this course
               </p>
             </div>
           </div>
