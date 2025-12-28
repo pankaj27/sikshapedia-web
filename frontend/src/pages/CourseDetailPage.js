@@ -165,7 +165,7 @@ const CourseDetailPage = () => {
               
               {description && (
                 <p className="text-blue-100 text-lg mb-6 max-w-2xl">
-                  {description.substring(0, 200)}{description.length > 200 ? '...' : ''}
+                  {description.replace(/<[^>]*>/g, '').substring(0, 200)}{description.replace(/<[^>]*>/g, '').length > 200 ? '...' : ''}
                 </p>
               )}
 
