@@ -1001,6 +1001,26 @@ const CollegeForm = () => {
     }
   }, [formData.institution_type]);
 
+  // Auto-update streams based on selected courses
+  useEffect(() => {
+    if (formData.courses && formData.courses.length > 0) {
+      const courseStreams = new Set();
+      formData.courses.forEach(course => {
+        if (course.stream) courseStreams.add(course.stream);
+      });
+      const uniqueStreams = Array.from(courseStreams);
+      
+      // Only update if streams actually changed
+      const currentStreams = formData.streams || [];
+      const streamsChanged = uniqueStreams.length !== currentStreams.length || 
+        !uniqueStreams.every(s => currentStreams.includes(s));
+      
+      if (streamsChanged) {
+        setFormData(prev => ({ ...prev, streams: uniqueStreams }));
+      }
+    }
+  }, [formData.courses]);
+
   const fetchRecognitions = async () => {
     try {
       const response = await api.get('/recognitions');
