@@ -328,35 +328,9 @@ const CourseDetailPage = () => {
                 <button onClick={() => setActiveWidget('counselling')} className="px-6 py-3 bg-white/20 hover:bg-white/30 text-white font-semibold rounded-xl transition-all flex items-center gap-2 backdrop-blur-sm">
                   <FiPhone size={18} /> Free Counselling
                 </button>
-                <button className="px-4 py-3 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-all flex items-center gap-2">
-                  <FiDownload size={18} /> Brochure
-                </button>
                 <button onClick={() => setIsSaved(!isSaved)} className={`px-4 py-3 rounded-xl transition-all flex items-center gap-2 ${isSaved ? 'bg-red-500 text-white' : 'bg-white/10 hover:bg-white/20 text-white'}`}>
                   <FiHeart size={18} fill={isSaved ? 'white' : 'none'} />
                 </button>
-              </div>
-            </div>
-
-            {/* Right Side - Quick Apply Card */}
-            <div className="hidden lg:block">
-              <div className="bg-white rounded-2xl p-6 shadow-2xl text-gray-900">
-                <h3 className="font-bold text-lg mb-4 text-gray-900">Quick Enquiry</h3>
-                <form className="space-y-3">
-                  <input type="text" placeholder="Your Name" className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent" />
-                  <input type="email" placeholder="Email Address" className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent" />
-                  <input type="tel" placeholder="Phone Number" className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent" />
-                  <select className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-600">
-                    <option>Select City</option>
-                    <option>Delhi</option>
-                    <option>Mumbai</option>
-                    <option>Bangalore</option>
-                    <option>Chennai</option>
-                  </select>
-                  <button type="submit" className="w-full py-3 bg-orange-600 hover:bg-orange-700 text-white font-semibold rounded-lg transition-colors">
-                    Submit Enquiry
-                  </button>
-                </form>
-                <p className="text-xs text-gray-500 mt-3 text-center">By submitting, you agree to our Terms & Privacy Policy</p>
               </div>
             </div>
           </div>
