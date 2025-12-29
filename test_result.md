@@ -610,3 +610,50 @@ To manually verify the "Save All & Publish" / "Save All & Submit" functionality:
 6. Verify all sections save without Network Error
 7. Verify status updates correctly
 
+
+
+
+---
+
+## Test Session: CourseDetailPage Dynamic Menu Visibility Testing (Dec 29, 2025)
+
+### Test Objective
+Verify that the Menu Configuration settings in CourseDetailForm.js correctly control the visibility of sections on the public CourseDetailPage.js.
+
+### Implementation Done
+Added `isMenuEnabled()` checks to all configurable sections in CourseDetailPage.js:
+- ✅ eligibility - `isMenuEnabled('eligibility')` check added
+- ✅ admission - `isMenuEnabled('admission')` check added  
+- ✅ syllabus - `isMenuEnabled('syllabus')` check added
+- ✅ colleges (Top Colleges) - `isMenuEnabled('colleges')` check added
+- ✅ career - `isMenuEnabled('career')` check added
+- ✅ faqs - `isMenuEnabled('faqs')` check added
+
+### Test Cases Required
+1. **Admin Panel Test**: Navigate to CourseDetailForm, find Menu Configuration section, toggle OFF a menu item (e.g., FAQs)
+2. **Save Test**: Save the course using section-wise save or submit
+3. **Frontend Test**: Navigate to the course detail page and verify the toggled-off section is hidden
+4. **Navigation Test**: Verify the navigation tabs also hide the disabled items
+
+### Admin Credentials
+- **Email**: admin@admissionbuddy.co
+- **Password**: admin123
+- **Course Edit URL**: /admin/courses-detail/edit/{course_id}
+
+### Menu Configuration IDs (from CourseMenuConfigSection.js)
+Mandatory (always visible):
+- overview, syllabus, career, fees
+
+Optional (can be toggled):
+- eligibility, admission, colleges, salary, faqs, gallery
+
+### Testing Instructions for Frontend Testing Agent
+1. Login to admin panel at /admin/login
+2. Navigate to Courses Detail management
+3. Edit an existing course that has data (e.g., B.E. course)
+4. Scroll to "Menu Configuration" section
+5. Toggle OFF one optional menu (e.g., "FAQs" or "Eligibility")
+6. Save the course
+7. Navigate to the public course detail page
+8. Verify the toggled-off section is NOT visible
+9. Verify the navigation tab for that section is also hidden
