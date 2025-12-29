@@ -58,32 +58,23 @@ const ExamSubPage = () => {
   const [currentSection, setCurrentSection] = useState(null);
   const [expandedFaq, setExpandedFaq] = useState(null);
 
-  // Fetch exam data
+  // Fetch exam data - Only from Exam Details Entry Form (exams-detail)
   useEffect(() => {
     const fetchExam = async () => {
       setLoading(true);
       try {
         // If preview mode, fetch all exams, otherwise only published
+        // Only fetch from exams-detail (detailed exams from Exam Details Entry Form)
         const apiUrl = isPreview ? '/exams-detail?limit=100' : '/exams-detail?status=published&limit=100';
         const response = await api.get(apiUrl);
         const exams = response.data || [];
         
-        // Find exam by slug
+        // Find exam by slug or id
         let foundExam = exams.find(e => e.slug === id);
         
         if (!foundExam) {
           foundExam = exams.find(e => 
             e.id === id ||
-            e.name?.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') === id
-          );
-        }
-        
-        // Fallback to quick exams endpoint
-        if (!foundExam) {
-          const quickResponse = await api.get('/exams?limit=200');
-          const quickExams = quickResponse.data || [];
-          foundExam = quickExams.find(e => 
-            e.slug === id || e.id === id ||
             e.name?.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') === id
           );
         }
