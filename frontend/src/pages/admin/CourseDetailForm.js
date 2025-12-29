@@ -633,6 +633,9 @@ const CourseDetailForm = () => {
     
     const selectedCourse = coursesList.find(c => c.id === selectedCourseId);
     if (selectedCourse) {
+      console.log('[CourseDetailForm] Selected course:', selectedCourse);
+      
+      // Auto-fill form data including stream and sub-stream
       setFormData({
         ...formData,
         name: selectedCourse.name,
@@ -641,7 +644,10 @@ const CourseDetailForm = () => {
         degree_type: selectedCourse.degree_type || 'UG',
         duration: selectedCourse.duration || '',
         eligibility: selectedCourse.eligibility || '',
-        base_course_id: selectedCourse.id
+        base_course_id: selectedCourse.id,
+        // Auto-fill stream and sub-stream
+        stream: selectedCourse.stream || selectedCourse.stream_id || '',
+        sub_stream: selectedCourse.sub_stream || selectedCourse.sub_stream_id || ''
       });
       
       // Fetch college count for this course
