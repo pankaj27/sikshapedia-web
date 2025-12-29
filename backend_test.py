@@ -1133,6 +1133,328 @@ class APITester:
         else:
             self.log_test("GET /exams-detail (all)", False, f"Status: {status}", response)
 
+    def test_exam_detail_section_wise_save(self):
+        """Test section-wise saving feature for Exam Detail Form"""
+        print("📝 Testing Exam Detail Section-wise Save Feature...")
+        
+        # Test exam ID from review request
+        exam_id = "f19957cb-2440-454b-a4e0-4d1d1f030a4f"
+        
+        # Test 1: Login as admin first
+        success, response, status = self.make_request("POST", "/auth/login", ADMIN_CREDENTIALS)
+        if success and "access_token" in response:
+            self.admin_token = response["access_token"]
+            user_info = response.get('user', {})
+            self.log_test("Admin Login for Exam Tests", True, 
+                         f"Logged in as: {user_info.get('email', 'N/A')}, role: {user_info.get('role', 'N/A')}")
+        else:
+            self.log_test("Admin Login for Exam Tests", False, f"Status: {status}", response)
+            return  # Cannot proceed without admin token
+        
+        # Test 2: Verify exam exists
+        success, response, status = self.make_request("GET", f"/exams-detail/{exam_id}", token=self.admin_token)
+        if success and response.get("id"):
+            exam_name = response.get("name", "Unknown")
+            self.log_test("Verify Test Exam Exists", True, f"Found exam: {exam_name}")
+        else:
+            self.log_test("Verify Test Exam Exists", False, f"Exam {exam_id} not found. Status: {status}")
+            # Continue with tests anyway to check error handling
+        
+        # Test all 7 section PATCH endpoints
+        self.test_exam_section_basic(exam_id)
+        self.test_exam_section_dates(exam_id)
+        self.test_exam_section_pattern(exam_id)
+        self.test_exam_section_content(exam_id)
+        self.test_exam_section_media(exam_id)
+        self.test_exam_section_seo(exam_id)
+        self.test_exam_section_menu(exam_id)
+        
+        # Test authorization and error handling
+        self.test_exam_authorization(exam_id)
+        self.test_exam_error_handling()
+        
+        # Verify data persistence
+        self.test_exam_data_persistence(exam_id)
+
+    def test_exam_section_basic(self, exam_id):
+        """Test PATCH /api/exams-detail/{exam_id}/section/basic"""
+        print("📋 Testing Basic Section Update...")
+        
+        basic_data = {
+            "name": "JEE Main Test",
+            "is_popular": True
+        }
+        
+        success, response, status = self.make_request(
+            "PATCH", f"/exams-detail/{exam_id}/section/basic", 
+            basic_data, token=self.admin_token
+        )
+        
+        if success and response.get("success"):
+            section = response.get("section", "unknown")
+            message = response.get("message", "Success")
+            self.log_test("PATCH /api/exams-detail/{id}/section/basic", True, 
+                         f"Section: {section}, Message: {message}")
+        else:
+            self.log_test("PATCH /api/exams-detail/{id}/section/basic", False, 
+                         f"Status: {status}", response)
+
+    def test_exam_section_dates(self, exam_id):
+        """Test PATCH /api/exams-detail/{exam_id}/section/dates"""
+        print("📅 Testing Dates Section Update...")
+        
+        dates_data = {
+            "exam_date": "2025-04-20"
+        }
+        
+        success, response, status = self.make_request(
+            "PATCH", f"/exams-detail/{exam_id}/section/dates", 
+            dates_data, token=self.admin_token
+        )
+        
+        if success and response.get("success"):
+            section = response.get("section", "unknown")
+            message = response.get("message", "Success")
+            self.log_test("PATCH /api/exams-detail/{id}/section/dates", True, 
+                         f"Section: {section}, Message: {message}")
+        else:
+            self.log_test("PATCH /api/exams-detail/{id}/section/dates", False, 
+                         f"Status: {status}", response)
+
+    def test_exam_section_pattern(self, exam_id):
+        """Test PATCH /api/exams-detail/{exam_id}/section/pattern"""
+        print("📊 Testing Pattern Section Update...")
+        
+        pattern_data = {
+            "total_marks": 360
+        }
+        
+        success, response, status = self.make_request(
+            "PATCH", f"/exams-detail/{exam_id}/section/pattern", 
+            pattern_data, token=self.admin_token
+        )
+        
+        if success and response.get("success"):
+            section = response.get("section", "unknown")
+            message = response.get("message", "Success")
+            self.log_test("PATCH /api/exams-detail/{id}/section/pattern", True, 
+                         f"Section: {section}, Message: {message}")
+        else:
+            self.log_test("PATCH /api/exams-detail/{id}/section/pattern", False, 
+                         f"Status: {status}", response)
+
+    def test_exam_section_content(self, exam_id):
+        """Test PATCH /api/exams-detail/{exam_id}/section/content"""
+        print("📝 Testing Content Section Update...")
+        
+        content_data = {
+            "difficulty_level": "Hard"
+        }
+        
+        success, response, status = self.make_request(
+            "PATCH", f"/exams-detail/{exam_id}/section/content", 
+            content_data, token=self.admin_token
+        )
+        
+        if success and response.get("success"):
+            section = response.get("section", "unknown")
+            message = response.get("message", "Success")
+            self.log_test("PATCH /api/exams-detail/{id}/section/content", True, 
+                         f"Section: {section}, Message: {message}")
+        else:
+            self.log_test("PATCH /api/exams-detail/{id}/section/content", False, 
+                         f"Status: {status}", response)
+
+    def test_exam_section_media(self, exam_id):
+        """Test PATCH /api/exams-detail/{exam_id}/section/media"""
+        print("🖼️ Testing Media Section Update...")
+        
+        media_data = {
+            "logo_url": ""
+        }
+        
+        success, response, status = self.make_request(
+            "PATCH", f"/exams-detail/{exam_id}/section/media", 
+            media_data, token=self.admin_token
+        )
+        
+        if success and response.get("success"):
+            section = response.get("section", "unknown")
+            message = response.get("message", "Success")
+            self.log_test("PATCH /api/exams-detail/{id}/section/media", True, 
+                         f"Section: {section}, Message: {message}")
+        else:
+            self.log_test("PATCH /api/exams-detail/{id}/section/media", False, 
+                         f"Status: {status}", response)
+
+    def test_exam_section_seo(self, exam_id):
+        """Test PATCH /api/exams-detail/{exam_id}/section/seo"""
+        print("🔍 Testing SEO Section Update...")
+        
+        seo_data = {
+            "meta_title": "JEE Main 2025 Test"
+        }
+        
+        success, response, status = self.make_request(
+            "PATCH", f"/exams-detail/{exam_id}/section/seo", 
+            seo_data, token=self.admin_token
+        )
+        
+        if success and response.get("success"):
+            section = response.get("section", "unknown")
+            message = response.get("message", "Success")
+            self.log_test("PATCH /api/exams-detail/{id}/section/seo", True, 
+                         f"Section: {section}, Message: {message}")
+        else:
+            self.log_test("PATCH /api/exams-detail/{id}/section/seo", False, 
+                         f"Status: {status}", response)
+
+    def test_exam_section_menu(self, exam_id):
+        """Test PATCH /api/exams-detail/{exam_id}/section/menu"""
+        print("📋 Testing Menu Section Update...")
+        
+        menu_data = {
+            "menu_config": {
+                "use_custom_menu": False
+            }
+        }
+        
+        success, response, status = self.make_request(
+            "PATCH", f"/exams-detail/{exam_id}/section/menu", 
+            menu_data, token=self.admin_token
+        )
+        
+        if success and response.get("success"):
+            section = response.get("section", "unknown")
+            message = response.get("message", "Success")
+            self.log_test("PATCH /api/exams-detail/{id}/section/menu", True, 
+                         f"Section: {section}, Message: {message}")
+        else:
+            self.log_test("PATCH /api/exams-detail/{id}/section/menu", False, 
+                         f"Status: {status}", response)
+
+    def test_exam_authorization(self, exam_id):
+        """Test authorization for exam section endpoints"""
+        print("🔐 Testing Exam Section Authorization...")
+        
+        # Test 1: Without auth token (should return 401)
+        success, response, status = self.make_request(
+            "PATCH", f"/exams-detail/{exam_id}/section/basic", 
+            {"name": "Test"}
+        )
+        
+        if not success and status == 401:
+            self.log_test("Unauthorized Access (no token)", True, 
+                         f"Correctly rejected with status {status}")
+        else:
+            self.log_test("Unauthorized Access (no token)", False, 
+                         f"Should have been rejected but got status {status}")
+        
+        # Test 2: Verify admin role can access
+        if self.admin_token:
+            success, response, status = self.make_request(
+                "PATCH", f"/exams-detail/{exam_id}/section/basic", 
+                {"name": "JEE Main Test Admin"}, token=self.admin_token
+            )
+            
+            if success:
+                self.log_test("Admin Role Access", True, "Admin can access section endpoints")
+            else:
+                self.log_test("Admin Role Access", False, f"Admin access failed with status {status}")
+
+    def test_exam_error_handling(self):
+        """Test error handling for exam section endpoints"""
+        print("❌ Testing Exam Section Error Handling...")
+        
+        # Test 1: Invalid exam ID (should return 404)
+        invalid_exam_id = "invalid-exam-id-12345"
+        success, response, status = self.make_request(
+            "PATCH", f"/exams-detail/{invalid_exam_id}/section/basic", 
+            {"name": "Test"}, token=self.admin_token
+        )
+        
+        if not success and status == 404:
+            self.log_test("Invalid Exam ID (404)", True, 
+                         f"Correctly returned 404 for invalid exam ID")
+        else:
+            self.log_test("Invalid Exam ID (404)", False, 
+                         f"Expected 404 but got status {status}")
+        
+        # Test 2: Invalid section name
+        exam_id = "f19957cb-2440-454b-a4e0-4d1d1f030a4f"
+        success, response, status = self.make_request(
+            "PATCH", f"/exams-detail/{exam_id}/section/invalid-section", 
+            {"test": "data"}, token=self.admin_token
+        )
+        
+        if not success and status in [404, 400]:
+            self.log_test("Invalid Section Name", True, 
+                         f"Correctly rejected invalid section with status {status}")
+        else:
+            self.log_test("Invalid Section Name", False, 
+                         f"Should have been rejected but got status {status}")
+
+    def test_exam_data_persistence(self, exam_id):
+        """Test that exam section updates persist correctly"""
+        print("💾 Testing Exam Data Persistence...")
+        
+        # Get the updated exam data
+        success, response, status = self.make_request("GET", f"/exams-detail/{exam_id}", token=self.admin_token)
+        
+        if success and response.get("id"):
+            # Verify the updates we made
+            verification_results = []
+            
+            # Check basic section updates
+            if response.get("name") == "JEE Main Test" and response.get("is_popular") == True:
+                verification_results.append("Basic section ✓")
+            else:
+                verification_results.append("Basic section ✗")
+            
+            # Check dates section updates
+            if response.get("exam_date") == "2025-04-20":
+                verification_results.append("Dates section ✓")
+            else:
+                verification_results.append("Dates section ✗")
+            
+            # Check pattern section updates
+            if response.get("total_marks") == 360:
+                verification_results.append("Pattern section ✓")
+            else:
+                verification_results.append("Pattern section ✗")
+            
+            # Check content section updates
+            if response.get("difficulty_level") == "Hard":
+                verification_results.append("Content section ✓")
+            else:
+                verification_results.append("Content section ✗")
+            
+            # Check SEO section updates
+            if response.get("meta_title") == "JEE Main 2025 Test":
+                verification_results.append("SEO section ✓")
+            else:
+                verification_results.append("SEO section ✗")
+            
+            # Check menu section updates
+            menu_config = response.get("menu_config", {})
+            if isinstance(menu_config, dict) and menu_config.get("use_custom_menu") == False:
+                verification_results.append("Menu section ✓")
+            else:
+                verification_results.append("Menu section ✗")
+            
+            success_count = len([r for r in verification_results if "✓" in r])
+            total_count = len(verification_results)
+            
+            if success_count >= 4:  # At least 4 out of 6 sections should be updated
+                self.log_test("Exam Data Persistence", True, 
+                             f"{success_count}/{total_count} sections updated correctly: {', '.join(verification_results)}")
+            else:
+                self.log_test("Exam Data Persistence", False, 
+                             f"Only {success_count}/{total_count} sections updated correctly: {', '.join(verification_results)}")
+        else:
+            self.log_test("Exam Data Persistence", False, 
+                         f"Could not retrieve exam data for verification. Status: {status}")
+
     def test_advertisement_system(self):
         """Test Advanced Advertisement Management System"""
         print("📢 Testing Advanced Advertisement Management System...")
