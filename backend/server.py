@@ -5176,6 +5176,184 @@ async def delete_exam_detail(exam_id: str, current_user: User = Depends(get_curr
     
     return {"message": "Exam deleted successfully"}
 
+
+# ============================================
+# Exams Detail - Section-wise PATCH APIs
+# (For saving large forms section by section to avoid Network Error)
+# ============================================
+
+@api_router.patch("/exams-detail/{exam_id}/section/basic")
+async def update_exam_detail_basic_section(exam_id: str, data: dict, current_user: User = Depends(get_current_user)):
+    """Update basic info section: name, slug, exam_type, conducting_body, etc."""
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Only admins can update exams")
+    
+    existing = await db.exams_detailed.find_one({"id": exam_id}, {"_id": 0})
+    if not existing:
+        raise HTTPException(status_code=404, detail="Exam not found")
+    
+    allowed_fields = [
+        'name', 'slug', 'full_name', 'exam_type', 'exam_level', 'conducting_body',
+        'state', 'description', 'streams', 'is_popular', 'is_featured', 
+        'popular_order', 'display_priority', 'status'
+    ]
+    
+    update_data = {k: v for k, v in data.items() if k in allowed_fields}
+    update_data['updated_at'] = datetime.now(timezone.utc).isoformat()
+    
+    await db.exams_detailed.update_one({"id": exam_id}, {"$set": update_data})
+    return {"success": True, "section": "basic", "message": "Basic info saved"}
+
+
+@api_router.patch("/exams-detail/{exam_id}/section/dates")
+async def update_exam_detail_dates_section(exam_id: str, data: dict, current_user: User = Depends(get_current_user)):
+    """Update important dates section"""
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Only admins can update exams")
+    
+    existing = await db.exams_detailed.find_one({"id": exam_id}, {"_id": 0})
+    if not existing:
+        raise HTTPException(status_code=404, detail="Exam not found")
+    
+    allowed_fields = [
+        'exam_date', 'application_start', 'application_end', 'result_date',
+        'counseling_date', 'admit_card_date', 'registration_deadline'
+    ]
+    
+    update_data = {k: v for k, v in data.items() if k in allowed_fields}
+    update_data['updated_at'] = datetime.now(timezone.utc).isoformat()
+    
+    await db.exams_detailed.update_one({"id": exam_id}, {"$set": update_data})
+    return {"success": True, "section": "dates", "message": "Important dates saved"}
+
+
+@api_router.patch("/exams-detail/{exam_id}/section/pattern")
+async def update_exam_detail_pattern_section(exam_id: str, data: dict, current_user: User = Depends(get_current_user)):
+    """Update exam pattern & config section"""
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Only admins can update exams")
+    
+    existing = await db.exams_detailed.find_one({"id": exam_id}, {"_id": 0})
+    if not existing:
+        raise HTTPException(status_code=404, detail="Exam not found")
+    
+    allowed_fields = [
+        'exam_pattern', 'exam_syllabus', 'eligibility', 'age_limit', 'application_fee',
+        'exam_duration', 'exam_mode', 'total_marks', 'total_questions',
+        'negative_marking', 'marking_scheme', 'languages_offered', 'sections'
+    ]
+    
+    update_data = {k: v for k, v in data.items() if k in allowed_fields}
+    update_data['updated_at'] = datetime.now(timezone.utc).isoformat()
+    
+    await db.exams_detailed.update_one({"id": exam_id}, {"$set": update_data})
+    return {"success": True, "section": "pattern", "message": "Exam pattern saved"}
+
+
+@api_router.patch("/exams-detail/{exam_id}/section/content")
+async def update_exam_detail_content_section(exam_id: str, data: dict, current_user: User = Depends(get_current_user)):
+    """Update content section: key_summary, preparation_tips, cutoffs, etc."""
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Only admins can update exams")
+    
+    existing = await db.exams_detailed.find_one({"id": exam_id}, {"_id": 0})
+    if not existing:
+        raise HTTPException(status_code=404, detail="Exam not found")
+    
+    allowed_fields = [
+        'key_summary', 'preparation_tips', 'previous_year_cutoffs', 'question_papers',
+        'study_materials', 'important_links', 'total_applicants', 'total_seats',
+        'difficulty_level', 'official_website', 'exam_centers', 'accepted_by'
+    ]
+    
+    update_data = {k: v for k, v in data.items() if k in allowed_fields}
+    update_data['updated_at'] = datetime.now(timezone.utc).isoformat()
+    
+    await db.exams_detailed.update_one({"id": exam_id}, {"$set": update_data})
+    return {"success": True, "section": "content", "message": "Content saved"}
+
+
+@api_router.patch("/exams-detail/{exam_id}/section/media")
+async def update_exam_detail_media_section(exam_id: str, data: dict, current_user: User = Depends(get_current_user)):
+    """Update media section: logo, images, videos"""
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Only admins can update exams")
+    
+    existing = await db.exams_detailed.find_one({"id": exam_id}, {"_id": 0})
+    if not existing:
+        raise HTTPException(status_code=404, detail="Exam not found")
+    
+    allowed_fields = [
+        'logo_url', 'content_images', 'content_videos', 'seo_images',
+        'seo_video_url', 'seo_video_title', 'seo_video_description'
+    ]
+    
+    update_data = {k: v for k, v in data.items() if k in allowed_fields}
+    update_data['updated_at'] = datetime.now(timezone.utc).isoformat()
+    
+    await db.exams_detailed.update_one({"id": exam_id}, {"$set": update_data})
+    return {"success": True, "section": "media", "message": "Media saved"}
+
+
+@api_router.patch("/exams-detail/{exam_id}/section/seo")
+async def update_exam_detail_seo_section(exam_id: str, data: dict, current_user: User = Depends(get_current_user)):
+    """Update SEO section: meta tags, seo content, TOC, FAQs"""
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Only admins can update exams")
+    
+    existing = await db.exams_detailed.find_one({"id": exam_id}, {"_id": 0})
+    if not existing:
+        raise HTTPException(status_code=404, detail="Exam not found")
+    
+    allowed_fields = [
+        'meta_title', 'meta_description', 'meta_keywords', 'og_title', 'og_description',
+        'og_image_url', 'canonical_url', 'robots_meta', 'schema_type',
+        'seo_intro', 'seo_full_content', 'seo_toc', 'seo_tables', 'seo_faqs'
+    ]
+    
+    update_data = {k: v for k, v in data.items() if k in allowed_fields}
+    update_data['updated_at'] = datetime.now(timezone.utc).isoformat()
+    
+    await db.exams_detailed.update_one({"id": exam_id}, {"$set": update_data})
+    return {"success": True, "section": "seo", "message": "SEO content saved"}
+
+
+@api_router.patch("/exams-detail/{exam_id}/section/menu")
+async def update_exam_detail_menu_section(exam_id: str, data: dict, current_user: User = Depends(get_current_user)):
+    """Update menu configuration section (largest data, contains all sub-page content)"""
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Only admins can update exams")
+    
+    existing = await db.exams_detailed.find_one({"id": exam_id}, {"_id": 0})
+    if not existing:
+        raise HTTPException(status_code=404, detail="Exam not found")
+    
+    # Handle menu_config - ensure proper structure
+    if 'menu_config' in data and data['menu_config']:
+        items = data['menu_config'].get('items', [])
+        for item in items:
+            # Initialize missing arrays
+            for field in ['toc', 'tables', 'images', 'videos', 'faqs']:
+                if field not in item or item[field] is None:
+                    item[field] = []
+            # Initialize widgets if missing
+            if 'widgets' not in item or item['widgets'] is None:
+                item['widgets'] = {
+                    'quick_facts': {'enabled': True},
+                    'quick_nav': {'enabled': True},
+                    'contact_cta': {'enabled': True, 'title': 'Need Help?', 'subtitle': 'Get expert guidance'},
+                    'related_exams': {'enabled': False, 'exams': []},
+                    'download_widget': {'enabled': False, 'title': 'Download Resources', 'files': []}
+                }
+    
+    allowed_fields = ['menu_config', 'sidebar_widgets']
+    
+    update_data = {k: v for k, v in data.items() if k in allowed_fields}
+    update_data['updated_at'] = datetime.now(timezone.utc).isoformat()
+    
+    await db.exams_detailed.update_one({"id": exam_id}, {"$set": update_data})
+    return {"success": True, "section": "menu", "message": "Menu configuration saved"}
+
     
     return {"message": "Course deleted successfully"}
 
