@@ -690,6 +690,120 @@ const CourseDetailForm = () => {
     setFormData({ ...formData, [field]: newValues });
   };
 
+  // ============================================
+  // Section-wise Save Functions (to avoid Network Error)
+  // ============================================
+  
+  // Get section data based on section name
+  const getSectionData = (section) => {
+    switch (section) {
+      case 'basic':
+        return {
+          name: formData.name,
+          slug: formData.slug,
+          full_name: formData.full_name,
+          degree_type: formData.degree_type,
+          duration: formData.duration,
+          stream: formData.stream,
+          eligibility: formData.eligibility,
+          career_prospects: formData.career_prospects,
+          average_salary: formData.average_salary,
+          fees_range: formData.fees_range,
+          min_fees: formData.min_fees,
+          max_fees: formData.max_fees,
+          top_recruiters: formData.top_recruiters || [],
+          specializations: formData.specializations || [],
+          subjects: formData.subjects || [],
+          skills_gained: formData.skills_gained || [],
+          entrance_exams: formData.entrance_exams || []
+        };
+      case 'content':
+        return {
+          description: formData.description,
+          faqs: formData.faqs || [],
+          highlights: formData.highlights || [],
+          overview: formData.overview,
+          curriculum: formData.curriculum,
+          admission_process: formData.admission_process,
+          job_roles: formData.job_roles || [],
+          salary_trends: formData.salary_trends
+        };
+      case 'seo':
+        return {
+          meta_title: formData.meta_title,
+          meta_description: formData.meta_description,
+          meta_keywords: formData.meta_keywords || [],
+          canonical_url: formData.canonical_url,
+          og_title: formData.og_title,
+          og_description: formData.og_description,
+          og_image: formData.og_image,
+          seo_content: formData.seo_content,
+          seo_intro: formData.seo_intro,
+          seo_full_content: formData.seo_full_content,
+          seo_toc: formData.seo_toc || [],
+          seo_faqs: formData.seo_faqs || []
+        };
+      default:
+        return {};
+    }
+  };
+
+  // Save a single section
+  const saveSectionData = async (section, sectionData) => {
+    // Remove null/undefined values
+    Object.keys(sectionData).forEach(key => {
+      if (sectionData[key] === null || sectionData[key] === undefined) {
+        delete sectionData[key];
+      }
+    });
+    
+    console.log(`[CourseDetailForm] Saving ${section} section:`, JSON.stringify(sectionData).length, 'bytes');
+    await api.patch(`/courses-detail/${id}/section/${section}`, sectionData);
+  };
+
+  // Save all sections sequentially (one by one to avoid timeout)
+  const handleSequentialSaveAll = async (targetStatus) => {
+    if (!id) {
+      alert('Please save the form first as draft.');
+      return false;
+    }
+
+    const sections = ['basic', 'content', 'seo'];
+    let allSaved = true;
+
+    for (const section of sections) {
+      try {
+        const sectionData = getSectionData(section);
+        await saveSectionData(section, sectionData);
+        console.log(`[CourseDetailForm] ${section} section saved`);
+      } catch (error) {
+        console.error(`[CourseDetailForm] Error saving ${section}:`, error);
+        allSaved = false;
+        alert(`Failed to save ${section} section: ${error.response?.data?.detail || error.message}`);
+        break;
+      }
+    }
+
+    if (allSaved) {
+      // Now update the status
+      try {
+        await api.patch(`/courses-detail/${id}/section/basic`, { status: targetStatus });
+        alert(targetStatus === 'published' 
+          ? 'All sections saved and course published!' 
+          : targetStatus === 'pending'
+            ? 'All sections saved and submitted for review!'
+            : 'All sections saved as draft!');
+        navigate('/admin/courses-detail');
+        return true;
+      } catch (error) {
+        alert(`Failed to update status: ${error.response?.data?.detail || error.message}`);
+        return false;
+      }
+    }
+
+    return false;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSaving(true);
