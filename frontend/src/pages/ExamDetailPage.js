@@ -28,15 +28,10 @@ const ExamDetailPage = () => {
       try {
         setLoading(true);
         // If preview mode, fetch all exams (including draft/pending), otherwise only published
+        // Only fetch from exams-detail (detailed exams from Exam Details Entry Form)
         const apiUrl = isPreview ? '/exams-detail?limit=100' : '/exams-detail?status=published&limit=100';
         let response = await api.get(apiUrl);
         let exam = response.data?.find(e => e.slug === id || e.id === id || e.name?.toLowerCase().replace(/\s+/g, '-') === id);
-        
-        if (!exam) {
-          // Fallback to quick entry exams
-          response = await api.get(`/exams?limit=200`);
-          exam = response.data?.find(e => e.slug === id || e.id === id || e.name?.toLowerCase().replace(/\s+/g, '-') === id);
-        }
         
         if (exam) {
           setExamFromApi(exam);
