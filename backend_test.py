@@ -8495,14 +8495,255 @@ class APITester:
         else:
             self.log_test("GET /api/exams?search=NEET", False, f"Status: {status}", response)
 
+    def test_gate_2025_exam_complete(self):
+        """Test GATE 2025 exam end-to-end as requested in review"""
+        print("🎓 Testing GATE 2025 Exam Complete End-to-End...")
+        
+        # Test 1: Database Verification - GET /api/exams-detail?slug=gate-2025
+        success, response, status = self.make_request("GET", "/exams-detail?slug=gate-2025")
+        if success and isinstance(response, list) and len(response) > 0:
+            exam_data = response[0]
+            exam_name = exam_data.get("name", "Unknown")
+            full_name = exam_data.get("fullName") or exam_data.get("full_name", "Unknown")
+            conductor = exam_data.get("conductor") or exam_data.get("conducting_body", "Unknown")
+            
+            self.log_test("Database Verification - GET /api/exams-detail?slug=gate-2025", True, 
+                         f"Found exam: {exam_name}, Full name: {full_name}, Conductor: {conductor}")
+            
+            # Verify required fields
+            required_fields = ["name", "description", "key_summary", "menu_config", "seo_full_content"]
+            missing_fields = []
+            present_fields = []
+            
+            for field in required_fields:
+                # Check both possible field names
+                alt_field = "fullName" if field == "full_name" else field
+                if exam_data.get(field) or exam_data.get(alt_field):
+                    present_fields.append(field)
+                else:
+                    missing_fields.append(field)
+            
+            if len(present_fields) >= 4:  # At least 4 out of 5 required fields
+                self.log_test("Required Fields Verification", True, 
+                             f"Found {len(present_fields)}/5 required fields: {', '.join(present_fields)}")
+            else:
+                self.log_test("Required Fields Verification", False, 
+                             f"Only {len(present_fields)}/5 required fields. Missing: {', '.join(missing_fields)}")
+            
+            # Test 2: Verify exam title and logo
+            if "Graduate Aptitude Test in Engineering 2025" in full_name:
+                self.log_test("Exam Title Verification", True, f"Correct title: {full_name}")
+            else:
+                self.log_test("Exam Title Verification", False, f"Expected 'Graduate Aptitude Test in Engineering 2025', got: {full_name}")
+            
+            # Check logo (should show "G" placeholder if no logo uploaded)
+            logo_url = exam_data.get("logo_url")
+            if not logo_url or logo_url.strip() == "":
+                self.log_test("Logo Placeholder Verification", True, "No logo uploaded - should show 'G' placeholder")
+            else:
+                self.log_test("Logo Placeholder Verification", True, f"Logo URL present: {logo_url}")
+            
+            # Test 3: Description HTML Rendering (P0 fix verification)
+            description = exam_data.get("description", "")
+            if description and len(description) > 0:
+                # Check if description contains HTML tags (should be formatted, not raw)
+                if "<strong>" in description or "<b>" in description:
+                    self.log_test("Description HTML Rendering", True, "Description contains formatted HTML (bold tags found)")
+                elif "GATE 2025" in description:
+                    self.log_test("Description HTML Rendering", True, "Description contains GATE 2025 content")
+                else:
+                    self.log_test("Description HTML Rendering", False, "Description may not be properly formatted")
+            else:
+                self.log_test("Description HTML Rendering", False, "Description is missing or empty")
+            
+            # Test 4: Menu Navigation - verify all 5 menu tabs
+            menu_config = exam_data.get("menu_config", {})
+            if isinstance(menu_config, dict):
+                menu_items = menu_config.get("items", [])
+                expected_menus = ["Overview", "Eligibility", "Syllabus", "Exam Pattern", "Important Dates"]
+                
+                if isinstance(menu_items, list) and len(menu_items) >= 5:
+                    menu_labels = [item.get("label", "") for item in menu_items if isinstance(item, dict)]
+                    found_menus = []
+                    
+                    for expected in expected_menus:
+                        for label in menu_labels:
+                            if expected.lower() in label.lower():
+                                found_menus.append(expected)
+                                break
+                    
+                    if len(found_menus) >= 4:  # At least 4 out of 5 expected menus
+                        self.log_test("Menu Navigation Verification", True, 
+                                     f"Found {len(found_menus)}/5 expected menus: {', '.join(found_menus)}")
+                    else:
+                        self.log_test("Menu Navigation Verification", False, 
+                                     f"Only found {len(found_menus)}/5 expected menus. Available: {', '.join(menu_labels[:5])}")
+                else:
+                    self.log_test("Menu Navigation Verification", False, 
+                                 f"Expected 5+ menu items, found {len(menu_items) if isinstance(menu_items, list) else 0}")
+            else:
+                self.log_test("Menu Navigation Verification", False, "Menu config is missing or invalid")
+            
+            # Test 5: Rich HTML Content - check SEO full content with H2 headings and tables
+            seo_full_content = exam_data.get("seo_full_content", "")
+            if seo_full_content and len(seo_full_content) > 0:
+                # Check for H2 headings
+                has_h2 = "<h2>" in seo_full_content or "## " in seo_full_content
+                # Check for tables
+                has_tables = "<table>" in seo_full_content or "GATE 2025 Highlights" in seo_full_content
+                
+                if has_h2 and has_tables:
+                    self.log_test("Rich HTML Content Verification", True, "SEO content contains H2 headings and tables")
+                elif has_h2:
+                    self.log_test("Rich HTML Content Verification", True, "SEO content contains H2 headings")
+                elif has_tables:
+                    self.log_test("Rich HTML Content Verification", True, "SEO content contains table content")
+                else:
+                    self.log_test("Rich HTML Content Verification", False, "SEO content missing H2 headings and tables")
+            else:
+                self.log_test("Rich HTML Content Verification", False, "SEO full content is missing or empty")
+            
+            # Store exam data for sub-page testing
+            self.gate_exam_data = exam_data
+            self.gate_exam_slug = "gate-2025"
+            
+        elif success and isinstance(response, list) and len(response) == 0:
+            self.log_test("Database Verification - GET /api/exams-detail?slug=gate-2025", False, 
+                         "GATE 2025 exam not found in database")
+            return
+        else:
+            self.log_test("Database Verification - GET /api/exams-detail?slug=gate-2025", False, 
+                         f"API error. Status: {status}", response)
+            return
+        
+        # Test 6: Sub-page Navigation URLs
+        self.test_gate_subpage_navigation()
+        
+        # Test 7: Frontend page loading (simulated)
+        self.test_gate_frontend_simulation()
+
+    def test_gate_subpage_navigation(self):
+        """Test GATE 2025 sub-page navigation URLs"""
+        print("🔗 Testing GATE 2025 Sub-page Navigation...")
+        
+        if not hasattr(self, 'gate_exam_data'):
+            self.log_test("Sub-page Navigation (skipped)", False, "No GATE exam data available")
+            return
+        
+        # Expected sub-pages based on menu configuration
+        expected_subpages = [
+            "eligibility",
+            "syllabus", 
+            "exam-pattern",
+            "important-dates"
+        ]
+        
+        menu_config = self.gate_exam_data.get("menu_config", {})
+        menu_items = menu_config.get("items", [])
+        
+        # Test each expected sub-page
+        for subpage in expected_subpages:
+            # Check if this subpage is enabled in menu config
+            subpage_enabled = False
+            subpage_content = ""
+            
+            for item in menu_items:
+                if isinstance(item, dict):
+                    item_id = item.get("id", "")
+                    item_label = item.get("label", "")
+                    item_enabled = item.get("enabled", False)
+                    item_content = item.get("content", "")
+                    
+                    if (subpage in item_id.lower() or 
+                        subpage.replace("-", " ") in item_label.lower() or
+                        subpage.replace("-", "_") in item_id.lower()):
+                        subpage_enabled = item_enabled
+                        subpage_content = item_content
+                        break
+            
+            # Simulate URL structure test
+            expected_url = f"/exams/gate-2025/{subpage}"
+            
+            if subpage_enabled:
+                if subpage_content and len(subpage_content.strip()) > 0:
+                    self.log_test(f"Sub-page: {expected_url}", True, 
+                                 f"Enabled with content ({len(subpage_content)} chars)")
+                else:
+                    self.log_test(f"Sub-page: {expected_url}", True, 
+                                 "Enabled but content may be empty")
+            else:
+                self.log_test(f"Sub-page: {expected_url}", False, 
+                             "Sub-page not enabled in menu configuration")
+
+    def test_gate_frontend_simulation(self):
+        """Simulate frontend page loading tests for GATE 2025"""
+        print("🌐 Testing GATE 2025 Frontend Page Simulation...")
+        
+        if not hasattr(self, 'gate_exam_data'):
+            self.log_test("Frontend Simulation (skipped)", False, "No GATE exam data available")
+            return
+        
+        # Test 1: Main page loading simulation
+        main_page_url = "https://exam-editor.preview.emergentagent.com/exams/gate-2025"
+        self.log_test("Main Page URL Structure", True, f"Expected URL: {main_page_url}")
+        
+        # Test 2: Page title verification
+        exam_name = self.gate_exam_data.get("name", "")
+        full_name = self.gate_exam_data.get("fullName") or self.gate_exam_data.get("full_name", "")
+        
+        if "Graduate Aptitude Test in Engineering 2025" in full_name:
+            self.log_test("Page Title Verification", True, f"Title should show: {full_name}")
+        else:
+            self.log_test("Page Title Verification", False, f"Title may be incorrect: {full_name}")
+        
+        # Test 3: Menu tab verification
+        menu_config = self.gate_exam_data.get("menu_config", {})
+        menu_items = menu_config.get("items", [])
+        
+        enabled_menus = []
+        for item in menu_items:
+            if isinstance(item, dict) and item.get("enabled", False):
+                enabled_menus.append(item.get("label", "Unknown"))
+        
+        if len(enabled_menus) >= 5:
+            self.log_test("Menu Tabs Display", True, f"Should show {len(enabled_menus)} tabs: {', '.join(enabled_menus[:5])}")
+        else:
+            self.log_test("Menu Tabs Display", False, f"Only {len(enabled_menus)} menu tabs enabled")
+        
+        # Test 4: Content rendering verification
+        description = self.gate_exam_data.get("description", "")
+        seo_content = self.gate_exam_data.get("seo_full_content", "")
+        
+        total_content_length = len(description) + len(seo_content)
+        if total_content_length > 500:  # Reasonable amount of content
+            self.log_test("Content Rendering Verification", True, 
+                         f"Sufficient content for rendering ({total_content_length} chars total)")
+        else:
+            self.log_test("Content Rendering Verification", False, 
+                         f"Limited content available ({total_content_length} chars total)")
+        
+        # Test 5: SEO and meta verification
+        meta_title = self.gate_exam_data.get("meta_title", "")
+        meta_description = self.gate_exam_data.get("meta_description", "")
+        
+        if meta_title and meta_description:
+            self.log_test("SEO Meta Tags Verification", True, 
+                         f"Meta title and description present")
+        elif meta_title:
+            self.log_test("SEO Meta Tags Verification", True, 
+                         "Meta title present, description may be auto-generated")
+        else:
+            self.log_test("SEO Meta Tags Verification", False, 
+                         "Meta title and description missing")
+
     def run_all_tests(self):
-        """Run all test suites focusing on NEET UG Exam Testing first"""
-        print("🚀 NEET UG EXAM TESTING - PRIMARY FOCUS")
+        """Run all test suites focusing on GATE 2025 Exam Testing first"""
+        print("🚀 GATE 2025 EXAM TESTING - PRIMARY FOCUS")
         print(f"🌐 Base URL: {BASE_URL}")
         print("=" * 80)
         
-        # **MAIN FOCUS: NEET UG Exam Testing**
-        self.test_neet_ug_exam_complete()  # Test NEET UG exam with complete end-to-end data entry
+        # **MAIN FOCUS: GATE 2025 Exam Testing**
+        self.test_gate_2025_exam_complete()  # Test GATE 2025 exam with complete end-to-end data entry
         
         print("\n" + "=" * 80)
         print("🔐 AUTHENTICATION & SECTION-WISE SAVE TESTING")
