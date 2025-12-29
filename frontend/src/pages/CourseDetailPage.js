@@ -19,6 +19,7 @@ const CourseDetailPage = () => {
   const [activeWidget, setActiveWidget] = useState(null);
   const [expandedFaq, setExpandedFaq] = useState(null);
   const [isSaved, setIsSaved] = useState(false);
+  const [showSeoContent, setShowSeoContent] = useState(false);
 
   useEffect(() => {
     const fetchCourse = async () => {
