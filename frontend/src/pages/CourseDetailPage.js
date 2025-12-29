@@ -673,8 +673,8 @@ const CourseDetailPage = () => {
               </section>
             )}
 
-            {/* Eligibility Section - Only show if data exists */}
-            {(eligibility || ageLimit || (course.entrance_exams && course.entrance_exams.length > 0)) && (
+            {/* Eligibility Section - Only show if data exists AND menu is enabled */}
+            {isMenuEnabled('eligibility') && (eligibility || ageLimit || (course.entrance_exams && course.entrance_exams.length > 0)) && (
               <section id="eligibility" className="bg-white rounded-2xl shadow-sm p-6 md:p-8">
                 <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
                   <span className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center">
