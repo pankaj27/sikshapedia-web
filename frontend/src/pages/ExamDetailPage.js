@@ -727,20 +727,22 @@ const ExamDetailPage = () => {
               </div>
             </div>
 
-            {/* ChapterWise PYQs Section */}
+            {/* ChapterWise PYQs Section - Dynamic from Backend */}
+            {examFromApi?.chapter_wise_pyqs?.length > 0 && (
             <div id="chapterwise" className="bg-white rounded-lg shadow-md p-6 scroll-mt-20">
               <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
                 <FiBook className="text-orange-600" />
                 Download {exam.name} PYQs ChapterWise
               </h2>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                {['Mole Concept', 'Organic Chemistry', 'Friction', 'Projectile Motion', 'Vectors', 'Circular Motion', 'Determinants', 'Electrostatics'].map((chapter, idx) => (
-                  <Link key={idx} to="#" className="text-blue-600 hover:text-orange-600 text-sm hover:underline">
-                    {chapter} {exam.name} PYQs
+                {examFromApi.chapter_wise_pyqs.map((chapter, idx) => (
+                  <Link key={idx} to={chapter.link || '#'} className="text-blue-600 hover:text-orange-600 text-sm hover:underline">
+                    {chapter.name} {exam.name} PYQs
                   </Link>
                 ))}
               </div>
             </div>
+            )}
 
             {/* Paper Pattern Section */}
             <div id="pattern" className="bg-white rounded-lg shadow-md p-6 scroll-mt-20">
