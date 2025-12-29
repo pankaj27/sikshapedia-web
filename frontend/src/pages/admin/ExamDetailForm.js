@@ -1691,6 +1691,17 @@ const ExamDetailForm = () => {
           <div className="mt-4"><label className="block text-sm font-medium text-gray-700 mb-1">Syllabus</label>
             <textarea name="exam_syllabus" value={formData.exam_syllabus} onChange={handleChange} rows="4" placeholder="List syllabus topics..."
               className="w-full border border-gray-300 rounded-lg px-4 py-2.5" /></div>
+          {/* Section Save Button */}
+          {id && (
+            <div className="mt-4 pt-4 border-t border-gray-200 flex justify-end">
+              <SectionSaveButton 
+                section="pattern" 
+                onSave={handleSectionSave} 
+                isSaving={sectionSaving.pattern} 
+                isSaved={sectionSaved.pattern}
+              />
+            </div>
+          )}
         </CollapsibleSection>
 
         {/* Application Fees */}
