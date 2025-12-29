@@ -181,6 +181,9 @@ const SimpleRichTextEditor = ({ value, onChange, placeholder }) => {
       TextStyle,
       Color,
       Underline,
+      TextAlign.configure({
+        types: ['heading', 'paragraph'],
+      }),
     ],
     content: value || '',
     onUpdate: ({ editor }) => {
