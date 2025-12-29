@@ -949,13 +949,24 @@ const CourseDetailPage = () => {
                 </button>
               </div>
 
-              {/* Compare & Share */}
-              <div className="mt-6 pt-6 border-t border-gray-200 grid grid-cols-2 gap-3">
-                <button className="py-2 border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center justify-center gap-2">
-                  <FiLayers size={16} /> Compare
-                </button>
-                <button className="py-2 border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center justify-center gap-2">
-                  <FiShare2 size={16} /> Share
+              {/* Share Button */}
+              <div className="mt-6 pt-6 border-t border-gray-200">
+                <button 
+                  onClick={() => {
+                    if (navigator.share) {
+                      navigator.share({
+                        title: fullName,
+                        text: `Check out ${fullName} - ${duration || ''} course`,
+                        url: window.location.href
+                      });
+                    } else {
+                      navigator.clipboard.writeText(window.location.href);
+                      alert('Link copied to clipboard!');
+                    }
+                  }}
+                  className="w-full py-2 border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center justify-center gap-2"
+                >
+                  <FiShare2 size={16} /> Share this Course
                 </button>
               </div>
             </div>
