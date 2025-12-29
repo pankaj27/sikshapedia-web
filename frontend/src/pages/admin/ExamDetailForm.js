@@ -21,11 +21,11 @@ import DraftRestoreBanner, { AutoSaveIndicator } from '../../components/admin/Dr
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Link from '@tiptap/extension-link';
-import TextStyle from '@tiptap/extension-text-style';
+import { TextStyle } from '@tiptap/extension-text-style';
 import { Color } from '@tiptap/extension-color';
 import Underline from '@tiptap/extension-underline';
 import TextAlign from '@tiptap/extension-text-align';
-import Table, { TableRow, TableHeader, TableCell } from '@tiptap/extension-table';
+import { Table, TableRow, TableHeader, TableCell } from '@tiptap/extension-table';
 
 // Brand name constant for alt tags
 const BRAND_NAME = 'admissionbuddy';
