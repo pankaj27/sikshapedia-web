@@ -702,8 +702,8 @@ const CourseDetailPage = () => {
               </section>
             )}
 
-            {/* Admission Process Section - Only show if data exists */}
-            {(admissionProcess || selectionCriteria) && (
+            {/* Admission Process Section - Only show if data exists AND menu is enabled */}
+            {isMenuEnabled('admission') && (admissionProcess || selectionCriteria) && (
               <section id="admission" className="bg-white rounded-2xl shadow-sm p-6 md:p-8">
                 <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
                   <span className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
@@ -734,8 +734,8 @@ const CourseDetailPage = () => {
               </section>
             )}
 
-            {/* Syllabus Section - Only show if data exists */}
-            {syllabusData.length > 0 && (
+            {/* Syllabus Section - Only show if data exists AND menu is enabled */}
+            {isMenuEnabled('syllabus') && syllabusData.length > 0 && (
               <section id="syllabus" className="bg-white rounded-2xl shadow-sm p-6 md:p-8">
                 <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
                   <span className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
@@ -764,8 +764,8 @@ const CourseDetailPage = () => {
               </section>
             )}
 
-            {/* Top Colleges Section - Only show if data exists */}
-            {topColleges.length > 0 && (
+            {/* Top Colleges Section - Only show if data exists AND menu is enabled */}
+            {isMenuEnabled('colleges') && topColleges.length > 0 && (
               <section id="colleges" className="bg-white rounded-2xl shadow-sm p-6 md:p-8">
                 <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
                   <span className="w-10 h-10 bg-indigo-100 rounded-xl flex items-center justify-center">
@@ -799,8 +799,8 @@ const CourseDetailPage = () => {
               </section>
             )}
 
-            {/* Career Section - Only show if data exists */}
-            {(jobOpportunities.length > 0 || careerProspects || careerOptions.length > 0 || jobRoles.length > 0) && (
+            {/* Career Section - Only show if data exists AND menu is enabled */}
+            {isMenuEnabled('career') && (jobOpportunities.length > 0 || careerProspects || careerOptions.length > 0 || jobRoles.length > 0) && (
               <section id="career" className="bg-white rounded-2xl shadow-sm p-6 md:p-8">
                 <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
                   <span className="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center">
@@ -875,8 +875,8 @@ const CourseDetailPage = () => {
               </section>
             )}
 
-            {/* FAQs Section - Only show if data exists */}
-            {faqs.length > 0 && (
+            {/* FAQs Section - Only show if data exists AND menu is enabled */}
+            {isMenuEnabled('faqs') && faqs.length > 0 && (
               <section id="faqs" className="bg-white rounded-2xl shadow-sm p-6 md:p-8">
                 <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
                   <span className="w-10 h-10 bg-teal-100 rounded-xl flex items-center justify-center">
