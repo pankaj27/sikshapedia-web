@@ -336,17 +336,6 @@ const CourseDetailPage = () => {
                 {/* SEO EXPANDABLE CONTENT */}
                 {showSeoContent && (
                   <div className="space-y-8">
-                    {/* Show Less Button */}
-                    <div className="text-center">
-                      <button
-                        onClick={() => setShowSeoContent(false)}
-                        className="inline-flex items-center gap-2 px-6 py-2 border-2 border-gray-400 text-gray-600 hover:bg-gray-50 text-sm font-medium rounded-full"
-                      >
-                        <span>Show Less</span>
-                        <FiChevronUp size={18} />
-                      </button>
-                    </div>
-                    
                     {/* TABLE OF CONTENTS - from SEO Content */}
                     {course.seo_toc?.length > 0 && (
                       <div className="bg-gray-50 rounded-lg p-6 border">
@@ -450,6 +439,17 @@ const CourseDetailPage = () => {
                         ))}
                       </div>
                     )}
+
+                    {/* Show Less Button - At the end */}
+                    <div className="text-center pt-4">
+                      <button
+                        onClick={() => setShowSeoContent(false)}
+                        className="inline-flex items-center gap-2 px-6 py-2 border-2 border-gray-400 text-gray-600 hover:bg-gray-50 text-sm font-medium rounded-full"
+                      >
+                        <span>Show Less</span>
+                        <FiChevronUp size={18} />
+                      </button>
+                    </div>
                   </div>
                 )}
               </section>
