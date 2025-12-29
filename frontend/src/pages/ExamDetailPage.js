@@ -194,7 +194,7 @@ const ExamDetailPage = () => {
               )}
               {exam.description ? (
                 <div 
-                  className="text-lg opacity-90"
+                  className="prose prose-invert prose-sm max-w-none text-lg opacity-90"
                   dangerouslySetInnerHTML={{ __html: exam.description }}
                 />
               ) : (
@@ -615,7 +615,10 @@ const ExamDetailPage = () => {
             {!exam.menuConfig?.items && (
               <div id="overview" className="mb-8 scroll-mt-20">
                 <div className="bg-white rounded-lg shadow-md p-6">
-                  <p className="text-gray-700 leading-relaxed mb-4">{exam.description}</p>
+                  <div 
+                    className="prose max-w-none text-gray-700 leading-relaxed mb-4"
+                    dangerouslySetInnerHTML={{ __html: exam.description }}
+                  />
                   <div className="flex gap-3">
                     <Button className="bg-orange-500 hover:bg-orange-600 text-white">
                       <FiDownload className="mr-2" />
