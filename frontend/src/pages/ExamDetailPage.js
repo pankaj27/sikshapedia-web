@@ -212,11 +212,16 @@ const ExamDetailPage = () => {
           <div className="flex items-center gap-6 overflow-x-auto py-3">
             {(exam.menuConfig?.items || []).filter(item => item.enabled !== false).map((item, idx) => {
               const enabledItems = (exam.menuConfig?.items || []).filter(i => i.enabled !== false);
-              const isActive = activeSection ? activeSection === item.id : (enabledItems[0]?.id === item.id);
+              const isFirstItem = idx === 0;
+              const isActive = activeSection ? activeSection === item.id : isFirstItem;
+              // First menu item (Overview) links to main page, others to sub-pages
+              const linkTo = isFirstItem 
+                ? `/exams/${examFromApi?.slug || id}` 
+                : `/exams/${examFromApi?.slug || id}/${item.id}`;
               return (
                 <Link 
                   key={item.id} 
-                  to={`/exams/${examFromApi?.slug || id}/${item.id}`}
+                  to={linkTo}
                   className={`text-sm font-medium pb-3 whitespace-nowrap transition-colors cursor-pointer ${
                     isActive
                       ? 'font-semibold text-orange-600 border-b-2 border-orange-600' 
@@ -230,7 +235,7 @@ const ExamDetailPage = () => {
             {/* Fallback if no menu items from backend */}
             {(!exam.menuConfig?.items || exam.menuConfig.items.length === 0) && (
               <>
-                <Link to={`/exams/${examFromApi?.slug || id}/overview`} className={`text-sm pb-3 whitespace-nowrap ${activeSection === 'overview' ? 'font-semibold text-orange-600 border-b-2 border-orange-600' : 'font-medium text-gray-700 hover:text-orange-600'}`}>Overview</Link>
+                <Link to={`/exams/${examFromApi?.slug || id}`} className={`text-sm pb-3 whitespace-nowrap ${!activeSection ? 'font-semibold text-orange-600 border-b-2 border-orange-600' : 'font-medium text-gray-700 hover:text-orange-600'}`}>Overview</Link>
                 <Link to={`/exams/${examFromApi?.slug || id}/eligibility`} className={`text-sm pb-3 whitespace-nowrap ${activeSection === 'eligibility' ? 'font-semibold text-orange-600 border-b-2 border-orange-600' : 'font-medium text-gray-700 hover:text-orange-600'}`}>Eligibility</Link>
                 <Link to={`/exams/${examFromApi?.slug || id}/syllabus`} className={`text-sm pb-3 whitespace-nowrap ${activeSection === 'syllabus' ? 'font-semibold text-orange-600 border-b-2 border-orange-600' : 'font-medium text-gray-700 hover:text-orange-600'}`}>Syllabus</Link>
                 <Link to={`/exams/${examFromApi?.slug || id}/exam-pattern`} className={`text-sm pb-3 whitespace-nowrap ${activeSection === 'exam-pattern' ? 'font-semibold text-orange-600 border-b-2 border-orange-600' : 'font-medium text-gray-700 hover:text-orange-600'}`}>Exam Pattern</Link>
