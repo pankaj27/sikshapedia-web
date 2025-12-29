@@ -8259,6 +8259,242 @@ class APITester:
         else:
             self.log_test("Hero Slider Settings Update", False, "No admin token available for testing updates")
 
+    def test_neet_ug_exam_complete(self):
+        """Test NEET UG exam that was just created with complete end-to-end data entry"""
+        print("🧬 Testing NEET UG Exam - Complete End-to-End Data Entry...")
+        
+        # Test 1: Verify Exam Data Created - GET /api/exams-detail/neet-ug (by slug)
+        success, response, status = self.make_request("GET", "/exams-detail?slug=neet-ug")
+        
+        if success and isinstance(response, list) and len(response) > 0:
+            neet_exam = response[0]
+            exam_name = neet_exam.get("name", "Unknown")
+            self.log_test("GET /api/exams-detail/neet-ug (by slug)", True, f"Found exam: {exam_name}")
+            
+            # Store exam ID for further tests
+            self.neet_exam_id = neet_exam.get("id")
+            
+            # Verify all required fields are properly stored
+            self.verify_neet_exam_fields(neet_exam)
+            
+        else:
+            self.log_test("GET /api/exams-detail/neet-ug (by slug)", False, 
+                         f"NEET UG exam not found. Status: {status}")
+            return
+        
+        # Test 2: Test Sub-page Access
+        self.test_neet_subpage_access()
+        
+        # Test 3: Verify Section-wise APIs work (Login as admin first)
+        self.test_neet_section_wise_apis()
+        
+        # Test 4: Check Quick Entry Integration
+        self.test_neet_quick_entry_integration()
+
+    def verify_neet_exam_fields(self, neet_exam):
+        """Verify all NEET UG exam fields are properly stored"""
+        print("🔍 Verifying NEET UG Exam Fields...")
+        
+        # Basic fields verification
+        required_fields = {
+            "name": "NEET UG",
+            "full_name": str,
+            "conducting_body": str,
+            "exam_type": str,
+            "exam_level": str
+        }
+        
+        for field, expected in required_fields.items():
+            value = neet_exam.get(field)
+            if isinstance(expected, str):
+                if value == expected:
+                    self.log_test(f"Field: {field}", True, f"Value: {value}")
+                else:
+                    self.log_test(f"Field: {field}", False, f"Expected: {expected}, Got: {value}")
+            elif isinstance(expected, type):
+                if isinstance(value, expected) and value:
+                    self.log_test(f"Field: {field}", True, f"Value: {value}")
+                else:
+                    self.log_test(f"Field: {field}", False, f"Missing or invalid type. Got: {value}")
+        
+        # Verify dates
+        date_fields = ["exam_date", "application_start", "application_end", "result_date"]
+        for field in date_fields:
+            value = neet_exam.get(field)
+            if value:
+                self.log_test(f"Date field: {field}", True, f"Value: {value}")
+            else:
+                self.log_test(f"Date field: {field}", False, "Missing or empty")
+        
+        # Verify exam pattern
+        exam_pattern = neet_exam.get("exam_pattern", {})
+        total_marks = exam_pattern.get("total_marks") if isinstance(exam_pattern, dict) else neet_exam.get("total_marks")
+        total_questions = exam_pattern.get("total_questions") if isinstance(exam_pattern, dict) else neet_exam.get("total_questions")
+        sections = exam_pattern.get("sections", []) if isinstance(exam_pattern, dict) else neet_exam.get("sections", [])
+        
+        if total_marks == 720:
+            self.log_test("Exam Pattern: total_marks", True, f"Value: {total_marks}")
+        else:
+            self.log_test("Exam Pattern: total_marks", False, f"Expected: 720, Got: {total_marks}")
+        
+        if total_questions == 200:
+            self.log_test("Exam Pattern: total_questions", True, f"Value: {total_questions}")
+        else:
+            self.log_test("Exam Pattern: total_questions", False, f"Expected: 200, Got: {total_questions}")
+        
+        if isinstance(sections, list) and len(sections) > 0:
+            self.log_test("Exam Pattern: sections", True, f"Found {len(sections)} sections")
+        else:
+            self.log_test("Exam Pattern: sections", False, "Sections array missing or empty")
+        
+        # Verify SEO data
+        seo_fields = ["meta_title", "meta_description", "seo_intro", "seo_faqs"]
+        for field in seo_fields:
+            value = neet_exam.get(field)
+            if value:
+                self.log_test(f"SEO field: {field}", True, f"Present ({len(str(value))} chars)")
+            else:
+                self.log_test(f"SEO field: {field}", False, "Missing or empty")
+        
+        # Verify menu_config has 9 items
+        menu_config = neet_exam.get("menu_config", {})
+        if isinstance(menu_config, dict):
+            items = menu_config.get("items", [])
+            if isinstance(items, list) and len(items) == 9:
+                item_labels = [item.get("label", "Unknown") for item in items]
+                expected_items = ["overview", "dates", "eligibility", "syllabus", "pattern", "preparation", "cutoff", "result", "counseling"]
+                self.log_test("Menu Config: 9 items", True, f"Items: {', '.join(item_labels)}")
+                
+                # Check if all expected items are present
+                found_items = [item.get("id", "").lower() for item in items]
+                missing_items = [item for item in expected_items if item not in found_items]
+                if not missing_items:
+                    self.log_test("Menu Config: Required items", True, "All required menu items present")
+                else:
+                    self.log_test("Menu Config: Required items", False, f"Missing: {', '.join(missing_items)}")
+            else:
+                self.log_test("Menu Config: 9 items", False, f"Expected 9 items, found {len(items) if isinstance(items, list) else 0}")
+        else:
+            self.log_test("Menu Config: 9 items", False, "Menu config missing or invalid")
+
+    def test_neet_subpage_access(self):
+        """Test each sub-page URL returns correct data"""
+        print("📄 Testing NEET UG Sub-page Access...")
+        
+        if not hasattr(self, 'neet_exam_id') or not self.neet_exam_id:
+            self.log_test("Sub-page Access (skipped)", False, "No NEET exam ID available")
+            return
+        
+        # Sub-pages to test
+        subpages = [
+            "overview",
+            "dates", 
+            "eligibility",
+            "syllabus",
+            "pattern",
+            "preparation",
+            "cutoff",
+            "result",
+            "counseling"
+        ]
+        
+        for subpage in subpages:
+            # Test URL: /exams/neet-ug/{subpage}
+            success, response, status = self.make_request("GET", f"/exams-detail?slug=neet-ug")
+            
+            if success and isinstance(response, list) and len(response) > 0:
+                exam_data = response[0]
+                menu_config = exam_data.get("menu_config", {})
+                items = menu_config.get("items", [])
+                
+                # Check if this subpage is enabled in menu config
+                subpage_enabled = False
+                for item in items:
+                    if item.get("id", "").lower() == subpage and item.get("enabled", False):
+                        subpage_enabled = True
+                        break
+                
+                if subpage_enabled:
+                    self.log_test(f"Sub-page: /exams/neet-ug/{subpage}", True, "Subpage enabled in menu config")
+                else:
+                    self.log_test(f"Sub-page: /exams/neet-ug/{subpage}", False, "Subpage not enabled or missing in menu config")
+            else:
+                self.log_test(f"Sub-page: /exams/neet-ug/{subpage}", False, f"Could not verify subpage. Status: {status}")
+
+    def test_neet_section_wise_apis(self):
+        """Test section-wise APIs work - Login as admin first"""
+        print("🔐 Testing NEET UG Section-wise APIs...")
+        
+        # Login as admin first
+        success, response, status = self.make_request("POST", "/auth/login", ADMIN_CREDENTIALS)
+        if success and "access_token" in response:
+            self.admin_token = response["access_token"]
+            user_info = response.get('user', {})
+            self.log_test("Admin Login for NEET Tests", True, 
+                         f"Logged in as: {user_info.get('email', 'N/A')}, role: {user_info.get('role', 'N/A')}")
+        else:
+            self.log_test("Admin Login for NEET Tests", False, f"Status: {status}", response)
+            return
+        
+        if not hasattr(self, 'neet_exam_id') or not self.neet_exam_id:
+            self.log_test("Section-wise APIs (skipped)", False, "No NEET exam ID available")
+            return
+        
+        # Test PATCH /api/exams-detail/{id}/section/basic - update name
+        basic_update_data = {
+            "name": "NEET UG - Updated Test"
+        }
+        
+        success, response, status = self.make_request(
+            "PATCH", f"/exams-detail/{self.neet_exam_id}/section/basic",
+            basic_update_data, token=self.admin_token
+        )
+        
+        if success and response.get("success"):
+            self.log_test("PATCH /api/exams-detail/{id}/section/basic", True, 
+                         f"Basic section updated: {response.get('message', 'Success')}")
+            
+            # Verify change persists
+            success, response, status = self.make_request("GET", f"/exams-detail/{self.neet_exam_id}")
+            if success and response.get("name") == "NEET UG - Updated Test":
+                self.log_test("Verify Basic Section Update Persistence", True, 
+                             f"Name updated to: {response.get('name')}")
+            else:
+                self.log_test("Verify Basic Section Update Persistence", False, 
+                             f"Name not updated. Current: {response.get('name') if success else 'Error'}")
+        else:
+            self.log_test("PATCH /api/exams-detail/{id}/section/basic", False, 
+                         f"Status: {status}", response)
+
+    def test_neet_quick_entry_integration(self):
+        """Test Quick Entry Integration - GET /api/exams?search=NEET"""
+        print("🔍 Testing NEET UG Quick Entry Integration...")
+        
+        # Test GET /api/exams?search=NEET
+        success, response, status = self.make_request("GET", "/exams?search=NEET")
+        
+        if success and isinstance(response, list):
+            neet_exams = [exam for exam in response if "NEET" in exam.get("name", "").upper()]
+            
+            if len(neet_exams) > 0:
+                neet_ug_found = False
+                for exam in neet_exams:
+                    if "UG" in exam.get("name", "").upper():
+                        neet_ug_found = True
+                        break
+                
+                if neet_ug_found:
+                    self.log_test("GET /api/exams?search=NEET", True, 
+                                 f"NEET UG found in search results ({len(neet_exams)} NEET exams total)")
+                else:
+                    self.log_test("GET /api/exams?search=NEET", False, 
+                                 f"NEET UG not found in search results (found {len(neet_exams)} other NEET exams)")
+            else:
+                self.log_test("GET /api/exams?search=NEET", False, 
+                             f"No NEET exams found in search results ({len(response)} total results)")
+        else:
+            self.log_test("GET /api/exams?search=NEET", False, f"Status: {status}", response)
+
     def run_all_tests(self):
         """Run all test suites focusing on Section-wise College Creation first"""
         print("🚀 SECTION-WISE COLLEGE CREATION TESTING")
