@@ -865,11 +865,11 @@ const ExamDetailForm = () => {
               <Button variant="outline" onClick={() => navigate('/admin/exams-detail')}>
                 <FiX className="mr-2 w-4 h-4" /> Cancel
               </Button>
-              <Button onClick={(e) => handleSubmit(e, true)} disabled={saving} variant="outline" className="border-indigo-300 text-indigo-600 hover:bg-indigo-50">
+              <Button onClick={handleSaveDraft} disabled={saving} variant="outline" className="border-indigo-300 text-indigo-600 hover:bg-indigo-50">
                 {saving ? <FiLoader className="mr-2 w-4 h-4 animate-spin" /> : <FiSave className="mr-2 w-4 h-4" />}
                 Save Draft
               </Button>
-              <Button onClick={handleSubmit} disabled={saving} className="bg-indigo-600 hover:bg-indigo-700">
+              <Button onClick={handlePublish} disabled={saving} className="bg-indigo-600 hover:bg-indigo-700">
                 {saving ? <FiLoader className="mr-2 w-4 h-4 animate-spin" /> : <FiSave className="mr-2 w-4 h-4" />}
                 Save & Publish
               </Button>
