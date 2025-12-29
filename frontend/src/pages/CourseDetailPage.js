@@ -121,15 +121,68 @@ const CourseDetailPage = () => {
   // Check for FAQs
   const hasFaqs = course.faqs && Array.isArray(course.faqs) && course.faqs.length > 0;
 
-  const navTabs = [
-    { id: 'overview', label: 'Overview', icon: FiBook, show: true },
-    { id: 'eligibility', label: 'Eligibility', icon: FiCheckCircle, show: !!eligibility },
-    { id: 'admission', label: 'Admission', icon: FiCalendar, show: !!(course.admission_process && course.admission_process.trim()) || !!(course.selection_criteria && course.selection_criteria.trim()) },
-    { id: 'syllabus', label: 'Syllabus', icon: HiOutlineDocumentText, show: hasSyllabus },
-    { id: 'colleges', label: 'Top Colleges', icon: HiOutlineOfficeBuilding, show: hasTopColleges },
-    { id: 'career', label: 'Career & Jobs', icon: FiBriefcase, show: hasCareerData },
-    { id: 'faqs', label: 'FAQs', icon: HiOutlineLightBulb, show: hasFaqs },
-  ].filter(tab => tab.show);
+  // Menu icon mapping
+  const menuIcons = {
+    overview: FiBook,
+    eligibility: FiCheckCircle,
+    admission: FiCalendar,
+    syllabus: HiOutlineDocumentText,
+    colleges: HiOutlineOfficeBuilding,
+    career: FiBriefcase,
+    fees: FiDollarSign,
+    salary: FiDollarSign,
+    faqs: HiOutlineLightBulb,
+    gallery: FiImage,
+  };
+
+  // Default menu items (fallback if no menu_config)
+  const defaultMenuItems = [
+    { id: 'overview', label: 'Overview', show: true },
+    { id: 'eligibility', label: 'Eligibility', show: !!eligibility },
+    { id: 'admission', label: 'Admission', show: !!(course.admission_process && course.admission_process.trim()) || !!(course.selection_criteria && course.selection_criteria.trim()) },
+    { id: 'syllabus', label: 'Syllabus', show: hasSyllabus },
+    { id: 'colleges', label: 'Top Colleges', show: hasTopColleges },
+    { id: 'career', label: 'Career & Jobs', show: hasCareerData },
+    { id: 'faqs', label: 'FAQs', show: hasFaqs },
+  ];
+
+  // Get menu items from menu_config or use defaults
+  const getMenuItems = () => {
+    const menuConfig = course?.menu_config;
+    
+    // If menu_config has items, use those (filter by enabled)
+    if (menuConfig?.items?.length > 0) {
+      return menuConfig.items
+        .filter(item => item.enabled)
+        .sort((a, b) => (a.order || 0) - (b.order || 0))
+        .map(item => ({
+          id: item.id,
+          label: item.label,
+          icon: menuIcons[item.id] || FiBook,
+          show: true
+        }));
+    }
+    
+    // Default menu (filter by show)
+    return defaultMenuItems.filter(item => item.show).map(item => ({
+      ...item,
+      icon: menuIcons[item.id] || FiBook
+    }));
+  };
+
+  const navTabs = getMenuItems();
+
+  // Helper function to check if a menu section is enabled
+  const isMenuEnabled = (menuId) => {
+    const menuConfig = course?.menu_config;
+    if (!menuConfig?.items || menuConfig.items.length === 0) {
+      // Use default logic
+      const defaultItem = defaultMenuItems.find(item => item.id === menuId);
+      return defaultItem ? defaultItem.show : true;
+    }
+    const menuItem = menuConfig.items.find(item => item.id === menuId);
+    return menuItem ? menuItem.enabled : false;
+  };
 
   // Syllabus data - only from database, no fallback
   const syllabusData = course.syllabus && course.syllabus.length > 0 ? course.syllabus : [];
