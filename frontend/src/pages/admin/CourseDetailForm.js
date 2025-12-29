@@ -1321,9 +1321,19 @@ const CourseDetailForm = () => {
 
             <div>
               <label className="block text-sm font-medium mb-2">Related Exams (Select Multiple)</label>
+              {/* Search input for exams */}
+              <input
+                type="text"
+                placeholder="🔍 Search exams..."
+                value={examSearch}
+                onChange={(e) => setExamSearch(e.target.value)}
+                className="w-full border rounded px-3 py-2 mb-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              />
               <div className="border rounded p-3 max-h-48 overflow-y-auto">
-                {exams.map(exam => (
-                  <label key={exam.id} className="flex items-center gap-2 mb-2 cursor-pointer">
+                {exams
+                  .filter(exam => exam.name.toLowerCase().includes(examSearch.toLowerCase()))
+                  .map(exam => (
+                  <label key={exam.id} className="flex items-center gap-2 mb-2 cursor-pointer hover:bg-gray-50 p-1 rounded">
                     <input
                       type="checkbox"
                       checked={formData.exam_ids?.includes(exam.id)}
@@ -1333,7 +1343,13 @@ const CourseDetailForm = () => {
                     <span className="text-sm">{exam.name}</span>
                   </label>
                 ))}
+                {exams.filter(exam => exam.name.toLowerCase().includes(examSearch.toLowerCase())).length === 0 && (
+                  <p className="text-sm text-gray-500 text-center py-2">No exams found matching "{examSearch}"</p>
+                )}
               </div>
+              {formData.exam_ids?.length > 0 && (
+                <p className="text-xs text-green-600 mt-1">✓ {formData.exam_ids.length} exam(s) selected</p>
+              )}
             </div>
           </div>
         </div>
