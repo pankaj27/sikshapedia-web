@@ -1751,11 +1751,27 @@ const CourseDetailForm = () => {
                                                 <tr>
                                                   {(block.headers || []).map((header, hIndex) => (
                                                     <th key={hIndex} className="border-2 border-teal-200 bg-teal-50 p-2">
-                                                      <input type="text" value={header} onChange={(e) => {
-                                                        const newToc = [...(formData.description_toc || [])];
-                                                        newToc[index].blocks[blockIndex].headers[hIndex] = e.target.value;
-                                                        setFormData({...formData, description_toc: newToc});
-                                                      }} className="w-full border-0 bg-transparent text-center font-bold text-sm" placeholder={`Header ${hIndex + 1}`} />
+                                                      <div className="flex items-center gap-1">
+                                                        <input type="text" value={header} onChange={(e) => {
+                                                          const newToc = [...(formData.description_toc || [])];
+                                                          newToc[index].blocks[blockIndex].headers[hIndex] = e.target.value;
+                                                          setFormData({...formData, description_toc: newToc});
+                                                        }} className="w-full border-0 bg-transparent text-center font-bold text-sm" placeholder={`Header ${hIndex + 1}`} />
+                                                        {block.headers.length > 1 && (
+                                                          <button
+                                                            type="button"
+                                                            onClick={() => {
+                                                              const newToc = [...(formData.description_toc || [])];
+                                                              newToc[index].blocks[blockIndex].headers.splice(hIndex, 1);
+                                                              newToc[index].blocks[blockIndex].rows.forEach(row => row.splice(hIndex, 1));
+                                                              setFormData({...formData, description_toc: newToc});
+                                                            }}
+                                                            className="text-red-500 text-xs"
+                                                          >
+                                                            ×
+                                                          </button>
+                                                        )}
+                                                      </div>
                                                     </th>
                                                   ))}
                                                   <th className="border-2 border-teal-200 bg-teal-50 p-2 w-20">
@@ -1783,13 +1799,15 @@ const CourseDetailForm = () => {
                                                       </td>
                                                     ))}
                                                     <td className="border-2 border-gray-200 p-2">
-                                                      <button type="button" onClick={() => {
-                                                        const newToc = [...(formData.description_toc || [])];
-                                                        newToc[index].blocks[blockIndex].rows = newToc[index].blocks[blockIndex].rows.filter((_, i) => i !== rIndex);
-                                                        setFormData({...formData, description_toc: newToc});
-                                                      }} className="text-red-500 hover:bg-red-50 p-1 rounded">
-                                                        <FiTrash2 size={12} />
-                                                      </button>
+                                                      {block.rows.length > 1 && (
+                                                        <button type="button" onClick={() => {
+                                                          const newToc = [...(formData.description_toc || [])];
+                                                          newToc[index].blocks[blockIndex].rows = newToc[index].blocks[blockIndex].rows.filter((_, i) => i !== rIndex);
+                                                          setFormData({...formData, description_toc: newToc});
+                                                        }} className="text-red-500 hover:bg-red-50 p-1 rounded">
+                                                          <FiTrash2 size={12} />
+                                                        </button>
+                                                      )}
                                                     </td>
                                                   </tr>
                                                 ))}
