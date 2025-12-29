@@ -8,6 +8,7 @@ import Youtube from '@tiptap/extension-youtube';
 import { TextStyle } from '@tiptap/extension-text-style';
 import { Color } from '@tiptap/extension-color';
 import Underline from '@tiptap/extension-underline';
+import TextAlign from '@tiptap/extension-text-align';
 import { 
   FiSave, FiX, FiPlus, FiTrash2, FiEdit, FiUpload, FiLoader, FiChevronDown, FiChevronRight, FiChevronUp,
   FiBook, FiMonitor, FiActivity, FiSearch, FiUsers, FiCast, FiVideo, FiDatabase,
@@ -16,7 +17,7 @@ import {
   FiCreditCard, FiMail, FiWifi, FiBattery, FiShield, FiBriefcase, FiTrendingUp,
   FiAward, FiMusic, FiBookOpen, FiPrinter, FiFilm, FiPackage, FiFeather, FiUnlock,
   FiInfo, FiFileText, FiBarChart2, FiDollarSign, FiMessageSquare, FiBookmark, FiImage, FiCalendar, FiHelpCircle, FiStar, FiLayers,
-  FiSend, FiClock, FiCheck, FiAlertCircle, FiBold, FiItalic, FiUnderline as FiUnderlineIcon, FiLink, FiList, FiAlignLeft
+  FiSend, FiClock, FiCheck, FiAlertCircle, FiBold, FiItalic, FiUnderline as FiUnderlineIcon, FiLink, FiList, FiAlignLeft, FiAlignCenter, FiAlignRight, FiAlignJustify
 } from 'react-icons/fi';
 import { HiOutlineAcademicCap, HiOutlineOfficeBuilding, HiOutlineCurrencyRupee, HiOutlineLibrary } from 'react-icons/hi';
 import api from '../../api/axios';
