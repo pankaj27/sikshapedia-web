@@ -912,7 +912,7 @@ const ExamDetailForm = () => {
                   <span className="text-sm font-semibold text-gray-800 flex items-center gap-2">
                     🔥 Mark as Popular
                   </span>
-                  <span className="text-xs text-gray-500">Show in "Popular Exams" section</span>
+                  <span className="text-xs text-gray-500">Show in &quot;Popular Exams&quot; section</span>
                 </div>
               </label>
               
