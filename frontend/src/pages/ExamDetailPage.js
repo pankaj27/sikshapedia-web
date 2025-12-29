@@ -744,14 +744,15 @@ const ExamDetailPage = () => {
             </div>
             )}
 
-            {/* Paper Pattern Section */}
+            {/* Paper Pattern Section - Only show if examInfo has data */}
+            {exam.examInfo && Object.values(exam.examInfo).some(v => v) && (
             <div id="pattern" className="bg-white rounded-lg shadow-md p-6 scroll-mt-20">
               <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
                 <FiFileText className="text-orange-600" />
                 {exam.name} Paper Pattern
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {Object.entries(exam.examInfo).map(([key, value]) => (
+                {Object.entries(exam.examInfo).filter(([key, value]) => value).map(([key, value]) => (
                   <div key={key} className="border-l-4 border-orange-500 pl-4">
                     <p className="text-sm text-gray-600 mb-1">{key.replace(/([A-Z])/g, ' $1').trim()}</p>
                     <p className="font-semibold text-gray-800">{value}</p>
@@ -759,6 +760,7 @@ const ExamDetailPage = () => {
                 ))}
               </div>
             </div>
+            )}
 
             {/* Study Notes Section - Dynamic from Backend */}
             {examFromApi?.study_materials?.length > 0 && (
