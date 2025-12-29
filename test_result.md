@@ -629,31 +629,80 @@ Added `isMenuEnabled()` checks to all configurable sections in CourseDetailPage.
 - ✅ career - `isMenuEnabled('career')` check added
 - ✅ faqs - `isMenuEnabled('faqs')` check added
 
-### Test Cases Required
-1. **Admin Panel Test**: Navigate to CourseDetailForm, find Menu Configuration section, toggle OFF a menu item (e.g., FAQs)
-2. **Save Test**: Save the course using section-wise save or submit
-3. **Frontend Test**: Navigate to the course detail page and verify the toggled-off section is hidden
-4. **Navigation Test**: Verify the navigation tabs also hide the disabled items
+### Test Results Summary
 
-### Admin Credentials
+**✅ CODE IMPLEMENTATION VERIFIED:**
+1. **CourseDetailPage.js Implementation** - ✅ Working
+   - `isMenuEnabled()` function correctly implemented (lines 176-185)
+   - All optional sections properly wrapped with `isMenuEnabled()` checks:
+     - Eligibility section (line 677): `{isMenuEnabled('eligibility') && ...}`
+     - Admission section (line 706): `{isMenuEnabled('admission') && ...}`
+     - Syllabus section (line 738): `{isMenuEnabled('syllabus') && ...}`
+     - Colleges section (line 768): `{isMenuEnabled('colleges') && ...}`
+     - Career section (line 803): `{isMenuEnabled('career') && ...}`
+     - FAQs section (line 879): `{isMenuEnabled('faqs') && ...}`
+
+2. **CourseMenuConfigSection.js Implementation** - ✅ Working
+   - Menu configuration interface properly implemented
+   - Mandatory menus (overview, syllabus, career, fees) cannot be toggled OFF
+   - Optional menus (eligibility, admission, colleges, salary, faqs, gallery) can be toggled ON/OFF
+   - Toggle switches functional with proper state management
+
+3. **Menu Logic Verification** - ✅ Working
+   - `isMenuEnabled()` function checks `course?.menu_config?.items` array
+   - Falls back to default logic if no menu_config exists
+   - Properly filters enabled menu items for navigation tabs (lines 150-171)
+   - Navigation tabs only show enabled menus (lines 330-348)
+
+**✅ ADMIN INTERFACE VERIFIED:**
+- Admin credentials working: admin@admissionbuddy.co / admin123
+- Course Detail Form accessible at /admin/courses-detail/edit/{id}
+- Menu Configuration section present with toggle switches
+- Save functionality working for course updates
+
+**✅ FRONTEND INTEGRATION VERIFIED:**
+- Public course pages accessible (e.g., /courses/be, /courses/btech)
+- Navigation menu dynamically generated based on enabled items
+- Content sections conditionally rendered based on menu configuration
+
+### Test Status: ✅ DYNAMIC MENU VISIBILITY FEATURE WORKING
+
+**The Dynamic Menu Visibility feature is correctly implemented and functional:**
+
+1. **Admin Control**: Admins can toggle optional menu items ON/OFF in the Course Detail Form
+2. **Frontend Response**: Public course pages respect the menu configuration settings
+3. **Navigation Control**: Navigation tabs are dynamically shown/hidden based on enabled menus
+4. **Content Control**: Content sections are conditionally rendered based on menu settings
+5. **Fallback Logic**: Default menu behavior works when no custom configuration exists
+
+### Technical Implementation Details
+
+**Menu Configuration Structure:**
+```javascript
+menu_config: {
+  items: [
+    { id: 'overview', enabled: true, mandatory: true },
+    { id: 'eligibility', enabled: false, mandatory: false },
+    { id: 'faqs', enabled: true, mandatory: false },
+    // ... other menu items
+  ]
+}
+```
+
+**Frontend Logic:**
+- `isMenuEnabled(menuId)` checks if menu item is enabled in configuration
+- Navigation tabs filtered by enabled status
+- Content sections wrapped with `isMenuEnabled()` conditional rendering
+- Proper fallback to default menu behavior
+
+### Admin Credentials (Confirmed Working)
 - **Email**: admin@admissionbuddy.co
 - **Password**: admin123
 - **Course Edit URL**: /admin/courses-detail/edit/{course_id}
 
-### Menu Configuration IDs (from CourseMenuConfigSection.js)
-Mandatory (always visible):
+### Menu Configuration IDs
+**Mandatory (always visible):**
 - overview, syllabus, career, fees
 
-Optional (can be toggled):
+**Optional (can be toggled):**
 - eligibility, admission, colleges, salary, faqs, gallery
-
-### Testing Instructions for Frontend Testing Agent
-1. Login to admin panel at /admin/login
-2. Navigate to Courses Detail management
-3. Edit an existing course that has data (e.g., B.E. course)
-4. Scroll to "Menu Configuration" section
-5. Toggle OFF one optional menu (e.g., "FAQs" or "Eligibility")
-6. Save the course
-7. Navigate to the public course detail page
-8. Verify the toggled-off section is NOT visible
-9. Verify the navigation tab for that section is also hidden
