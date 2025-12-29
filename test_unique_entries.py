@@ -7,7 +7,7 @@ import requests
 import json
 import time
 
-BASE_URL = "https://edu-form-saver.preview.emergentagent.com/api"
+BASE_URL = "https://course-page-enhance.preview.emergentagent.com/api"
 
 ADMIN_CREDENTIALS = {
     "email": "admin@admissionbuddy.co",

@@ -8,7 +8,7 @@ import json
 import sys
 
 # Backend URL from frontend .env
-BASE_URL = "https://edu-form-saver.preview.emergentagent.com/api"
+BASE_URL = "https://course-page-enhance.preview.emergentagent.com/api"
 
 # Test credentials
 ADMIN_CREDENTIALS = {

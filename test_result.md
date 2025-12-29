@@ -74,12 +74,12 @@ Verify if the Institute/College form can successfully submit a large entry with 
 ### Detailed Test Results
 
 #### ✅ Admin Authentication
-- **Login URL**: https://edu-form-saver.preview.emergentagent.com/admin/login
+- **Login URL**: https://course-page-enhance.preview.emergentagent.com/admin/login
 - **Credentials**: admin@admissionbuddy.co / admin123
 - **Result**: Successfully authenticated and redirected to admin dashboard
 
 #### ✅ College Form Functionality
-- **Form URL**: https://edu-form-saver.preview.emergentagent.com/admin/colleges/new
+- **Form URL**: https://course-page-enhance.preview.emergentagent.com/admin/colleges/new
 - **College Name**: "Test Engineering College Kolkata" (auto-generated slug: test-engineering-college-kolkata)
 - **Type**: Government
 - **Established Year**: 2025 (dropdown working)
@@ -225,7 +225,7 @@ Verify the complete new college creation workflow with section-wise saving to pr
 - No data loss between section saves
 
 ### API Base URL Verified
-- **URL**: https://edu-form-saver.preview.emergentagent.com/api
+- **URL**: https://course-page-enhance.preview.emergentagent.com/api
 - **Admin Credentials**: admin@admissionbuddy.co / admin123 ✅ Working
 
 ### Network Error Resolution
@@ -262,7 +262,7 @@ Complete end-to-end UI test of the new college creation workflow with section-wi
 ### Detailed Test Results
 
 #### ✅ Admin Authentication & Navigation
-- **Login URL**: https://edu-form-saver.preview.emergentagent.com/admin/login
+- **Login URL**: https://course-page-enhance.preview.emergentagent.com/admin/login
 - **Credentials**: admin@admissionbuddy.co / admin123 ✅ Working
 - **Navigation**: Successfully navigated to /admin/colleges/new
 - **Form Loading**: College form loads correctly with all sections
@@ -459,7 +459,7 @@ Complete verification of ALL fields for 3 entries on their Edit pages as request
 - **Save Functionality**: Section-wise save buttons present and functional
 
 ### Admin Access Confirmed
-- **Login URL**: https://edu-form-saver.preview.emergentagent.com/admin/login
+- **Login URL**: https://course-page-enhance.preview.emergentagent.com/admin/login
 - **Credentials**: admin@admissionbuddy.co / admin123 ✅ Working
 - **Edit URLs**: All 3 test entries accessible and editable
 
@@ -589,7 +589,7 @@ Verify that the new "Save All & Publish" / "Save All & Submit" buttons work corr
 - Frontend admin interface is accessible for manual testing
 
 ### API Base URL Verified
-- **URL**: https://edu-form-saver.preview.emergentagent.com/api
+- **URL**: https://course-page-enhance.preview.emergentagent.com/api
 - **Admin Credentials**: admin@admissionbuddy.co / admin123 ✅ Working
 
 ### Network Error Resolution
@@ -602,7 +602,7 @@ The section-wise save mechanism successfully handles large college forms by:
 
 ### Manual Testing Instructions
 To manually verify the "Save All & Publish" / "Save All & Submit" functionality:
-1. Login to admin panel: https://edu-form-saver.preview.emergentagent.com/admin/login
+1. Login to admin panel: https://course-page-enhance.preview.emergentagent.com/admin/login
 2. Use credentials: admin@admissionbuddy.co / admin123
 3. Navigate to any college edit page (e.g., /admin/colleges/edit/ba621807-73ca-407d-a983-9807f3be305f)
 4. Make changes to multiple sections
@@ -725,7 +725,7 @@ Complete end-to-end testing of Course Detail functionality including admin entry
 ### Admin Credentials (Confirmed Working)
 - **Email**: admin@admissionbuddy.co ✅ Working
 - **Password**: admin123 ✅ Working
-- **Base URL**: https://edu-form-saver.preview.emergentagent.com ✅ Working
+- **Base URL**: https://course-page-enhance.preview.emergentagent.com ✅ Working
 
 ---
 

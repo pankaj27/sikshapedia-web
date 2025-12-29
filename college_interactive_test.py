@@ -10,7 +10,7 @@ import sys
 from datetime import datetime
 
 # Configuration
-BACKEND_URL = "https://edu-form-saver.preview.emergentagent.com/api"
+BACKEND_URL = "https://course-page-enhance.preview.emergentagent.com/api"
 TEST_COLLEGE_ID = "iit-bombay-002"
 
 class CollegeInteractiveFeaturesTester:
