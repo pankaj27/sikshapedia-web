@@ -892,14 +892,6 @@ const CourseDetailForm = () => {
       setActionLoading(false);
     }
   };
-      alert('Course submitted for review!');
-    } catch (error) {
-      console.error('Error submitting for review:', error);
-      alert('Error submitting for review');
-    } finally {
-      setActionLoading(false);
-    }
-  };
 
   const handleApprove = async () => {
     setActionLoading(true);
