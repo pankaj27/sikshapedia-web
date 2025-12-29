@@ -325,6 +325,30 @@ const RichTextToolbar = ({ editor, collegeName, onOpenImageModal, onOpenVideoMod
       
       <div className="w-px h-6 bg-gray-300 mx-1 self-center" />
       
+      {/* Text Alignment */}
+      <button type="button" onClick={() => editor.chain().focus().setTextAlign('left').run()}
+        className={`p-2 rounded hover:bg-gray-200 ${editor.isActive({ textAlign: 'left' }) ? 'bg-blue-100 text-blue-700' : ''}`}
+        title="Align Left">
+        <FiAlignLeft size={16} />
+      </button>
+      <button type="button" onClick={() => editor.chain().focus().setTextAlign('center').run()}
+        className={`p-2 rounded hover:bg-gray-200 ${editor.isActive({ textAlign: 'center' }) ? 'bg-blue-100 text-blue-700' : ''}`}
+        title="Align Center">
+        <FiAlignCenter size={16} />
+      </button>
+      <button type="button" onClick={() => editor.chain().focus().setTextAlign('right').run()}
+        className={`p-2 rounded hover:bg-gray-200 ${editor.isActive({ textAlign: 'right' }) ? 'bg-blue-100 text-blue-700' : ''}`}
+        title="Align Right">
+        <FiAlignRight size={16} />
+      </button>
+      <button type="button" onClick={() => editor.chain().focus().setTextAlign('justify').run()}
+        className={`p-2 rounded hover:bg-gray-200 ${editor.isActive({ textAlign: 'justify' }) ? 'bg-blue-100 text-blue-700' : ''}`}
+        title="Justify">
+        <FiAlignJustify size={16} />
+      </button>
+      
+      <div className="w-px h-6 bg-gray-300 mx-1 self-center" />
+      
       {/* Link, Image, Video */}
       <button type="button" onClick={addLink}
         className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('link') ? 'bg-blue-100 text-blue-700' : ''}`}
