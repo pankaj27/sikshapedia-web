@@ -1,5 +1,36 @@
 # Test Results
 
+## Test Session: Rich Text Editor Fixes (Dec 29, 2025)
+
+### Test Objective
+1. Fix bullet list not showing (blank appearing instead of bullets)
+2. Add rich text editor to SEO Content TOC Text Block
+
+### Test Results Summary
+
+**✅ FIXED ISSUES:**
+1. **Bullet List CSS Fix** - ✅ Added CSS styles for `.ProseMirror ul` and `.ProseMirror li` to show proper bullet points
+2. **SEO TOC Text Block Rich Editor** - ✅ Replaced `<textarea>` with `SimpleRichTextEditor` in SEO Content section
+
+**📝 Changes Made:**
+- Added CSS styles in SimpleRichTextEditor component:
+  - `list-style-type: disc` for ul elements
+  - `list-style-type: decimal` for ol elements
+  - Proper padding and margin for list items
+- Added same CSS styles in RichTextEditorWithTable component
+- Replaced textarea in SEO TOC Text Block (line ~3690) with SimpleRichTextEditor
+
+**✅ Verification:**
+- Bullet list now shows proper bullet points (• Test line 1, • Test line 2, etc.)
+- SEO Content TOC Text Block now has full rich text toolbar:
+  - Bold, Italic, Underline
+  - Color picker
+  - Link insertion
+  - Bullet list
+  - Text alignment (Left, Center, Right, Justify)
+
+---
+
 ## Test Session: Description TOC Rich Text Editor (Dec 29, 2025)
 
 ### Test Objective
