@@ -832,19 +832,19 @@ const CourseDetailForm = () => {
     }
   };
 
-  // Save as Draft handler
+  // Save as Draft handler - uses section-wise saving on edit mode
   const handleSaveDraft = async () => {
     setSavingDraft(true);
     try {
-      const dataToSave = {
-        ...formData,
-        status: 'draft'
-      };
-      
       if (id) {
-        await api.put(`/courses-detail/${id}`, dataToSave);
-        alert('Draft saved successfully!');
+        // Edit mode - use section-wise saving to avoid Network Error
+        await handleSequentialSaveAll('draft');
       } else {
+        // New entry - create with minimal data first
+        const dataToSave = {
+          ...formData,
+          status: 'draft'
+        };
         const response = await api.post('/courses-detail', dataToSave);
         // Clear auto-save draft after successful save
         clearCourseDraft();
@@ -862,12 +862,36 @@ const CourseDetailForm = () => {
     }
   };
 
+  // Handle Publish - uses section-wise saving
+  const handlePublish = async () => {
+    if (!id) {
+      alert('Please save as draft first before publishing.');
+      return;
+    }
+    setSaving(true);
+    try {
+      await handleSequentialSaveAll('published');
+    } finally {
+      setSaving(false);
+    }
+  };
+
   const handleSubmitForReview = async () => {
+    if (!id) {
+      alert('Please save as draft first before submitting for review.');
+      return;
+    }
     setActionLoading(true);
     try {
-      await api.post(`/admin/submit-for-review/course/${id}`);
-      const response = await api.get(`/courses-detail/${id}`);
-      setFormData({ ...formData, ...response.data });
+      // Use section-wise saving then submit for review
+      await handleSequentialSaveAll('pending');
+    } catch (error) {
+      console.error('Error submitting for review:', error);
+      alert('Error submitting for review');
+    } finally {
+      setActionLoading(false);
+    }
+  };
       alert('Course submitted for review!');
     } catch (error) {
       console.error('Error submitting for review:', error);
