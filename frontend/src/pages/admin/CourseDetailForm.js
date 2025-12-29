@@ -263,32 +263,48 @@ const RichTextEditorWithTable = ({ value, onChange, placeholder, minHeight = '20
     <div className="border-2 border-gray-200 rounded-lg overflow-hidden">
       <SimpleRichTextToolbar editor={editor} showTableOptions={true} />
       <style>{`
-        .ProseMirror table {
+        .rich-editor .ProseMirror table {
           border-collapse: collapse;
           margin: 1em 0;
           width: 100%;
         }
-        .ProseMirror th,
-        .ProseMirror td {
+        .rich-editor .ProseMirror th,
+        .rich-editor .ProseMirror td {
           border: 1px solid #ccc;
           padding: 8px 12px;
           text-align: left;
           min-width: 80px;
         }
-        .ProseMirror th {
+        .rich-editor .ProseMirror th {
           background-color: #f3f4f6;
           font-weight: 600;
         }
-        .ProseMirror tr:hover td {
+        .rich-editor .ProseMirror tr:hover td {
           background-color: #f9fafb;
         }
-        .ProseMirror .selectedCell {
+        .rich-editor .ProseMirror .selectedCell {
           background-color: #dbeafe;
+        }
+        .rich-editor .ProseMirror ul {
+          list-style-type: disc;
+          padding-left: 1.5em;
+          margin: 0.5em 0;
+        }
+        .rich-editor .ProseMirror ol {
+          list-style-type: decimal;
+          padding-left: 1.5em;
+          margin: 0.5em 0;
+        }
+        .rich-editor .ProseMirror li {
+          margin: 0.25em 0;
+        }
+        .rich-editor .ProseMirror li p {
+          margin: 0;
         }
       `}</style>
       <EditorContent 
         editor={editor} 
-        className="prose prose-sm max-w-none p-3 focus:outline-none [&_.ProseMirror]:outline-none"
+        className="rich-editor prose prose-sm max-w-none p-3 focus:outline-none [&_.ProseMirror]:outline-none"
         style={{ minHeight }}
       />
     </div>
