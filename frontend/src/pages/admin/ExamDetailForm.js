@@ -2899,7 +2899,7 @@ const ExamDetailForm = () => {
         <CollapsibleSection title="Key Summary (Bullet Points)" icon={<FiList className="w-5 h-5" />} color="amber">
           <div className="space-y-4">
             <p className="text-sm text-gray-600">
-              Add key highlights that appear in the "Key Summary" section on the exam detail page. These are important points students should know at a glance.
+              Add key highlights that appear in the &quot;Key Summary&quot; section on the exam detail page. These are important points students should know at a glance.
             </p>
             
             {/* Existing Key Points */}
