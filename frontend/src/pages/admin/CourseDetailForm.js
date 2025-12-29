@@ -1490,15 +1490,16 @@ const CourseDetailForm = () => {
             {/* Description with Rich Content */}
             <CollapsibleSection title="Description *" icon="📝" defaultOpen={true} badge={`${formData.description_toc?.length || 0} sections`}>
               <div className="space-y-4">
-                {/* Main Description Text - Rich Text Editor */}
+                {/* Main Description Text - Rich Text Editor with Table Support */}
                 <div>
                   <label className="block text-sm font-medium mb-1">Short Description</label>
-                  <SimpleRichTextEditor
+                  <RichTextEditorWithTable
                     value={formData.description}
                     onChange={(html) => setFormData(prev => ({ ...prev, description: html }))}
                     placeholder="Brief description of the course..."
+                    minHeight="150px"
                   />
-                  <p className="text-xs text-gray-500 mt-1">You can change text color and add links</p>
+                  <p className="text-xs text-gray-500 mt-1">You can add tables, change text color and add links. Click "Table" button to insert a table.</p>
                 </div>
 
                 {/* Description TOC Builder - Advanced Block Editor */}
