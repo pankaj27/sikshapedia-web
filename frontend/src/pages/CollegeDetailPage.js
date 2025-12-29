@@ -1619,7 +1619,7 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
 
                     {college?.admission_dates && college.admission_dates.length > 0 && (
                       <>
-                        <h3 className="text-xl font-bold mb-3">Admission Dates {year + 1}</h3>
+                        <h3 className="text-xl font-bold mb-3">Admission Dates {year}</h3>
                         <div className="overflow-x-auto mb-6">
                           <table className="w-full border-collapse border">
                             <thead>
