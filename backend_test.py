@@ -8496,12 +8496,19 @@ class APITester:
             self.log_test("GET /api/exams?search=NEET", False, f"Status: {status}", response)
 
     def run_all_tests(self):
-        """Run all test suites focusing on Section-wise College Creation first"""
-        print("🚀 SECTION-WISE COLLEGE CREATION TESTING")
+        """Run all test suites focusing on NEET UG Exam Testing first"""
+        print("🚀 NEET UG EXAM TESTING - PRIMARY FOCUS")
         print(f"🌐 Base URL: {BASE_URL}")
         print("=" * 80)
         
-        # **MAIN FOCUS: Section-wise College Creation Workflow**
+        # **MAIN FOCUS: NEET UG Exam Testing**
+        self.test_neet_ug_exam_complete()  # Test NEET UG exam with complete end-to-end data entry
+        
+        print("\n" + "=" * 80)
+        print("🔐 AUTHENTICATION & SECTION-WISE SAVE TESTING")
+        print("=" * 80)
+        
+        # Core functionality tests
         self.test_authentication()  # Ensure we have admin token
         self.test_section_wise_save_functionality()  # Test sequential section-wise save functionality
         self.test_section_wise_college_creation()  # Test the specific functionality requested
