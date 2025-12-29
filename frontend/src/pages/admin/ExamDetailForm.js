@@ -1097,6 +1097,17 @@ const ExamDetailForm = () => {
               </p>
             </div>
           </div>
+          {/* Section Save Button */}
+          {id && (
+            <div className="mt-4 pt-4 border-t border-gray-200 flex justify-end">
+              <SectionSaveButton 
+                section="basic" 
+                onSave={handleSectionSave} 
+                isSaving={sectionSaving.basic} 
+                isSaved={sectionSaved.basic}
+              />
+            </div>
+          )}
         </CollapsibleSection>
 
         {/* Media Section - Logo, Images, Videos */}
