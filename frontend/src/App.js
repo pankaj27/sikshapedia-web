@@ -25,7 +25,7 @@ const NewsPage = lazy(() => import('./pages/NewsPage'));
 const NewsDetailPage = lazy(() => import('./pages/NewsDetailPage'));
 const WriteReviewPage = lazy(() => import('./pages/WriteReviewPage'));
 const ExamDetailPage = lazy(() => import('./pages/ExamDetailPage'));
-const ExamSubPages = lazy(() => import('./pages/ExamSubPages'));
+const ExamSubPage = lazy(() => import('./pages/ExamSubPage'));
 const CoursesPage = lazy(() => import('./pages/CoursesPage'));
 const CoursesAfter10thPage = lazy(() => import('./pages/CoursesAfter10thPage'));
 const CoursesAfter12thPage = lazy(() => import('./pages/CoursesAfter12thPage'));
