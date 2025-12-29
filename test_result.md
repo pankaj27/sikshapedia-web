@@ -615,6 +615,120 @@ To manually verify the "Save All & Publish" / "Save All & Submit" functionality:
 
 ---
 
+## Test Session: Course Detail Page E2E Testing (Dec 29, 2025)
+
+### Test Objective
+Complete end-to-end testing of Course Detail functionality including admin entry, public page display, URL navigation, and menu consistency as requested in review.
+
+### Test Results Summary
+
+**✅ WORKING FEATURES:**
+1. **Course Main Page Loading** - ✅ Working (loads at /courses/btech-cs-test)
+2. **Course Information Display** - ✅ Working:
+   - Course name: "Bachelor of Technology in Computer Science" ✅
+   - Duration: "4 Years" ✅
+   - Average fees: "₹2.5L" ✅
+   - Multiple menu tabs visible ✅
+3. **URL-based Section Navigation** - ✅ Mostly Working:
+   - Syllabus: `/courses/btech-cs-test/syllabus` ✅
+   - Career: `/courses/btech-cs-test/career` ✅
+   - Eligibility: `/courses/btech-cs-test/eligibility` ✅
+   - Admission: `/courses/btech-cs-test/admission` ✅
+   - FAQs: `/courses/btech-cs-test/faqs` ✅
+4. **Section Content Display** - ✅ Working:
+   - Syllabus: 4 semesters with subjects ✅
+   - Career: Job roles and salary information ✅
+   - Eligibility: Educational qualification, entrance exams, age limit ✅
+   - Admission: How to apply and selection criteria ✅
+   - FAQs: 5 FAQs with expandable answers ✅
+5. **Main Button Navigation** - ✅ Working (returns to main course page)
+6. **Direct URL Access** - ✅ Working (can access sections directly via URL)
+7. **Page Title Updates** - ✅ Working (titles change per section)
+8. **Menu Consistency** - ✅ Working (same menus appear on main and sub pages)
+
+**❌ ISSUES FOUND:**
+1. **Top Colleges Navigation** - ❌ FAILED:
+   - Clicking "Top Colleges" redirects to `/colleges` instead of `/courses/btech-cs-test/colleges`
+   - This breaks the expected URL structure for course-specific college listings
+
+**⚠️ MINOR OBSERVATIONS:**
+1. **Course with Different Data** - Different courses show different menu items based on available data (expected behavior)
+2. **Menu Highlighting** - Active section tabs are properly highlighted
+
+### Detailed Test Results
+
+#### ✅ Phase 1: Existing Test Course Verification
+- **URL**: `/courses/btech-cs-test`
+- **Course Name**: "Bachelor of Technology in Computer Science" ✅
+- **Duration**: "4 Years" ✅
+- **Average Fees**: "₹2.5L" ✅
+- **Menu Tabs Found**: Overview, Syllabus, Career, Eligibility, Admission, Top Colleges, FAQs ✅
+
+#### ✅ Phase 2: URL-based Section Navigation
+- **Syllabus**: URL changes to `/courses/btech-cs-test/syllabus` ✅
+  - Page title contains "Syllabus" ✅
+  - Shows 4 semesters with subjects ✅
+  - Syllabus tab highlighted ✅
+- **Career**: URL changes to `/courses/btech-cs-test/career` ✅
+  - Shows career options and job roles ✅
+  - Salary range displays ✅
+- **Eligibility**: URL changes to `/courses/btech-cs-test/eligibility` ✅
+  - Shows educational qualification, entrance exams, age limit ✅
+- **Admission**: URL changes to `/courses/btech-cs-test/admission` ✅
+  - Shows "How to Apply" and "Selection Criteria" sections ✅
+- **FAQs**: URL changes to `/courses/btech-cs-test/faqs` ✅
+  - Shows 5 FAQs ✅
+  - FAQ expansion functionality working ✅
+
+#### ❌ Phase 2: Top Colleges Navigation Issue
+- **Issue**: Clicking "Top Colleges" redirects to `/colleges` instead of `/courses/btech-cs-test/colleges`
+- **Expected**: Course-specific colleges page
+- **Actual**: General colleges listing page
+- **Impact**: Breaks the expected URL structure and user experience
+
+#### ✅ Phase 3: Main Button Navigation
+- **Main Button**: Found on sub-pages ✅
+- **Navigation**: Returns to `/courses/btech-cs-test` ✅
+- **Functionality**: Correctly loads main course page ✅
+
+#### ✅ Phase 4: Menu Consistency Check
+- **Main Page Menus**: Overview, Syllabus, Career Options, Fee Structure, Eligibility, Admission Process, Top Colleges, Salary & Scope, FAQs
+- **Sub Page Menus**: Same menus appear on sub-pages (excluding "Main" button) ✅
+- **Consistency**: Menu items are consistent between main and sub pages ✅
+
+#### ✅ Phase 5: Direct URL Access
+- **Direct Access**: `/courses/btech-cs-test/admission` loads correctly ✅
+- **Content**: Shows admission-related content ✅
+- **Tab Highlighting**: Correct tab is highlighted ✅
+
+#### ✅ Phase 6: Different Course Data Test
+- **Course 2**: `/courses/btech-computer-science`
+- **Menu Items**: Shows only menus with available data (Overview, Eligibility, Top Colleges, Career & Jobs, Fee Structure) ✅
+- **Consistency**: Menu consistency maintained on sub-pages ✅
+
+### Test Status: ✅ MOSTLY WORKING - ONE CRITICAL ISSUE
+
+**The Course Detail Page functionality is working correctly with one critical navigation issue:**
+
+**Critical Issue:**
+- Top Colleges navigation redirects to general colleges page instead of course-specific colleges page
+
+**Working Features:**
+- All URL-based section navigation (except Top Colleges)
+- Content display for all sections
+- Main button navigation
+- Menu consistency
+- Direct URL access
+- Page title updates
+- FAQ expansion functionality
+
+### Admin Credentials (Confirmed Working)
+- **Email**: admin@admissionbuddy.co ✅ Working
+- **Password**: admin123 ✅ Working
+- **Base URL**: https://edu-form-saver.preview.emergentagent.com ✅ Working
+
+---
+
 ## Test Session: CourseDetailPage Dynamic Menu Visibility Testing (Dec 29, 2025)
 
 ### Test Objective
