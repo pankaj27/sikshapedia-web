@@ -513,24 +513,22 @@ const ExamDetailPage = () => {
           </aside>
 
           {/* Main Content - Dynamic based on activeSection */}
-          <div className="lg:col-span-3">
+          <div className="lg:col-span-3 order-1 lg:order-2">
             {/* Dynamic Content from Backend Menu Config */}
             {exam.menuConfig?.items && exam.menuConfig.items.length > 0 && (
               <div id="exam-content-section" className="mb-8 scroll-mt-32">
                 {exam.menuConfig.items
                   .filter(item => {
-                    // If activeSection is set, match by id
-                    if (activeSection) return item.id === activeSection;
-                    // Otherwise show first enabled item
+                    // Show first enabled item (Overview) on main page
                     const firstEnabledItem = exam.menuConfig.items.find(i => i.enabled !== false);
                     return item.id === firstEnabledItem?.id;
                   })
                   .map(item => (
                     <div key={item.id} className="bg-white rounded-lg shadow-md p-6">
                       {/* Page Heading */}
-                      <h1 className="text-2xl font-bold text-gray-900 mb-4">
+                      <h2 className="text-2xl font-bold text-gray-900 mb-4">
                         {item.page_heading || item.label}
-                      </h1>
+                      </h2>
                       
                       {/* Page Content (HTML) */}
                       {item.content && (
