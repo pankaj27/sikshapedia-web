@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { FiChevronRight, FiChevronDown, FiChevronUp, FiClock, FiDollarSign, FiBook, FiUsers, FiSend, FiMessageCircle, FiPhone, FiMapPin, FiCalendar, FiAward, FiTrendingUp, FiCheckCircle, FiDownload, FiShare2, FiHeart, FiStar, FiBriefcase, FiLayers, FiList, FiImage } from 'react-icons/fi';
 import { HiOutlineAcademicCap, HiOutlineOfficeBuilding, HiOutlineLightBulb, HiOutlineDocumentText } from 'react-icons/hi';
@@ -14,6 +14,8 @@ import AuthorInfo from '../components/AuthorInfo';
 import { Link } from '../components/CustomLink';
 const CourseDetailPage = () => {
   const { slug } = useParams();
+  const [searchParams] = useSearchParams();
+  const isPreview = searchParams.get('preview') === 'true';
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('overview');
@@ -25,8 +27,9 @@ const CourseDetailPage = () => {
   useEffect(() => {
     const fetchCourse = async () => {
       try {
-        // First try to get published courses only
-        const detailResponse = await api.get('/courses-detail?status=published');
+        // If preview mode, fetch all courses (including draft/pending), otherwise only published
+        const apiUrl = isPreview ? '/courses-detail' : '/courses-detail?status=published';
+        const detailResponse = await api.get(apiUrl);
         const detailCourses = detailResponse.data || [];
         
         // Find course by slug, prioritizing exact slug match
@@ -59,7 +62,7 @@ const CourseDetailPage = () => {
       }
     };
     fetchCourse();
-  }, [slug]);
+  }, [slug, isPreview]);
 
   // Generate SEO-friendly URL for menu sections
   const getSectionUrl = useMemo(() => {
