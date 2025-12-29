@@ -760,20 +760,22 @@ const ExamDetailPage = () => {
               </div>
             </div>
 
-            {/* Study Notes Section */}
+            {/* Study Notes Section - Dynamic from Backend */}
+            {examFromApi?.study_materials?.length > 0 && (
             <div id="studynotes" className="bg-white rounded-lg shadow-md p-6 scroll-mt-20">
               <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
                 <FiBook className="text-orange-600" />
                 {exam.name} Study Notes
               </h2>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                {['Trigonometry', 'Thermodynamics', 'Atomic Structure', 'Statistics', 'Elasticity', 'Rotational Motion'].map((topic, idx) => (
-                  <Link key={idx} to="#" className="text-blue-600 hover:text-orange-600 text-sm hover:underline">
-                    {topic} Study Notes
+                {examFromApi.study_materials.map((material, idx) => (
+                  <Link key={idx} to={material.link || material.file_url || '#'} className="text-blue-600 hover:text-orange-600 text-sm hover:underline">
+                    {material.name || material.title} Study Notes
                   </Link>
                 ))}
               </div>
             </div>
+            )}
 
             {/* Advertisement - Rectangular Banner */}
             <div className="bg-gradient-to-br from-blue-500 to-cyan-500 rounded-lg shadow-md p-6 text-white">
