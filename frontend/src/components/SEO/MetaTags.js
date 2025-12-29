@@ -9,7 +9,7 @@ const MetaTags = ({
   ogImage = '/admissionbuddy-logo.png',
   type = 'website'
 }) => {
-  const siteUrl = 'https://formsaver-2.preview.emergentagent.com';
+  const siteUrl = 'https://edu-form-saver.preview.emergentagent.com';
   const fullCanonical = canonical ? `${siteUrl}${canonical}` : siteUrl;
 
   return (

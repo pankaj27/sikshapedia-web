@@ -11,7 +11,7 @@ import time
 from typing import Dict, Any, Optional
 
 # Backend URL from frontend .env
-BASE_URL = "https://formsaver-2.preview.emergentagent.com/api"
+BASE_URL = "https://edu-form-saver.preview.emergentagent.com/api"
 
 # Test credentials
 ADMIN_CREDENTIALS = {
