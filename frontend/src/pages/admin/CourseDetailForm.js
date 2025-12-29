@@ -287,6 +287,10 @@ const CourseDetailForm = () => {
   const autoSaveTimerRef = useRef(null);
   const [collegeCount, setCollegeCount] = useState(0);
   const [loadingCollegeCount, setLoadingCollegeCount] = useState(false);
+  
+  // Section-wise save states
+  const [sectionSaving, setSectionSaving] = useState({});
+  const [sectionSaved, setSectionSaved] = useState({});
 
   // Get admin user from localStorage (admin login stores in adminUser)
   const adminUserStr = localStorage.getItem('adminUser');
