@@ -218,6 +218,9 @@ const RichTextEditorWithTable = ({ value, onChange, placeholder, minHeight = '20
       TextStyle,
       Color,
       Underline,
+      TextAlign.configure({
+        types: ['heading', 'paragraph'],
+      }),
       Table.configure({
         resizable: true,
       }),
