@@ -3618,30 +3618,37 @@ const CourseDetailForm = () => {
                                       <div className="overflow-x-auto">
                                         <table className="w-full border-collapse">
                                           <thead>
+                                            {/* Delete Column buttons row */}
+                                            <tr>
+                                              {(block.headers || []).map((header, hIndex) => (
+                                                <th key={hIndex} className="border-x-2 border-t-2 border-teal-200 bg-red-50 p-1 text-center">
+                                                  {block.headers.length > 1 && (
+                                                    <button type="button" onClick={() => {
+                                                      const newToc = [...(formData.seo_toc || [])];
+                                                      newToc[index].blocks[blockIndex].headers.splice(hIndex, 1);
+                                                      newToc[index].blocks[blockIndex].rows = newToc[index].blocks[blockIndex].rows.map(row => {
+                                                        const newRow = [...row];
+                                                        newRow.splice(hIndex, 1);
+                                                        return newRow;
+                                                      });
+                                                      setFormData({...formData, seo_toc: newToc});
+                                                    }} className="text-red-500 hover:text-red-700 hover:bg-red-100 rounded text-xs px-1" title="Delete Column">
+                                                      ✕ Del
+                                                    </button>
+                                                  )}
+                                                </th>
+                                              ))}
+                                              <th className="border-x-2 border-t-2 border-teal-200 bg-teal-50 p-1 w-12"></th>
+                                            </tr>
+                                            {/* Headers row */}
                                             <tr>
                                               {(block.headers || []).map((header, hIndex) => (
                                                 <th key={hIndex} className="border-2 border-teal-200 bg-teal-50 p-2">
-                                                  <div className="flex items-center gap-2">
-                                                    <input type="text" value={header} onChange={(e) => {
-                                                      const newToc = [...(formData.seo_toc || [])];
-                                                      newToc[index].blocks[blockIndex].headers[hIndex] = e.target.value;
-                                                      setFormData({...formData, seo_toc: newToc});
-                                                    }} className="flex-1 border-0 bg-transparent text-center font-bold text-sm" placeholder={`Header ${hIndex + 1}`} />
-                                                    {block.headers.length > 1 && (
-                                                      <button type="button" onClick={() => {
-                                                        const newToc = [...(formData.seo_toc || [])];
-                                                        newToc[index].blocks[blockIndex].headers.splice(hIndex, 1);
-                                                        newToc[index].blocks[blockIndex].rows = newToc[index].blocks[blockIndex].rows.map(row => {
-                                                          const newRow = [...row];
-                                                          newRow.splice(hIndex, 1);
-                                                          return newRow;
-                                                        });
-                                                        setFormData({...formData, seo_toc: newToc});
-                                                      }} className="bg-red-100 text-red-600 hover:bg-red-200 rounded px-1.5 py-0.5 text-xs font-bold" title="Delete Column">
-                                                        ✕
-                                                      </button>
-                                                    )}
-                                                  </div>
+                                                  <input type="text" value={header} onChange={(e) => {
+                                                    const newToc = [...(formData.seo_toc || [])];
+                                                    newToc[index].blocks[blockIndex].headers[hIndex] = e.target.value;
+                                                    setFormData({...formData, seo_toc: newToc});
+                                                  }} className="w-full border-0 bg-transparent text-center font-bold text-sm" placeholder={`Header ${hIndex + 1}`} />
                                                 </th>
                                               ))}
                                               <th className="border-2 border-teal-200 bg-teal-50 p-2 w-12">
