@@ -201,9 +201,27 @@ const SimpleRichTextEditor = ({ value, onChange, placeholder }) => {
   return (
     <div className="border-2 border-gray-200 rounded-lg overflow-hidden">
       <SimpleRichTextToolbar editor={editor} />
+      <style>{`
+        .simple-editor .ProseMirror ul {
+          list-style-type: disc;
+          padding-left: 1.5em;
+          margin: 0.5em 0;
+        }
+        .simple-editor .ProseMirror ol {
+          list-style-type: decimal;
+          padding-left: 1.5em;
+          margin: 0.5em 0;
+        }
+        .simple-editor .ProseMirror li {
+          margin: 0.25em 0;
+        }
+        .simple-editor .ProseMirror li p {
+          margin: 0;
+        }
+      `}</style>
       <EditorContent 
         editor={editor} 
-        className="prose prose-sm max-w-none p-3 min-h-[100px] focus:outline-none [&_.ProseMirror]:outline-none [&_.ProseMirror]:min-h-[80px]"
+        className="simple-editor prose prose-sm max-w-none p-3 min-h-[100px] focus:outline-none [&_.ProseMirror]:outline-none [&_.ProseMirror]:min-h-[80px]"
       />
     </div>
   );
