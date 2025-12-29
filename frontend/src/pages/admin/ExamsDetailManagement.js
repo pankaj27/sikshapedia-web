@@ -141,6 +141,15 @@ const ExamsDetailManagement = () => {
                     <Button
                       variant="outline"
                       size="sm"
+                      onClick={() => window.open(`/exams/${exam.slug || exam.id}?preview=true`, '_blank')}
+                      className="mr-2 text-green-600 hover:text-green-700 hover:bg-green-50"
+                      title="Preview Exam Page"
+                    >
+                      <FiEye className="mr-1" /> Preview
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
                       onClick={() => navigate(`/admin/exams-detail/edit/${exam.id}`)}
                       className="mr-2"
                     >
