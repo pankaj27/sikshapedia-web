@@ -3626,7 +3626,7 @@ const CourseDetailForm = () => {
                                                       const newToc = [...(formData.seo_toc || [])];
                                                       newToc[index].blocks[blockIndex].headers[hIndex] = e.target.value;
                                                       setFormData({...formData, seo_toc: newToc});
-                                                    }} className="w-full border-0 bg-transparent text-center font-bold text-sm" placeholder={`Header ${hIndex + 1}`} />
+                                                    }} className="flex-1 min-w-0 border-0 bg-transparent text-center font-bold text-sm" placeholder={`Header ${hIndex + 1}`} />
                                                     {block.headers.length > 1 && (
                                                       <button type="button" onClick={() => {
                                                         const newToc = [...(formData.seo_toc || [])];
@@ -3637,14 +3637,14 @@ const CourseDetailForm = () => {
                                                           return newRow;
                                                         });
                                                         setFormData({...formData, seo_toc: newToc});
-                                                      }} className="text-red-500 hover:text-red-700 text-xs flex-shrink-0" title="Delete Column">
+                                                      }} className="text-red-500 hover:text-red-700 flex-shrink-0 p-1 hover:bg-red-50 rounded" title="Delete Column">
                                                         ✕
                                                       </button>
                                                     )}
                                                   </div>
                                                 </th>
                                               ))}
-                                              <th className="border-2 border-teal-200 bg-teal-50 p-2 w-20">
+                                              <th className="border-2 border-teal-200 bg-teal-50 p-2 w-12">
                                                 <button type="button" onClick={() => {
                                                   const newToc = [...(formData.seo_toc || [])];
                                                   newToc[index].blocks[blockIndex].headers.push('');
