@@ -484,9 +484,27 @@ const RichTextEditor = ({ value, onChange, placeholder, collegeName }) => {
           onOpenImageModal={() => setImageModalOpen(true)}
           onOpenVideoModal={() => setVideoModalOpen(true)}
         />
+        <style>{`
+          .college-editor .ProseMirror ul {
+            list-style-type: disc;
+            padding-left: 1.5em;
+            margin: 0.5em 0;
+          }
+          .college-editor .ProseMirror ol {
+            list-style-type: decimal;
+            padding-left: 1.5em;
+            margin: 0.5em 0;
+          }
+          .college-editor .ProseMirror li {
+            margin: 0.25em 0;
+          }
+          .college-editor .ProseMirror li p {
+            margin: 0;
+          }
+        `}</style>
         <EditorContent 
           editor={editor} 
-          className="prose max-w-none p-3 min-h-[120px] focus:outline-none"
+          className="college-editor prose max-w-none p-3 min-h-[120px] focus:outline-none"
         />
       </div>
       
