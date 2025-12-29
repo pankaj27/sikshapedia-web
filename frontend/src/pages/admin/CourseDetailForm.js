@@ -1098,7 +1098,18 @@ const CourseDetailForm = () => {
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Basic Information */}
         <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-xl font-bold mb-4">Basic Information</h2>
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-bold">Basic Information</h2>
+            {id && (
+              <SectionSaveButton 
+                section="basic"
+                onSave={handleSectionSave}
+                isSaving={sectionSaving.basic}
+                isSaved={sectionSaved.basic}
+                disabled={!id}
+              />
+            )}
+          </div>
           <div className="grid grid-cols-2 gap-4">
             <div className="col-span-2">
               <label className="block text-sm font-medium mb-1">Course Name *</label>
