@@ -93,6 +93,7 @@ const ExamsDetailManagement = () => {
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Level</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Conducting Body</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Popular</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
               <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>
             </tr>
           </thead>
