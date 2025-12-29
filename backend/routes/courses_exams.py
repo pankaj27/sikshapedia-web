@@ -543,6 +543,74 @@ async def update_course_detail(course_id: str, course_data: dict):
     return CourseDetail(**updated)
 
 
+# ============================================
+# Section-wise Course Detail Update Endpoints
+# ============================================
+
+@router.patch("/courses-detail/{course_id}/section/basic")
+async def update_course_detail_basic_section(course_id: str, data: dict):
+    """Update basic info section: name, slug, degree_type, duration, stream, etc."""
+    existing = await db.courses_detailed.find_one({"id": course_id}, {"_id": 0})
+    if not existing:
+        raise HTTPException(status_code=404, detail="Course detail not found")
+    
+    allowed_fields = [
+        'name', 'slug', 'full_name', 'degree_type', 'duration', 'stream',
+        'eligibility', 'career_prospects', 'average_salary', 'fees_range',
+        'min_fees', 'max_fees', 'top_recruiters', 'specializations', 'subjects',
+        'skills_gained', 'entrance_exams', 'status'
+    ]
+    
+    update_data = {k: v for k, v in data.items() if k in allowed_fields}
+    update_data['updated_at'] = datetime.now(timezone.utc).isoformat()
+    
+    await db.courses_detailed.update_one({"id": course_id}, {"$set": update_data})
+    return {"success": True, "section": "basic", "message": "Basic info saved"}
+
+
+@router.patch("/courses-detail/{course_id}/section/content")
+async def update_course_detail_content_section(course_id: str, data: dict):
+    """Update content section: description, faqs, etc."""
+    existing = await db.courses_detailed.find_one({"id": course_id}, {"_id": 0})
+    if not existing:
+        raise HTTPException(status_code=404, detail="Course detail not found")
+    
+    allowed_fields = [
+        'description', 'faqs', 'highlights', 'overview', 'curriculum',
+        'admission_process', 'job_roles', 'salary_trends'
+    ]
+    
+    update_data = {k: v for k, v in data.items() if k in allowed_fields}
+    update_data['updated_at'] = datetime.now(timezone.utc).isoformat()
+    
+    await db.courses_detailed.update_one({"id": course_id}, {"$set": update_data})
+    return {"success": True, "section": "content", "message": "Content saved"}
+
+
+@router.patch("/courses-detail/{course_id}/section/seo")
+async def update_course_detail_seo_section(course_id: str, data: dict):
+    """Update SEO section: meta_title, meta_description, seo content, etc."""
+    existing = await db.courses_detailed.find_one({"id": course_id}, {"_id": 0})
+    if not existing:
+        raise HTTPException(status_code=404, detail="Course detail not found")
+    
+    allowed_fields = [
+        'meta_title', 'meta_description', 'meta_keywords', 'canonical_url',
+        'og_title', 'og_description', 'og_image', 'seo_content', 'seo_intro',
+        'seo_full_content', 'seo_toc', 'seo_faqs', 'schema_type'
+    ]
+    
+    # Fix meta_keywords if it's a string
+    if isinstance(data.get('meta_keywords'), str):
+        data['meta_keywords'] = [kw.strip() for kw in data['meta_keywords'].split(',') if kw.strip()] if data['meta_keywords'] else []
+    
+    update_data = {k: v for k, v in data.items() if k in allowed_fields}
+    update_data['updated_at'] = datetime.now(timezone.utc).isoformat()
+    
+    await db.courses_detailed.update_one({"id": course_id}, {"$set": update_data})
+    return {"success": True, "section": "seo", "message": "SEO content saved"}
+
+
 @router.delete("/courses-detail/{course_id}")
 async def delete_course_detail(course_id: str):
     """Delete a detailed course page (admin only)"""
