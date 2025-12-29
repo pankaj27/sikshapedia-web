@@ -3145,14 +3145,26 @@ const CourseDetailForm = () => {
         {/* ═══════════════════════════════════════════════════════════════════════════════ */}
         {/* SEO & META TAGS SECTION - Using Reusable Component                              */}
         {/* ═══════════════════════════════════════════════════════════════════════════════ */}
-        <CollapsibleSection title="SEO & Meta Tags" icon="🏷️" defaultOpen={false} badge="Auto Generate">
+        <div className="bg-white rounded-lg shadow p-6">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-bold">🏷️ SEO & Meta Tags</h2>
+            {id && (
+              <SectionSaveButton 
+                section="seo"
+                onSave={handleSectionSave}
+                isSaving={sectionSaving.seo}
+                isSaved={sectionSaved.seo}
+                disabled={!id}
+              />
+            )}
+          </div>
           <SeoMetaSection 
             formData={formData} 
             setFormData={setFormData} 
             handleChange={handleChange}
             entityType="course"
           />
-        </CollapsibleSection>
+        </div>
 
         {/* ═══════════════════════════════════════════════════════════════════════════════ */}
         {/* SEO CONTENT SECTION WITH TOC & TABLES                                           */}
