@@ -3639,29 +3639,24 @@ const CourseDetailForm = () => {
                                             <tr>
                                               {(block.headers || []).map((header, hIndex) => (
                                                 <th key={hIndex} className="border-2 border-teal-200 bg-teal-50 p-2">
-                                                  <div style={{display: 'flex', alignItems: 'center', gap: '4px'}}>
+                                                  <div className="flex items-center gap-1">
                                                     <input type="text" value={header} onChange={(e) => {
                                                       const newToc = [...(formData.seo_toc || [])];
                                                       newToc[index].blocks[blockIndex].headers[hIndex] = e.target.value;
                                                       setFormData({...formData, seo_toc: newToc});
-                                                    }} style={{flex: 1, border: 'none', background: 'transparent', textAlign: 'center', fontWeight: 'bold', fontSize: '14px'}} placeholder={`Header ${hIndex + 1}`} />
+                                                    }} className="w-full border-0 bg-transparent text-center font-bold text-sm" placeholder={`Header ${hIndex + 1}`} />
                                                     {block.headers.length > 1 && (
-                                                      <button 
-                                                        type="button" 
+                                                      <button
+                                                        type="button"
                                                         onClick={() => {
                                                           const newToc = [...(formData.seo_toc || [])];
                                                           newToc[index].blocks[blockIndex].headers.splice(hIndex, 1);
-                                                          newToc[index].blocks[blockIndex].rows = newToc[index].blocks[blockIndex].rows.map(row => {
-                                                            const newRow = [...row];
-                                                            newRow.splice(hIndex, 1);
-                                                            return newRow;
-                                                          });
+                                                          newToc[index].blocks[blockIndex].rows.forEach(row => row.splice(hIndex, 1));
                                                           setFormData({...formData, seo_toc: newToc});
-                                                        }} 
-                                                        style={{backgroundColor: '#fee2e2', color: '#dc2626', padding: '2px 6px', borderRadius: '4px', fontSize: '11px', border: '1px solid #fca5a5', cursor: 'pointer', flexShrink: 0}}
-                                                        title="Delete Column"
+                                                        }}
+                                                        className="text-red-500 text-xs"
                                                       >
-                                                        ✕
+                                                        ×
                                                       </button>
                                                     )}
                                                   </div>
