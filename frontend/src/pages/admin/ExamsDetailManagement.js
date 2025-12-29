@@ -123,9 +123,6 @@ const ExamsDetailManagement = () => {
                       {exam.exam_level}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {exam.conducting_body}
-                  </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     {exam.is_popular || exam.popular ? (
                       <span className="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
