@@ -374,20 +374,26 @@ const ExamSubPage = () => {
             <div className="bg-white rounded-lg shadow-md p-4 sticky top-28">
               <h3 className="font-bold text-gray-800 mb-3 border-b pb-2">Quick Links</h3>
               <nav className="space-y-1">
-                {menuItems.slice(0, 8).map((item) => (
-                  <Link
-                    key={item.id}
-                    to={`/exams/${exam.slug || id}/${item.id}${isPreview ? '?preview=true' : ''}`}
-                    className={`flex items-center gap-2 px-3 py-2 rounded text-sm transition-colors ${
-                      item.id === section 
-                        ? 'bg-orange-500 text-white' 
-                        : 'text-gray-700 hover:bg-gray-100'
-                    }`}
-                  >
-                    {getMenuIcon(item.id)}
-                    {item.label}
-                  </Link>
-                ))}
+                {menuItems.slice(0, 8).map((item, idx) => {
+                  const isFirstItem = idx === 0;
+                  const linkTo = isFirstItem 
+                    ? `/exams/${exam.slug || id}${isPreview ? '?preview=true' : ''}`
+                    : `/exams/${exam.slug || id}/${item.id}${isPreview ? '?preview=true' : ''}`;
+                  return (
+                    <Link
+                      key={item.id}
+                      to={linkTo}
+                      className={`flex items-center gap-2 px-3 py-2 rounded text-sm transition-colors ${
+                        item.id === section 
+                          ? 'bg-orange-500 text-white' 
+                          : 'text-gray-700 hover:bg-gray-100'
+                      }`}
+                    >
+                      {getMenuIcon(item.id)}
+                      {item.label}
+                    </Link>
+                  );
+                })}
               </nav>
             </div>
 
