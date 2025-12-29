@@ -1760,6 +1760,17 @@ const ExamDetailForm = () => {
             className="mt-4 flex items-center gap-2 px-4 py-2 border border-dashed border-purple-300 rounded-lg text-purple-600 hover:border-purple-500 hover:bg-purple-50">
             <FiPlus className="w-4 h-4" /> Add Question Paper
           </button>
+          {/* Section Save Button */}
+          {id && (
+            <div className="mt-4 pt-4 border-t border-gray-200 flex justify-end">
+              <SectionSaveButton 
+                section="content" 
+                onSave={handleSectionSave} 
+                isSaving={sectionSaving.content} 
+                isSaved={sectionSaved.content}
+              />
+            </div>
+          )}
         </CollapsibleSection>
 
         {/* Page-Level Sidebar Widgets */}
