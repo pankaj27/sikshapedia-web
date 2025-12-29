@@ -399,6 +399,9 @@ const RichTextEditor = ({ value, onChange, placeholder, collegeName }) => {
       TextStyle,
       Color,
       Underline,
+      TextAlign.configure({
+        types: ['heading', 'paragraph'],
+      }),
     ],
     content: value || '',
     onUpdate: ({ editor }) => {
