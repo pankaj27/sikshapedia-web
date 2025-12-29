@@ -525,15 +525,10 @@ const ExamDetailPage = () => {
                   })
                   .map(item => (
                     <div key={item.id} className="bg-white rounded-lg shadow-md p-6">
-                      {/* Page Heading */}
-                      <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                        {item.page_heading || item.label}
-                      </h2>
-                      
-                      {/* Page Content (HTML) */}
+                      {/* Page Content (HTML) - includes its own heading */}
                       {item.content && (
                         <div 
-                          className="prose prose-lg max-w-none mb-6 text-gray-700"
+                          className="prose prose-lg max-w-none text-gray-700 prose-headings:text-gray-900 prose-h2:text-2xl prose-h2:font-bold prose-h3:text-xl prose-h3:font-semibold prose-ul:list-disc prose-li:marker:text-orange-500"
                           dangerouslySetInnerHTML={{ __html: item.content }}
                         />
                       )}
