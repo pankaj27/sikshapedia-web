@@ -11,16 +11,20 @@ const getDefaultYear = () => {
   const currentMonth = now.getMonth() + 1; // JavaScript months are 0-indexed
   
   // Academic year logic: July onwards = next year admissions
-  const year = currentMonth >= 7 ? currentYear + 1 : currentYear;
-  const nextYear = year + 1;
+  // For display purposes, we want:
+  // - "Admission 2026" to show from July 2025 onwards
+  // - year = current display year for admissions (2026 if July+ 2025)
+  // - next_year = year + 1 (for scholarships etc)
+  const admissionYear = currentMonth >= 7 ? currentYear + 1 : currentYear;
+  const nextYear = admissionYear + 1;
   
   return {
-    year,
-    year_short: String(year).slice(-2),
+    year: admissionYear, // This is the admission year to display
+    year_short: String(admissionYear).slice(-2),
     next_year: nextYear,
     next_year_short: String(nextYear).slice(-2),
-    academic_year: `${year}-${String(nextYear).slice(-2)}`,
-    admission_text: `Admissions ${year}`,
+    academic_year: `${admissionYear}-${String(nextYear).slice(-2)}`,
+    admission_text: `Admissions ${admissionYear}`,
     mode: 'auto'
   };
 };
