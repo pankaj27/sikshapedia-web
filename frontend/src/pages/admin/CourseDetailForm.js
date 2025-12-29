@@ -190,12 +190,12 @@ const RichTextEditorWithTable = ({ value, onChange, placeholder, minHeight = '20
       TextStyle,
       Color,
       Underline,
-      TiptapTable.configure({
+      Table.configure({
         resizable: true,
       }),
-      TiptapTableRow,
-      TiptapTableHeader,
-      TiptapTableCell,
+      TableRow,
+      TableHeader,
+      TableCell,
     ],
     content: value || '',
     onUpdate: ({ editor }) => {
