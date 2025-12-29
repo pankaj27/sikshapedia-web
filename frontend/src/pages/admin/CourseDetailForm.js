@@ -1979,14 +1979,29 @@ const CourseDetailForm = () => {
                             <thead>
                               <tr>
                                 {(table.headers || []).map((header, colIndex) => (
-                                  <th key={colIndex} className="border border-teal-200 bg-teal-100 p-1">
-                                    <input type="text" value={header} onChange={(e) => {
-                                      const newTables = [...(formData.description_tables || [])];
-                                      newTables[tableIndex].headers[colIndex] = e.target.value;
-                                      setFormData({...formData, description_tables: newTables});
-                                    }} className="w-full border-0 bg-transparent font-semibold text-center text-teal-800 text-xs" placeholder="Header" />
+                                  <th key={colIndex} className="border border-teal-200 bg-teal-100 p-1 relative">
+                                    <div className="flex items-center gap-1">
+                                      <input type="text" value={header} onChange={(e) => {
+                                        const newTables = [...(formData.description_tables || [])];
+                                        newTables[tableIndex].headers[colIndex] = e.target.value;
+                                        setFormData({...formData, description_tables: newTables});
+                                      }} className="w-full border-0 bg-transparent font-semibold text-center text-teal-800 text-xs" placeholder="Header" />
+                                      {table.headers.length > 1 && (
+                                        <button type="button" onClick={() => {
+                                          const newTables = [...(formData.description_tables || [])];
+                                          newTables[tableIndex].headers.splice(colIndex, 1);
+                                          newTables[tableIndex].rows.forEach(row => row.splice(colIndex, 1));
+                                          setFormData({...formData, description_tables: newTables});
+                                        }} className="text-red-500 hover:text-red-700 text-xs flex-shrink-0" title="Delete Column">
+                                          ✕
+                                        </button>
+                                      )}
+                                    </div>
                                   </th>
                                 ))}
+                                <th className="border border-teal-200 bg-teal-50 p-1 w-8">
+                                  <span className="text-xs text-gray-400">Row</span>
+                                </th>
                               </tr>
                             </thead>
                             <tbody>
@@ -2001,6 +2016,17 @@ const CourseDetailForm = () => {
                                       }} className="w-full border-0 text-xs" />
                                     </td>
                                   ))}
+                                  <td className="border border-teal-200 p-1 w-8">
+                                    {table.rows.length > 1 && (
+                                      <button type="button" onClick={() => {
+                                        const newTables = [...(formData.description_tables || [])];
+                                        newTables[tableIndex].rows.splice(rowIndex, 1);
+                                        setFormData({...formData, description_tables: newTables});
+                                      }} className="text-red-500 hover:text-red-700 text-xs" title="Delete Row">
+                                        ✕
+                                      </button>
+                                    )}
+                                  </td>
                                 </tr>
                               ))}
                             </tbody>
