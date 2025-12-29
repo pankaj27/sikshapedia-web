@@ -488,47 +488,24 @@ const ExamDetailPage = () => {
               </nav>
             </div>
 
-            {/* Quick Actions */}
-            <div className="bg-gradient-to-br from-orange-500 to-red-500 rounded-lg shadow-md p-4 text-white">
-              <h3 className="font-bold mb-3">Quick Actions</h3>
-              <div className="space-y-2">
-                <Button className="w-full bg-white text-orange-600 hover:bg-gray-100 text-sm">
-                  <FiDownload className="mr-2" size={16} />
-                  Download All Papers
-                </Button>
-                <Button className="w-full bg-white text-orange-600 hover:bg-gray-100 text-sm">
-                  <FiFileText className="mr-2" size={16} />
-                  Ask a Question
-                </Button>
-                <Button className="w-full bg-white text-orange-600 hover:bg-gray-100 text-sm">
-                  <FiInfo className="mr-2" size={16} />
-                  Get More Info
-                </Button>
-              </div>
-            </div>
+            {/* Apply Now Widget - Connected to System */}
+            <ApplyNowWidget 
+              collegeName={exam.name}
+              courseName={exam.name}
+              onClose={() => {}}
+            />
+
+            {/* Counselling Widget - Connected to System */}
+            <CounsellingWidget onClose={() => {}} />
+
+            {/* Ask Question Widget - Connected to System */}
+            <AskQuestionWidget 
+              context={`Regarding ${exam.name} exam`}
+              onClose={() => {}}
+            />
 
             {/* Sponsored Sidebar Ads */}
             <SidebarSponsoredAd placementId="exam_detail_sidebar" title="Recommended Colleges" />
-
-            {/* College Predictor Banner */}
-            <div className="bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg shadow-md p-4 text-white text-center">
-              <FiAward className="mx-auto mb-2" size={32} />
-              <h3 className="font-bold mb-2">College Predictor</h3>
-              <p className="text-sm mb-3 opacity-90">Know your chances of admission</p>
-              <Button className="w-full bg-white text-blue-600 hover:bg-gray-100 text-sm font-semibold">
-                Predict Now
-              </Button>
-            </div>
-
-            {/* Counseling Banner - Sidebar */}
-            <div className="bg-gradient-to-br from-green-500 to-teal-500 rounded-lg shadow-md p-4 text-white text-center">
-              <FiInfo className="mx-auto mb-2" size={28} />
-              <h3 className="font-bold mb-2 text-sm">Need Help?</h3>
-              <p className="text-xs mb-3 opacity-90">Talk to our expert counselors</p>
-              <Button className="w-full bg-white text-green-600 hover:bg-gray-100 text-xs font-semibold">
-                Get Free Counseling
-              </Button>
-            </div>
           </aside>
 
           {/* Main Content - Dynamic based on activeSection */}
