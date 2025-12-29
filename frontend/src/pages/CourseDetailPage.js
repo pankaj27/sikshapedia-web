@@ -13,10 +13,10 @@ import AuthorInfo from '../components/AuthorInfo';
 
 import { Link } from '../components/CustomLink';
 const CourseDetailPage = () => {
-  const { slug, section: urlSection } = useParams();
+  const { slug } = useParams();
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState(urlSection || 'overview');
+  const [activeTab, setActiveTab] = useState('overview');
   const [activeWidget, setActiveWidget] = useState(null);
   const [expandedFaq, setExpandedFaq] = useState(null);
   const [isSaved, setIsSaved] = useState(false);
