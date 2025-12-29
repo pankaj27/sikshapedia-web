@@ -151,8 +151,24 @@ const ExamSubPage = () => {
     );
   }
 
-  // Get menu items from backend config
-  const menuItems = (exam.menu_config?.items || exam.menuConfig?.items || []).filter(item => item.enabled !== false);
+  // Get menu items from backend config or use default fallback
+  const backendMenuItems = (exam.menu_config?.items || exam.menuConfig?.items || []).filter(item => item.enabled !== false);
+  
+  // Default menu items if no menu_config exists
+  const defaultMenuItems = [
+    { id: 'overview', label: 'Overview', enabled: true },
+    { id: 'dates', label: 'Important Dates', enabled: true },
+    { id: 'eligibility', label: 'Eligibility', enabled: true },
+    { id: 'application', label: 'Application', enabled: true },
+    { id: 'pattern', label: 'Exam Pattern', enabled: true },
+    { id: 'syllabus', label: 'Syllabus', enabled: true },
+    { id: 'preparation', label: 'Preparation', enabled: true },
+    { id: 'cutoff', label: 'Cutoff', enabled: true },
+    { id: 'result', label: 'Result', enabled: true },
+    { id: 'counseling', label: 'Counseling', enabled: true },
+  ];
+  
+  const menuItems = backendMenuItems.length > 0 ? backendMenuItems : defaultMenuItems;
   
   // Get page heading and meta info
   const pageHeading = currentSection?.page_heading || `${exam.name} ${currentSection?.label || section}`;
