@@ -61,38 +61,11 @@ const CourseDetailPage = () => {
     fetchCourse();
   }, [slug]);
 
-  // Update active tab and scroll when URL section changes
-  useEffect(() => {
-    if (urlSection) {
-      setActiveTab(urlSection);
-      // Scroll to section after a short delay to ensure content is loaded
-      setTimeout(() => {
-        const element = document.getElementById(urlSection);
-        if (element) {
-          const offset = 160;
-          const elementPosition = element.getBoundingClientRect().top;
-          const offsetPosition = elementPosition + window.pageYOffset - offset;
-          window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
-        }
-      }, 300);
-    }
-  }, [urlSection, course]);
-
   // Generate SEO-friendly URL for menu sections
   const getSectionUrl = useMemo(() => {
     if (!course || !slug) return (sectionId) => `#${sectionId}`;
     return (sectionId) => `/courses/${slug}/${sectionId}`;
   }, [course, slug]);
-
-  const scrollToSection = (sectionId) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      const offset = 160;
-      const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - offset;
-      window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
-    }
-  };
 
   if (loading) {
     return (
