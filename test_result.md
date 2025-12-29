@@ -1391,3 +1391,36 @@ All 9 expected sub-pages failed:
 5. **Complete SEO Data**: Add meta_description
 
 **The NEET UG exam needs to be properly created with correct data before it can be considered complete.**
+
+
+---
+
+## Test Session: GATE 2025 Exam End-to-End Testing (Dec 29, 2025)
+
+### Test Objective
+Complete end-to-end testing of newly created GATE 2025 exam:
+1. Verify exam data in database
+2. Test public exam page rendering
+3. Verify all menu tabs work correctly
+4. Test sub-page navigation
+5. Verify HTML content renders properly (P0 fix verification)
+
+### Test Cases
+1. **Database Verification** - Check exam exists with correct data
+2. **Main Page Loading** - /exams/gate-2025 loads correctly
+3. **Description HTML Rendering** - P0 fix verification (prose class applied)
+4. **Menu Navigation** - All tabs work (Overview, Eligibility, Syllabus, Exam Pattern, Important Dates)
+5. **Sub-page URLs** - Each menu item has correct URL structure
+6. **Content Display** - Rich HTML content renders correctly with tables
+
+### Admin Credentials
+- Email: admin@admissionbuddy.co
+- Password: admin123
+
+### Exam Details
+- Name: GATE 2025
+- Slug: gate-2025
+- Full Name: Graduate Aptitude Test in Engineering 2025
+- Conductor: IIT Roorkee
+- Status: published
+
