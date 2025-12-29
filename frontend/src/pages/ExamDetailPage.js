@@ -175,7 +175,7 @@ const ExamDetailPage = () => {
             <div className="w-20 h-20 md:w-24 md:h-24 bg-white rounded-xl shadow-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
               {exam.logoUrl ? (
                 <img 
-                  src={exam.logoUrl.startsWith('/api') ? exam.logoUrl : `/api${exam.logoUrl}`} 
+                  src={exam.logoUrl.startsWith('http') ? exam.logoUrl : (exam.logoUrl.startsWith('/api') ? exam.logoUrl : `/api${exam.logoUrl}`)} 
                   alt={`${exam.name} logo`} 
                   className="w-full h-full object-contain p-2"
                   onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }}
