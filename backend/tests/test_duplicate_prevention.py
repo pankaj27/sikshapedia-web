@@ -11,7 +11,7 @@ import sys
 from typing import Dict, Any, Optional
 
 # Backend URL from frontend .env
-BASE_URL = "https://content-ordering.preview.emergentagent.com/api"
+BASE_URL = "https://exam-editor.preview.emergentagent.com/api"
 
 # Admin credentials for testing
 ADMIN_CREDENTIALS = {

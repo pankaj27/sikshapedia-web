@@ -209,12 +209,12 @@ Verify if the Institute/College form can successfully submit a large entry with 
 ### Detailed Test Results
 
 #### ✅ Admin Authentication
-- **Login URL**: https://content-ordering.preview.emergentagent.com/admin/login
+- **Login URL**: https://exam-editor.preview.emergentagent.com/admin/login
 - **Credentials**: admin@admissionbuddy.co / admin123
 - **Result**: Successfully authenticated and redirected to admin dashboard
 
 #### ✅ College Form Functionality
-- **Form URL**: https://content-ordering.preview.emergentagent.com/admin/colleges/new
+- **Form URL**: https://exam-editor.preview.emergentagent.com/admin/colleges/new
 - **College Name**: "Test Engineering College Kolkata" (auto-generated slug: test-engineering-college-kolkata)
 - **Type**: Government
 - **Established Year**: 2025 (dropdown working)
@@ -360,7 +360,7 @@ Verify the complete new college creation workflow with section-wise saving to pr
 - No data loss between section saves
 
 ### API Base URL Verified
-- **URL**: https://content-ordering.preview.emergentagent.com/api
+- **URL**: https://exam-editor.preview.emergentagent.com/api
 - **Admin Credentials**: admin@admissionbuddy.co / admin123 ✅ Working
 
 ### Network Error Resolution
@@ -397,7 +397,7 @@ Complete end-to-end UI test of the new college creation workflow with section-wi
 ### Detailed Test Results
 
 #### ✅ Admin Authentication & Navigation
-- **Login URL**: https://content-ordering.preview.emergentagent.com/admin/login
+- **Login URL**: https://exam-editor.preview.emergentagent.com/admin/login
 - **Credentials**: admin@admissionbuddy.co / admin123 ✅ Working
 - **Navigation**: Successfully navigated to /admin/colleges/new
 - **Form Loading**: College form loads correctly with all sections
@@ -594,7 +594,7 @@ Complete verification of ALL fields for 3 entries on their Edit pages as request
 - **Save Functionality**: Section-wise save buttons present and functional
 
 ### Admin Access Confirmed
-- **Login URL**: https://content-ordering.preview.emergentagent.com/admin/login
+- **Login URL**: https://exam-editor.preview.emergentagent.com/admin/login
 - **Credentials**: admin@admissionbuddy.co / admin123 ✅ Working
 - **Edit URLs**: All 3 test entries accessible and editable
 
@@ -724,7 +724,7 @@ Verify that the new "Save All & Publish" / "Save All & Submit" buttons work corr
 - Frontend admin interface is accessible for manual testing
 
 ### API Base URL Verified
-- **URL**: https://content-ordering.preview.emergentagent.com/api
+- **URL**: https://exam-editor.preview.emergentagent.com/api
 - **Admin Credentials**: admin@admissionbuddy.co / admin123 ✅ Working
 
 ### Network Error Resolution
@@ -737,7 +737,7 @@ The section-wise save mechanism successfully handles large college forms by:
 
 ### Manual Testing Instructions
 To manually verify the "Save All & Publish" / "Save All & Submit" functionality:
-1. Login to admin panel: https://content-ordering.preview.emergentagent.com/admin/login
+1. Login to admin panel: https://exam-editor.preview.emergentagent.com/admin/login
 2. Use credentials: admin@admissionbuddy.co / admin123
 3. Navigate to any college edit page (e.g., /admin/colleges/edit/ba621807-73ca-407d-a983-9807f3be305f)
 4. Make changes to multiple sections
@@ -860,7 +860,7 @@ Complete end-to-end testing of Course Detail functionality including admin entry
 ### Admin Credentials (Confirmed Working)
 - **Email**: admin@admissionbuddy.co ✅ Working
 - **Password**: admin123 ✅ Working
-- **Base URL**: https://content-ordering.preview.emergentagent.com ✅ Working
+- **Base URL**: https://exam-editor.preview.emergentagent.com ✅ Working
 
 ---
 
@@ -1100,7 +1100,7 @@ Verify Rich Text Editor features in CollegeForm.js (Institute Entry Form) as req
 - ✅ **UPGRADED**: SEO TOC Text Block now has rich text editor instead of plain textarea
 
 ### Admin Access Verified
-- **Login URL**: https://content-ordering.preview.emergentagent.com/admin/login
+- **Login URL**: https://exam-editor.preview.emergentagent.com/admin/login
 - **Credentials**: admin@admissionbuddy.co / admin123 ✅ Working
 - **Institution Entry**: Accessible via sidebar navigation ✅
 - **Edit Form**: College edit form loads correctly with all rich text editors ✅
@@ -1163,7 +1163,7 @@ Verify the Rich Text Editor fixes in CourseDetailForm.js as requested:
    - ✅ Full rich text functionality available
 
 ### Admin Access Verified
-- **Login URL**: https://content-ordering.preview.emergentagent.com/admin/login
+- **Login URL**: https://exam-editor.preview.emergentagent.com/admin/login
 - **Credentials**: admin@admissionbuddy.co / admin123 ✅ Working
 - **Course Detail Form**: /admin/courses-detail/edit/{id} ✅ Accessible
 
@@ -1251,7 +1251,7 @@ Test the Exam Details Page connection with Admin Entry Form as requested in revi
 ### Admin Credentials (Confirmed Working)
 - **Email**: admin@admissionbuddy.co ✅ Working
 - **Password**: admin123 ✅ Working  
-- **URL**: https://content-ordering.preview.emergentagent.com/admin/login ✅ Working
+- **URL**: https://exam-editor.preview.emergentagent.com/admin/login ✅ Working
 
 ### Changes Verification
 **All requested changes have been successfully implemented:**
