@@ -650,9 +650,10 @@ const ExamDetailPage = () => {
               </div>
             )}
 
-            {/* Question Paper Sections by Year */}
+            {/* Question Paper Sections by Year - Only show if data exists */}
+            {exam.questionPapers && Object.keys(exam.questionPapers).length > 0 && (
             <div className="space-y-6">
-              {Object.keys(exam.questionPapers || {}).map((year) => (
+              {Object.keys(exam.questionPapers).map((year) => (
                 <div key={year} id={year} className="bg-white rounded-lg shadow-md overflow-hidden scroll-mt-20">
                   <div className="bg-gradient-to-r from-orange-500 to-red-500 px-6 py-3 flex items-center justify-between">
                     <h2 className="text-xl font-bold text-white flex items-center gap-2">
@@ -711,6 +712,7 @@ const ExamDetailPage = () => {
                   </div>
                 ))}
               </div>
+            )}
 
             {/* Mid Content Advertisement */}
             <div className="bg-gradient-to-r from-orange-400 to-red-500 rounded-lg shadow-md p-8 text-center text-white">
