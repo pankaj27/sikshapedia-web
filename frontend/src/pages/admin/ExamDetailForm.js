@@ -1604,6 +1604,17 @@ const ExamDetailForm = () => {
             </div>
 
           </div>
+          {/* Section Save Button */}
+          {id && (
+            <div className="mt-4 pt-4 border-t border-gray-200 flex justify-end">
+              <SectionSaveButton 
+                section="media" 
+                onSave={handleSectionSave} 
+                isSaving={sectionSaving.media} 
+                isSaved={sectionSaved.media}
+              />
+            </div>
+          )}
         </CollapsibleSection>
 
         {/* SEO & Meta Tags (Main Page) */}
@@ -1614,6 +1625,17 @@ const ExamDetailForm = () => {
             handleChange={handleChange}
             entityType="exam"
           />
+          {/* Section Save Button */}
+          {id && (
+            <div className="mt-4 pt-4 border-t border-gray-200 flex justify-end">
+              <SectionSaveButton 
+                section="seo" 
+                onSave={handleSectionSave} 
+                isSaving={sectionSaving.seo} 
+                isSaved={sectionSaved.seo}
+              />
+            </div>
+          )}
         </CollapsibleSection>
 
         {/* Important Dates */}
