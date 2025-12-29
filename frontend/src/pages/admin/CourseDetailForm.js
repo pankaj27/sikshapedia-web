@@ -1331,7 +1331,18 @@ const CourseDetailForm = () => {
 
         {/* Course Content */}
         <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-xl font-bold mb-4">Course Details</h2>
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-bold">Course Details (Content)</h2>
+            {id && (
+              <SectionSaveButton 
+                section="content"
+                onSave={handleSectionSave}
+                isSaving={sectionSaving.content}
+                isSaved={sectionSaved.content}
+                disabled={!id}
+              />
+            )}
+          </div>
           <div className="space-y-4">
             {/* Description with Rich Content */}
             <CollapsibleSection title="Description *" icon="📝" defaultOpen={true} badge={`${formData.description_toc?.length || 0} sections`}>
