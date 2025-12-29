@@ -1499,7 +1499,7 @@ const CourseDetailForm = () => {
                     placeholder="Brief description of the course..."
                     minHeight="150px"
                   />
-                  <p className="text-xs text-gray-500 mt-1">You can add tables, change text color and add links. Click "Table" button to insert a table.</p>
+                  <p className="text-xs text-gray-500 mt-1">You can add tables, change text color and add links. Click Table button to insert a table.</p>
                 </div>
 
                 {/* Description TOC Builder - Advanced Block Editor */}
