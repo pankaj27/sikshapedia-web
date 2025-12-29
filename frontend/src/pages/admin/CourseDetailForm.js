@@ -2318,12 +2318,13 @@ const CourseDetailForm = () => {
 
             <div>
               <label className="block text-sm font-medium mb-1">Overview</label>
-              <SimpleRichTextEditor
+              <RichTextEditorWithTable
                 value={formData.overview}
                 onChange={(html) => setFormData(prev => ({ ...prev, overview: html }))}
                 placeholder="Detailed course overview..."
+                minHeight="200px"
               />
-              <p className="text-xs text-gray-500 mt-1">You can change text color and add links</p>
+              <p className="text-xs text-gray-500 mt-1">You can add tables, change text color and add links. Click Table button to insert a table.</p>
             </div>
 
             <div>
