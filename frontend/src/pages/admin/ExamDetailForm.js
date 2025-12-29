@@ -1357,8 +1357,13 @@ const ExamDetailForm = () => {
             </div>
             <div className="lg:col-span-3">
               <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
-              <textarea name="description" value={formData.description} onChange={handleChange} rows="3" placeholder="Brief description..."
-                className="w-full border border-gray-300 rounded-lg px-4 py-2.5" />
+              <p className="text-xs text-gray-500 mb-2">Rich text editor with bullet points, links, text formatting, tables, and alignment options</p>
+              <RichTextEditorWithTable 
+                value={formData.description} 
+                onChange={(content) => setFormData({ ...formData, description: content })}
+                placeholder="Brief description..."
+                minHeight="150px"
+              />
             </div>
             <div className="lg:col-span-3">
               <div className="flex items-center justify-between mb-2">
