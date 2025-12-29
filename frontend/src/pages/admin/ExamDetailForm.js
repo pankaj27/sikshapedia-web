@@ -128,6 +128,38 @@ const HyperlinkInput = ({ value, onChange, placeholder = "Enter URL..." }) => {
   );
 };
 
+// Section Save Button Component
+const SectionSaveButton = ({ section, onSave, isSaving, isSaved, disabled }) => {
+  return (
+    <button
+      type="button"
+      onClick={() => onSave(section)}
+      disabled={disabled || isSaving}
+      className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+        isSaved 
+          ? 'bg-green-100 text-green-700 border border-green-300' 
+          : isSaving 
+            ? 'bg-gray-100 text-gray-500 cursor-wait'
+            : 'bg-blue-600 text-white hover:bg-blue-700'
+      }`}
+    >
+      {isSaving ? (
+        <>
+          <span className="animate-spin">⏳</span> Saving...
+        </>
+      ) : isSaved ? (
+        <>
+          <FiCheck className="w-4 h-4" /> Saved ✓
+        </>
+      ) : (
+        <>
+          <FiSave className="w-4 h-4" /> Save Section
+        </>
+      )}
+    </button>
+  );
+};
+
 const ExamDetailForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -137,6 +169,10 @@ const ExamDetailForm = () => {
   const [actionLoading, setActionLoading] = useState(false);
   const [uploadingFile, setUploadingFile] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
+  
+  // Section-wise save states
+  const [sectionSaving, setSectionSaving] = useState({});
+  const [sectionSaved, setSectionSaved] = useState({});
 
   // Master location data
   const [masterStates, setMasterStates] = useState([]);
