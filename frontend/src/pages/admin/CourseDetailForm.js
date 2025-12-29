@@ -645,9 +645,9 @@ const CourseDetailForm = () => {
         duration: selectedCourse.duration || '',
         eligibility: selectedCourse.eligibility || '',
         base_course_id: selectedCourse.id,
-        // Auto-fill stream and sub-stream
-        stream: selectedCourse.stream || selectedCourse.stream_id || '',
-        sub_stream: selectedCourse.sub_stream || selectedCourse.sub_stream_id || ''
+        // Auto-fill stream_id and sub_stream_ids from the course
+        stream_id: selectedCourse.stream_id || '',
+        sub_stream_ids: selectedCourse.sub_stream_id ? [selectedCourse.sub_stream_id] : (selectedCourse.sub_stream_ids || [])
       });
       
       // Fetch college count for this course
