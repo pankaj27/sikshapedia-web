@@ -1,5 +1,30 @@
 # Test Results
 
+## Test Session: Description TOC Rich Text Editor (Dec 29, 2025)
+
+### Test Objective
+Verify that the Description TOC text editor in CourseDetailForm.js has been upgraded from a plain textarea to a rich text editor with bullet points, links, and text alignment options.
+
+### Test Results Summary
+
+**✅ IMPLEMENTED FEATURES:**
+1. **TextAlign Extension** - ✅ Added `@tiptap/extension-text-align` to both SimpleRichTextEditor and RichTextEditorWithTable
+2. **Toolbar Alignment Buttons** - ✅ Added left, center, right, and justify alignment buttons to SimpleRichTextToolbar
+3. **TOC Text Block Rich Editor** - ✅ Replaced `<textarea>` with `SimpleRichTextEditor` component in TEXT BLOCK section
+
+**📝 Rich Text Features Available in TOC Text Block:**
+- Bold, Italic, Underline formatting
+- Text color selection
+- Link insertion/removal
+- Bullet list
+- Text alignment (Left, Center, Right, Justify) - NEW!
+
+### Verification Screenshots
+- Short Description editor shows alignment buttons ✅
+- TOC Text Block shows full rich text toolbar ✅
+
+---
+
 ## Test Session: Stream → Sub-Stream → Course Connection Testing
 
 ### Test Objective
