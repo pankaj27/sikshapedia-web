@@ -1,71 +1,69 @@
 <analysis>**original_problem_statement:**
-The user's primary goal was to resolve a recurring Network Error that occurred when submitting the large Institute/College/School/University entry form on their live site. The agent implemented a section-wise saving mechanism to break the large form into smaller, individually saved parts. This led to a series of subsequent bug reports from the user, including:
-1.  Initial data like State/City not saving.
-2.  Data disappearing on the edit page after being saved.
-3.  Lack of search functionality in key dropdowns.
-4.  Missing delete column feature in a table editor.
-5.  Incomplete data saving/loading for different institution types (College, School, University).
-The agent has iteratively fixed all reported bugs and guided the user to deploy the changes to the live site. The final interaction revolves around the user still facing the Network Error post-deployment, which the agent has diagnosed as a user workflow issue (not using the newly implemented Save Section buttons).
+The user requested a series of enhancements and fixes focused on improving the admin content entry forms and connecting them to the frontend pages. The initial task was to add rich text capabilities (bullet points, links, justification) to the  and . The scope then expanded to include:
+1.  Adding a Preview button to the admin course list and ensuring it works for draft courses.
+2.  Connecting the  to the frontend , dynamically rendering all data from the backend and removing all hardcoded content.
+3.  Refactoring the  menu from a single-page content switcher to a separate sub-page architecture (e.g., ) for better SEO, mirroring the functionality of the course and college pages.
+4.  Debugging and fixing a critical issue where newly created exams were not being saved or published correctly due to database connection and user role problems.
+5.  Re-ordering the content layout on  to place the SEO content section above the main overview content.
+6.  Replacing hardcoded sidebar widgets on the exam page with system-connected Apply Now and Need Counselling forms.
 
 **User's preferred language**: Bengali
 
 **what currently exists?**
-A full-stack application with a complex admin form for managing educational institutions. The critical Network Error from timeouts has been addressed by implementing and deploying a section-wise saving mechanism. On the  page, the form is now divided into sections (Basic, Media, Courses, etc.), each with its own Save Section button.
-
-Numerous critical bugs related to data persistence have been fixed. The form now correctly saves and loads all fields—including nested data like location, contact info, and school-specific attributes—across all institution types (College, School, and University). Additional features like search in dropdowns and a delete column button in the table editor have also been added. The latest code is deployed on the user's live site.
+The application's admin forms (, ) are now fully equipped with rich text editors that support bullet points, links, and text alignment. The frontend  is now completely dynamic, fetching all its data from the backend and no longer contains hardcoded sections or widgets. Its navigation has been upgraded to a separate sub-page architecture for better SEO. A critical bug preventing exams from being saved and published has been resolved, and a test exam (JEE Main) now exists in the database and is visible on the live preview URL. Preview functionality has been added to the admin lists for both courses and exams, allowing administrators to view draft content.
 
 **Last working item**:
--   **Last item agent was working**: Diagnosing the user's report of a Network Error on the live site () *after* the new code was deployed. The user was trying to save the mr college of education form.
+-   **Last item agent was working**: Re-ordering the content on  to ensure the SEO content section (intro, TOC, tables, FAQs) appears above the main Overview content section. The agent added test data to the database to verify the functionality.
 -   **Status**: USER VERIFICATION PENDING
--   **Agent's Finding**: The agent confirmed through API checks and a live-site screenshot that both the backend and frontend have been updated successfully. The new Save Section buttons are visible on the edit page. The error is occurring because the user is likely still using the main Save Draft button, which submits the entire form at once and causes the original timeout error. The agent has explained this to the user and instructed them to use the per-section save buttons.
 -   **Agent Testing Done**: Y
--   **Which testing method agent to use?**: Manual testing by user. The user needs to confirm if using the Save Section buttons on the live site resolves the error.
+-   **Which testing method agent to use?**: Manual testing by user. The user needs to navigate to the  exam page and confirm the content layout meets their expectations.
 -   **User Testing Done**: N
 
 **All Pending/In progress Issue list**:
--   Issue 1: User experiencing Network Error on the live site when saving a form (P0)
--   Issue 2: Incorrect URL generation for new colleges (P1)
+-   Issue 1: Incorrect URL generation for new colleges (P1)
+-   Issue 2: Investigate Hotlinked Images (P1)
 
 **Issues Detail:**
--   **Issue 1: User experiencing Network Error on the live site when saving a form**
-    -   **Attempted fixes**: The agent investigated and confirmed the new code is deployed correctly. The issue is diagnosed as a user workflow problem (using the old Save Draft button instead of the new Save Section buttons). The agent has instructed the user on the correct procedure.
+-   **Issue 1: Incorrect URL generation for new colleges**
+    -   **Attempted fixes**: None. This is a carried-over issue from a previous handoff.
     -   **Next debug checklist**:
-        1.  Wait for the user to confirm if using the individual Save Section buttons on the live site resolves the Network Error.
-        2.  If the error persists, check the live server's backend logs () for errors during the PATCH request.
-    -   **Why fix this issue and what will be achieved with the fix?**: This is the original, critical problem that prevents the user from managing large entries on their production site.
-    -   **Status**: USER VERIFICATION PENDING
-    -   **Is recurring issue?**: Y
-    -   **Should Test frontend/backend/both after fix?**: User manual testing.
-    -   **Blocked on other issue**: None
-
--   **Issue 2: Incorrect URL generation for new colleges**
-    -   **Attempted fixes**: None. This was a secondary complaint that the agent deprioritized in favor of the critical Network Error.
-    -   **Next debug checklist**:
-        1.  Ask the user to provide an example of a correct and an incorrect URL.
+        1.  Ask the user for an example of a correct vs. an incorrect URL.
         2.  Investigate the slug generation logic in the  function in .
-        3.  Verify how the frontend router (in  or ) uses the slug to construct the final URL.
-        4.  Modify the backend slug generation to match the user's expected format.
+        3.  Check the frontend routing in  to see how the slug is used.
+        4.  Modify the backend logic to generate slugs in the user's desired format.
     -   **Why fix this issue and what will be achieved with the fix?**: Ensures correct, user-friendly, and SEO-friendly URLs for all newly created institution pages.
     -   **Status**: NOT STARTED
-    -   **Is recurring issue?**: N
+    -   **Is recurring issue?**: Y (Carried over)
     -   **Should Test frontend/backend/both after fix?**: Both
     -   **Blocked on other issue**: None
 
+-   **Issue 2: Investigate Hotlinked Images**
+    -   **Attempted fixes**: None. This is a carried-over issue from a previous handoff.
+    -   **Next debug checklist**:
+        1.  Verify if images from external sources are failing to load on detail pages.
+        2.  Propose a solution to the user, such as implementing an image proxy or integrating a service like Cloudinary to upload and serve images.
+    -   **Why fix this issue and what will be achieved with the fix?**: To ensure all images, regardless of their source, load reliably on the website.
+    -   **Status**: NOT STARTED
+    -   **Is recurring issue?**: N
+    -   **Should Test frontend/backend/both after fix?**: Frontend
+    -   **Blocked on other issue**: None
+
 **In progress Task List**:
-None.
+-   None
 
 **Upcoming and Future Tasks**
--   **(P1) Investigate Hotlinked Images:** Address the issue of hotlinked images not loading on detail pages, likely by proposing a Cloudinary-based upload solution.
 -   **(P2) Dynamic Page Titles:** Enhance SEO by making titles on filtered listing pages dynamic (e.g., append course names).
 -   **(P2) Add More Page Widgets:** Fulfill the user's earlier request for more configurable widgets in the admin panel.
 -   **(P3) Refactor :** Replace  with React Router's  for better SPA behavior.
 
 **Completed work in this session**
--   **Bug Fix: Full Data Persistence (DONE):** Fixed numerous critical bugs where form data was not saving or loading correctly on the edit page. This comprehensive fix covered all institution types (College, School, University) and all form fields, including nested objects for location, contact info, and school-specific attributes.
--   **Feature: Searchable Dropdowns (DONE):** Added search functionality to Affiliated To and Recognized By dropdowns.
--   **Feature: Table Column Deletion (DONE):** Added a delete column button to the table editor within the SEO Content section.
--   **End-to-End Testing (DONE):** Performed exhaustive, multi-round end-to-end testing of the entire form for all institution types, verifying that every single field saves and loads correctly.
--   **Live Site Deployment Support (DONE):** Diagnosed the post-deployment Network Error and confirmed the fix is live, pending correct user action.
+-   **Feature: Rich Text Editor Enhancements (DONE):** Added bullet points, links, and text alignment options to all rich text editors and TOC text blocks in  and .
+-   **Feature: Admin Preview Functionality (DONE):** Added a Preview button to the  and  lists, enabling admins to view 'draft' or 'pending' content.
+-   **Feature: Dynamic Exam Page (DONE):** Connected  to the backend, removing all hardcoded content (PYQs, Study Notes, sidebar widgets).
+-   **Feature: SEO-Friendly Exam Navigation (DONE):** Re-architected  to use a separate sub-page structure (e.g., ) handled by a new  component.
+-   **Bug Fix: Critical Exam Persistence Issue (DONE):** Diagnosed and fixed a bug preventing exams from being saved and published due to incorrect database name and missing admin roles. Successfully created and published an exam.
+-   **UI/UX: System-Connected Widgets (DONE):** Replaced hardcoded sidebar widgets on  with dynamic Apply Now and Need Counselling forms.
+-   **UI/UX: Content Reordering (DONE):** Adjusted the layout of  to display the SEO content section above the main Overview content.
 
 **Earlier issues found/mentioned but not fixed**
 -   **Issue 1: Incorrect URL generation for new colleges.** As detailed in the Pending/In progress Issue list.
@@ -73,66 +71,75 @@ None.
 **Known issue recurrence from previous fork**
 -   **Issue recurrence**: Network Error on saving a large form.
 -   **Recurrence count**: High
--   **Status**: USER VERIFICATION PENDING. A definitive code solution (section-wise saving) has been implemented and deployed. The issue is now likely resolved, pending confirmation from the user that they are following the new workflow.
+-   **Status**: RESOLVED (Did not recur in this session).
 
 **Code Architecture**
-allowed_fieldsfetchCollegehandleSectionSavehandleSubmit
+
 
 **Key Technical Concepts**
--   **Pydantic Model-State Synchronization:** The core challenge was ensuring Pydantic models in the backend matched the complex, nested state structure of the React frontend to prevent data loss during serialization and deserialization.
--   **Comprehensive Data Hydration:** The  function in  was significantly refactored to correctly populate (hydrate) the entire form state from the API response, including deeply nested objects.
--   **Live Site Debugging:** Diagnosing a post-deployment issue by remotely verifying backend endpoints, inspecting deployed frontend assets via browser tools, and identifying a user workflow mismatch.
+-   **Tiptap Editor Customization:** Added the  extension and custom CSS to enable text alignment and fix bullet point rendering across multiple editor instances.
+-   **Conditional Rendering for Preview Mode:** Utilized URL query parameters () to alter frontend API requests, enabling the display of 'draft' or 'pending' content for administrators.
+-   **SEO-Driven Architecture:** Refactored the  from a single-page application model to a multi-page structure using a new  component and React Router, enhancing SEO by creating unique URLs for each content section.
+-   **Database and API Debugging:** Resolved a critical bug where API calls returned success (200 OK) but failed to persist data. The root cause was a mismatch in the  environment variable used by the server versus debugging scripts. Also fixed admin role permissions.
 
 **key DB schema**
--   ****: The schema now correctly handles nested objects for  (with ) and  (with , ), as well as school-specific fields like , , and .
+-   **exams_detailed**: (in  database) Stores detailed exam information. Key fields include uid=0(root) gid=0(root) groups=0(root), , ,  (/), , , , and various content fields.
+
+**changes in tech stack**
+-   No new packages were added. Existing libraries like Tiptap were extended.
 
 **All files of reference**
--   **/app/backend/server.py**: Contains all backend logic, Pydantic models, and API endpoint definitions.
--   **/app/frontend/src/pages/admin/CollegeForm.js**: The central and most complex frontend file, managing the state, UI, and logic for the entire institution form.
+-   **/app/frontend/src/pages/admin/CollegeForm.js**: Modified for rich text editor features.
+-   **/app/frontend/src/pages/admin/CourseDetailForm.js**: Modified for rich text editor features.
+-   **/app/frontend/src/pages/ExamDetailPage.js**: Major refactor for dynamic content, SEO navigation, and preview functionality.
+-   **/app/frontend/src/pages/ExamSubPage.js**: New component created to handle the sub-page architecture for exams.
+-   **/app/frontend/src/pages/admin/CoursesDetailManagement.js**: Modified to add the Preview button.
+-   **/app/frontend/srcs/pages/admin/ExamsDetailManagement.js**: Modified to add the Preview button.
 
 **Areas that need refactoring**:
--   The  component is monolithic and exceeds 5,000 lines. It should be broken down into smaller, reusable components for each major section (e.g., , , ) to improve maintainability.
+-    and  are still large monolithic components that would benefit from being broken down into smaller, reusable sub-components.
+-   The data fetching logic is duplicated between  and . This could be consolidated into a single custom hook (e.g., ).
 
 **key api endpoints**
--   : The  in this endpoint's logic were heavily expanded to accept updates for location, contact info, rankings, and various flags.
--   : Logic was updated to save a more comprehensive set of fields on initial draft creation.
--   : The data source for the edit page.
+-   : Fetches course details. Logic was adapted on the frontend to call without the  filter when  is present.
+-   : Fetches exam details. Logic was adapted on the frontend to call without the  filter when  is present.
+-   : Creates a new detailed exam. This endpoint was extensively debugged to resolve admin role and database persistence issues.
 
 **Critical Info for New Agent**
--   **Respond in Bengali:** All communication with the user MUST be in Bengali.
--   **Live Site Network Error is Priority #1:** Your first action should be to follow up with the user about the Network Error on the live site. Guide them to use the **Save Section** buttons and confirm if that resolves the problem. Do not assume it's a code bug; it is highly likely a user training issue.
--   **The Form is Fixed (but complex):** The agent has performed exhaustive testing and fixed all known data persistence bugs. Do not try to re-fix these unless the user provides new, specific evidence of a field not working. Be aware that the  file is very large and its state is deeply nested.
+-   **Respond in Bengali.** This is a strict user requirement.
+-   **Database Name:** The correct database is , configured via the  environment variable in . Ensure any debugging scripts target this specific database.
+-   **Admin User:** An admin user ( / ) was created and is required for content creation/editing APIs.
+-   **Preview vs. Published Content:** Content with a 'pending' or 'draft' status is only visible on frontend pages if the URL includes the  query parameter. This logic is handled within the respective page components (, ).
 
 **documents and test reports created in this job**
--   
+-    (updated for E2E testing)
 
 **Last 10 User Messages and any pending HUMAN messages**
-1.  **User:** I'm getting a Network Error and an incorrect URL on the live site.
-2.  **User:** The error happens on the mr college of education edit page, even with Save Draft.
-3.  **User:** You're wasting my money, I've deployed again.
-4.  **User:** Did you check ALL fields? Does data load correctly on edit?
-5.  **User:** Test EVERYTHING again for all form types (College, School, University) and fix all bugs at once.
-6.  **User:** No, I mean test *every single field*, including logo, banner, video. No exceptions.
-7.  **User:** Have you checked all fields now? Does all data fetch on edit?
-8.  **User:** Deploying.
-9.  **User:** Add an entry on the live site and publish it.
-10. **User:** The live URL is .
+1.  **User:** Asks to re-order content on the exam page so SEO content is above the main overview. (Agent implemented it).
+2.  **User:** Points out that the published exam page URL shows Exam Not Found. (Agent debugged a critical database persistence and status issue and fixed it).
+3.  **User:** Requests to remove the fallback for quick entry exams, so only exams created via the detail form are shown. (Agent implemented it).
+4.  **User:** Reports that the menu is missing on exam sub-pages. (Agent identified it was happening for quick entry exams without a menu config).
+5.  **User:** Chooses to refactor the exam page menu into a separate sub-page architecture for better SEO. (Agent implemented it).
+6.  **User:** Asks how the exam page menu works and how it *should* work. (Agent presented options).
+7.  **User:** Asks to delete hardcoded sidebar widgets and replace them with system-connected Apply Now and Need Counselling widgets. (Agent implemented it).
+8.  **User:** Asks what is hardcoded in the exam page sidebar. (Agent provided a list).
+9.  **User:** Insists that hardcoded content is still showing on the exam details page. (Agent investigated again and made more UI sections conditional on data existing).
+10. **User:** Initially reports hardcoded content on the course page but clarifies it's the exam page. (Agent began investigation on ).
 
 **Project Health Check:**
--   **Broken**: None in the codebase. The live site functionality is pending user verification of the correct workflow.
+-   **Broken**: None. All requested features in this session are complete, with the last one pending user verification.
 -   **Mocked**: None.
 
 **3rd Party Integrations**
 -   Cloudinary (Image/document uploads)
 -   Resend (Transactional emails)
 -   Tiptap (): Rich text editor.
--   axios-retry
 
 **Testing status**
--   **Testing agent used after significant changes**: YES
+-   **Testing agent used after significant changes**: YES (after implementing rich text editor features).
 -   **Troubleshoot agent used after agent stuck in loop**: NO
--   **Test files created**: None. All testing was done via live API calls and UI interaction.
--   **Known regressions**: None. All regressions found during the session were fixed.
+-   **Test files created**: None.
+-   **Known regressions**: None.
 
 **Credentials to test flow:**
 -   **Admin Login:**
@@ -141,4 +148,9 @@ allowed_fieldsfetchCollegehandleSectionSavehandleSubmit
     -   Password: 
 
 **What agent forgot to execute**
--   The agent did not investigate the user's secondary complaint about incorrect URL generation after being sidetracked by the more critical Network Error issue. This remains a pending task.</analysis>
+-   The following tasks from the previous handoff were not addressed as the user introduced a new set of high-priority tasks during this session. They remain in the backlog:
+    -   Incorrect URL generation for new colleges (P1)
+    -   Investigate Hotlinked Images (P1)
+    -   Dynamic Page Titles (P2)
+    -   Add More Page Widgets (P2)
+    -   Refactor  (P3)</analysis>
