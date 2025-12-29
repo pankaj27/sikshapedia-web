@@ -52,6 +52,7 @@ const ExamDetailPage = () => {
     fullName: examFromApi.full_name || examFromApi.name,
     description: examFromApi.description || '',
     conductor: examFromApi.conducting_body || '',
+    logoUrl: examFromApi.logo_url || '',
     questionPapers: examFromApi.question_papers?.reduce((acc, paper) => {
       const year = paper.year || '2024';
       if (!acc[year]) acc[year] = [];
