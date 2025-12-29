@@ -251,8 +251,8 @@ const CourseDetailPage = () => {
         <meta property="og:title" content={sectionMeta.title} />
         <meta property="og:description" content={sectionMeta.description} />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content={`${window.location.origin}/courses/${slug}${urlSection ? `/${urlSection}` : ''}`} />
-        <link rel="canonical" href={`${window.location.origin}/courses/${slug}${urlSection ? `/${urlSection}` : ''}`} />
+        <meta property="og:url" content={`${window.location.origin}/courses/${slug}`} />
+        <link rel="canonical" href={`${window.location.origin}/courses/${slug}`} />
       </Helmet>
 
       {/* Hero Section */}
