@@ -5074,11 +5074,14 @@ async def delete_study_material(material_id: str):
 async def get_exams_detail(
     skip: int = Query(0, ge=0),
     limit: int = Query(20, ge=1, le=1000),
-    status: Optional[str] = Query(None)
+    status: Optional[str] = Query(None),
+    slug: Optional[str] = Query(None)
 ):
     query = {}
     if status:
         query['status'] = status
+    if slug:
+        query['slug'] = slug
     
     exams = await db.exams_detailed.find(query, {"_id": 0}).skip(skip).limit(limit).to_list(limit)
     return exams
