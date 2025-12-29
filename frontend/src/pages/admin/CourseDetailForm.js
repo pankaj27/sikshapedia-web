@@ -3619,10 +3619,10 @@ const CourseDetailForm = () => {
                                         <table className="w-full border-collapse">
                                           <thead>
                                             {/* Delete Column buttons row */}
-                                            <tr>
-                                              {(block.headers || []).map((header, hIndex) => (
-                                                <th key={hIndex} className="border-x-2 border-t-2 border-teal-200 bg-red-50 p-1 text-center">
-                                                  {block.headers.length > 1 && (
+                                            {block.headers && block.headers.length > 1 && (
+                                              <tr>
+                                                {block.headers.map((_, hIndex) => (
+                                                  <th key={hIndex} className="border-x-2 border-t-2 border-red-200 bg-red-50 p-1 text-center">
                                                     <button type="button" onClick={() => {
                                                       const newToc = [...(formData.seo_toc || [])];
                                                       newToc[index].blocks[blockIndex].headers.splice(hIndex, 1);
@@ -3632,14 +3632,14 @@ const CourseDetailForm = () => {
                                                         return newRow;
                                                       });
                                                       setFormData({...formData, seo_toc: newToc});
-                                                    }} className="text-red-500 hover:text-red-700 hover:bg-red-100 rounded text-xs px-1" title="Delete Column">
-                                                      ✕ Del
+                                                    }} className="bg-red-500 text-white hover:bg-red-600 rounded text-xs px-2 py-0.5 font-bold" title="Delete Column">
+                                                      ✕
                                                     </button>
-                                                  )}
-                                                </th>
-                                              ))}
-                                              <th className="border-x-2 border-t-2 border-teal-200 bg-teal-50 p-1 w-12"></th>
-                                            </tr>
+                                                  </th>
+                                                ))}
+                                                <th className="border-x-2 border-t-2 border-teal-200 bg-teal-50 p-1 w-12"></th>
+                                              </tr>
+                                            )}
                                             {/* Headers row */}
                                             <tr>
                                               {(block.headers || []).map((header, hIndex) => (
