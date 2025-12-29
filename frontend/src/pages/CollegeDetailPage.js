@@ -2645,7 +2645,7 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
                   ) : (
                     // Fallback to generated news
                     [
-                      { title: `Admission ${year + 1} Opens`, date: `Dec 12, ${year}` },
+                      { title: `Admission ${year} Opens`, date: `Dec 12, ${year - 1}` },
                       { title: 'Placement Results Announced', date: `Dec 6, ${year}` },
                       { title: 'New Course Launch', date: `Nov 28, ${year}` }
                     ].map((news, i) => (
