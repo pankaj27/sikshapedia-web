@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { FiChevronRight, FiChevronDown, FiChevronUp, FiClock, FiDollarSign, FiBook, FiUsers, FiSend, FiMessageCircle, FiPhone, FiMapPin, FiCalendar, FiAward, FiTrendingUp, FiCheckCircle, FiDownload, FiShare2, FiHeart, FiStar, FiBriefcase, FiLayers, FiList, FiImage } from 'react-icons/fi';
 import { HiOutlineAcademicCap, HiOutlineOfficeBuilding, HiOutlineLightBulb, HiOutlineDocumentText } from 'react-icons/hi';
 import api from '../api/axios';
@@ -12,10 +13,10 @@ import AuthorInfo from '../components/AuthorInfo';
 
 import { Link } from '../components/CustomLink';
 const CourseDetailPage = () => {
-  const { slug } = useParams();
+  const { slug, section: urlSection } = useParams();
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState(urlSection || 'overview');
   const [activeWidget, setActiveWidget] = useState(null);
   const [expandedFaq, setExpandedFaq] = useState(null);
   const [isSaved, setIsSaved] = useState(false);
