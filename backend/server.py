@@ -3116,7 +3116,7 @@ async def admin_login(credentials: UserLogin):
 @api_router.get("/admin/profile")
 async def get_admin_profile(current_user: User = Depends(get_current_user)):
     """Get admin profile"""
-    if current_user.role != "admin":
+    if current_user.role not in ["admin", "super_admin"]:
         raise HTTPException(status_code=403, detail="Admin access required")
     
     admin_doc = await db.admins.find_one({"id": current_user.id}, {"_id": 0, "password_hash": 0})
@@ -3134,7 +3134,7 @@ class AdminProfileUpdate(BaseModel):
 @api_router.put("/admin/profile")
 async def update_admin_profile(profile_data: AdminProfileUpdate, current_user: User = Depends(get_current_user)):
     """Update admin profile - name, photo, job title, bio"""
-    if current_user.role != "admin":
+    if current_user.role not in ["admin", "super_admin"]:
         raise HTTPException(status_code=403, detail="Admin access required")
     
     update_data = {}
@@ -3198,7 +3198,7 @@ async def update_admin_profile(profile_data: AdminProfileUpdate, current_user: U
 @api_router.get("/admin/authors")
 async def get_authors_for_content(current_user: User = Depends(get_current_user)):
     """Get team members for author selection in content forms (any admin)"""
-    if current_user.role != "admin":
+    if current_user.role not in ["admin", "super_admin"]:
         raise HTTPException(status_code=403, detail="Admin access required")
     
     # Get all active team members (exclude password_hash only)
@@ -3962,7 +3962,7 @@ async def upload_user_document(
 @api_router.get("/admin/stats")
 async def get_admin_stats(current_user: User = Depends(get_current_user)):
     """Get platform statistics for admin dashboard"""
-    if current_user.role != "admin":
+    if current_user.role not in ["admin", "super_admin"]:
         raise HTTPException(status_code=403, detail="Admin access required")
     
     # Count from colleges collection by institution_type
@@ -4373,7 +4373,7 @@ async def update_college_seo_content_section(college_id: str, data: dict, curren
 
 @api_router.delete("/colleges/{college_id}")
 async def delete_college(college_id: str, current_user: User = Depends(get_current_user)):
-    if current_user.role != "admin":
+    if current_user.role not in ["admin", "super_admin"]:
         raise HTTPException(status_code=403, detail="Only admins can delete colleges")
     
     result = await db.colleges.delete_one({"id": college_id})
@@ -4385,7 +4385,7 @@ async def delete_college(college_id: str, current_user: User = Depends(get_curre
 @api_router.post("/colleges/{college_id}/generate-credentials")
 async def generate_college_credentials(college_id: str, background_tasks: BackgroundTasks, current_user: User = Depends(get_current_user)):
     """Generate institute login credentials for an existing college"""
-    if current_user.role != "admin":
+    if current_user.role not in ["admin", "super_admin"]:
         raise HTTPException(status_code=403, detail="Only admins can generate credentials")
     
     college = await db.colleges.find_one({"id": college_id}, {"_id": 0})
@@ -4424,7 +4424,7 @@ async def generate_college_credentials(college_id: str, background_tasks: Backgr
 @api_router.get("/admin/credential-reports")
 async def get_all_credential_reports(current_user: User = Depends(get_current_user)):
     """Get all credential reports (Admin only)"""
-    if current_user.role != "admin":
+    if current_user.role not in ["admin", "super_admin"]:
         raise HTTPException(status_code=403, detail="Only admins can view credential reports")
     
     reports = await db.credential_reports.find({}, {"_id": 0}).sort("created_at", -1).to_list(500)
@@ -5093,7 +5093,7 @@ async def get_exam_detail(exam_id: str):
 
 @api_router.post("/exams-detail")
 async def create_exam_detail(exam_data: dict, current_user: User = Depends(get_current_user)):
-    if current_user.role != "admin":
+    if current_user.role not in ["admin", "super_admin"]:
         raise HTTPException(status_code=403, detail="Only admins can create exams")
     
     # Generate ID if not provided
@@ -5127,7 +5127,7 @@ async def create_exam_detail(exam_data: dict, current_user: User = Depends(get_c
 
 @api_router.put("/exams-detail/{exam_id}")
 async def update_exam_detail(exam_id: str, exam_data: dict, current_user: User = Depends(get_current_user)):
-    if current_user.role != "admin":
+    if current_user.role not in ["admin", "super_admin"]:
         raise HTTPException(status_code=403, detail="Only admins can update exams")
     
     existing_exam = await db.exams_detailed.find_one({"id": exam_id}, {"_id": 0})
@@ -5167,7 +5167,7 @@ async def update_exam_detail(exam_id: str, exam_data: dict, current_user: User =
 
 @api_router.delete("/exams-detail/{exam_id}")
 async def delete_exam_detail(exam_id: str, current_user: User = Depends(get_current_user)):
-    if current_user.role != "admin":
+    if current_user.role not in ["admin", "super_admin"]:
         raise HTTPException(status_code=403, detail="Only admins can delete exams")
     
     result = await db.exams_detailed.delete_one({"id": exam_id})
@@ -5185,7 +5185,7 @@ async def delete_exam_detail(exam_id: str, current_user: User = Depends(get_curr
 @api_router.patch("/exams-detail/{exam_id}/section/basic")
 async def update_exam_detail_basic_section(exam_id: str, data: dict, current_user: User = Depends(get_current_user)):
     """Update basic info section: name, slug, exam_type, conducting_body, etc."""
-    if current_user.role != "admin":
+    if current_user.role not in ["admin", "super_admin"]:
         raise HTTPException(status_code=403, detail="Only admins can update exams")
     
     existing = await db.exams_detailed.find_one({"id": exam_id}, {"_id": 0})
@@ -5208,7 +5208,7 @@ async def update_exam_detail_basic_section(exam_id: str, data: dict, current_use
 @api_router.patch("/exams-detail/{exam_id}/section/dates")
 async def update_exam_detail_dates_section(exam_id: str, data: dict, current_user: User = Depends(get_current_user)):
     """Update important dates section"""
-    if current_user.role != "admin":
+    if current_user.role not in ["admin", "super_admin"]:
         raise HTTPException(status_code=403, detail="Only admins can update exams")
     
     existing = await db.exams_detailed.find_one({"id": exam_id}, {"_id": 0})
@@ -5230,7 +5230,7 @@ async def update_exam_detail_dates_section(exam_id: str, data: dict, current_use
 @api_router.patch("/exams-detail/{exam_id}/section/pattern")
 async def update_exam_detail_pattern_section(exam_id: str, data: dict, current_user: User = Depends(get_current_user)):
     """Update exam pattern & config section"""
-    if current_user.role != "admin":
+    if current_user.role not in ["admin", "super_admin"]:
         raise HTTPException(status_code=403, detail="Only admins can update exams")
     
     existing = await db.exams_detailed.find_one({"id": exam_id}, {"_id": 0})
@@ -5253,7 +5253,7 @@ async def update_exam_detail_pattern_section(exam_id: str, data: dict, current_u
 @api_router.patch("/exams-detail/{exam_id}/section/content")
 async def update_exam_detail_content_section(exam_id: str, data: dict, current_user: User = Depends(get_current_user)):
     """Update content section: key_summary, preparation_tips, cutoffs, etc."""
-    if current_user.role != "admin":
+    if current_user.role not in ["admin", "super_admin"]:
         raise HTTPException(status_code=403, detail="Only admins can update exams")
     
     existing = await db.exams_detailed.find_one({"id": exam_id}, {"_id": 0})
@@ -5276,7 +5276,7 @@ async def update_exam_detail_content_section(exam_id: str, data: dict, current_u
 @api_router.patch("/exams-detail/{exam_id}/section/media")
 async def update_exam_detail_media_section(exam_id: str, data: dict, current_user: User = Depends(get_current_user)):
     """Update media section: logo, images, videos"""
-    if current_user.role != "admin":
+    if current_user.role not in ["admin", "super_admin"]:
         raise HTTPException(status_code=403, detail="Only admins can update exams")
     
     existing = await db.exams_detailed.find_one({"id": exam_id}, {"_id": 0})
@@ -5298,7 +5298,7 @@ async def update_exam_detail_media_section(exam_id: str, data: dict, current_use
 @api_router.patch("/exams-detail/{exam_id}/section/seo")
 async def update_exam_detail_seo_section(exam_id: str, data: dict, current_user: User = Depends(get_current_user)):
     """Update SEO section: meta tags, seo content, TOC, FAQs"""
-    if current_user.role != "admin":
+    if current_user.role not in ["admin", "super_admin"]:
         raise HTTPException(status_code=403, detail="Only admins can update exams")
     
     existing = await db.exams_detailed.find_one({"id": exam_id}, {"_id": 0})
@@ -5321,7 +5321,7 @@ async def update_exam_detail_seo_section(exam_id: str, data: dict, current_user:
 @api_router.patch("/exams-detail/{exam_id}/section/menu")
 async def update_exam_detail_menu_section(exam_id: str, data: dict, current_user: User = Depends(get_current_user)):
     """Update menu configuration section (largest data, contains all sub-page content)"""
-    if current_user.role != "admin":
+    if current_user.role not in ["admin", "super_admin"]:
         raise HTTPException(status_code=403, detail="Only admins can update exams")
     
     existing = await db.exams_detailed.find_one({"id": exam_id}, {"_id": 0})
@@ -5409,7 +5409,7 @@ async def update_application_status(
     status: str,
     current_user: User = Depends(get_current_user)
 ):
-    if current_user.role != "admin":
+    if current_user.role not in ["admin", "super_admin"]:
         raise HTTPException(status_code=403, detail="Only admins can update application status")
     
     valid_statuses = ["submitted", "under_review", "accepted", "rejected"]
@@ -5890,7 +5890,7 @@ async def get_study_material(material_id: str):
 
 @api_router.post("/study-materials", response_model=StudyMaterial)
 async def create_study_material(material_data: StudyMaterialCreate, current_user: User = Depends(get_current_user)):
-    if current_user.role != "admin":
+    if current_user.role not in ["admin", "super_admin"]:
         raise HTTPException(status_code=403, detail="Only admins can create study materials")
     
     material = StudyMaterial(**material_data.model_dump())
