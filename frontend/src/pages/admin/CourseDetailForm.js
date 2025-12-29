@@ -1462,7 +1462,7 @@ const CourseDetailForm = () => {
                   </label>
                 ))}
                 {exams.filter(exam => exam.name.toLowerCase().includes(examSearch.toLowerCase())).length === 0 && (
-                  <p className="text-sm text-gray-500 text-center py-2">No exams found matching "{examSearch}"</p>
+                  <p className="text-sm text-gray-500 text-center py-2">No exams found matching &quot;{examSearch}&quot;</p>
                 )}
               </div>
               {formData.exam_ids?.length > 0 && (
