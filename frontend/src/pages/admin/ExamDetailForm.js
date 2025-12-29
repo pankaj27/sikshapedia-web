@@ -3367,37 +3367,249 @@ const ExamDetailForm = () => {
 
             {/* SEO Full Content */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">SEO Full Content (HTML Supported)</label>
-              <textarea name="seo_full_content" value={formData.seo_full_content} onChange={handleChange} rows="8" placeholder="Full SEO content with HTML..."
-                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 font-mono text-sm" />
+              <label className="block text-sm font-medium text-gray-700 mb-1">SEO Full Content</label>
+              <p className="text-xs text-gray-500 mb-2">Full rich text editor with bullets, links, alignment, tables (add/remove rows & columns), images, and videos</p>
+              <RichTextEditorWithTable 
+                value={formData.seo_full_content} 
+                onChange={(content) => setFormData({ ...formData, seo_full_content: content })}
+                placeholder="Full SEO content..."
+                minHeight="300px"
+              />
             </div>
 
-            {/* Table of Contents Builder */}
+            {/* Table of Contents Builder - Rich Text with Images */}
             <div className="border-2 border-purple-300 rounded-lg p-4 bg-purple-50">
               <div className="flex items-center justify-between mb-4">
                 <div>
                   <label className="block text-sm font-medium text-purple-800">📑 Table of Contents Builder</label>
-                  <p className="text-xs text-purple-600">Create clickable TOC sections with content</p>
+                  <p className="text-xs text-purple-600">Create TOC sections with rich text content, images, and formatting</p>
                 </div>
                 <span className="text-xs bg-purple-200 text-purple-800 px-2 py-1 rounded">{formData.seo_toc?.length || 0} sections</span>
               </div>
               
-              <div className="space-y-3 mb-4">
+              <div className="space-y-4 mb-4">
                 {(formData.seo_toc || []).map((item, index) => (
-                  <div key={index} className="bg-white rounded-lg border-2 border-purple-200 p-3">
+                  <div key={index} className="bg-white rounded-lg border-2 border-purple-200 p-4">
                     <div className="flex items-start gap-3">
                       <div className="flex items-center justify-center w-8 h-8 bg-purple-100 text-purple-800 rounded-full font-bold text-sm flex-shrink-0">{index + 1}</div>
-                      <div className="flex-1 space-y-2">
-                        <div className="grid grid-cols-2 gap-2">
-                          <div><label className="block text-xs text-gray-600 mb-1">Section Title *</label>
+                      <div className="flex-1 space-y-3">
+                        {/* Title and Anchor */}
+                        <div className="grid grid-cols-2 gap-3">
+                          <div>
+                            <label className="block text-xs text-gray-600 mb-1">Section Title *</label>
                             <input type="text" value={item.title || ''} onChange={(e) => {
                               const newToc = [...(formData.seo_toc || [])];
                               newToc[index].title = e.target.value;
                               newToc[index].anchor = e.target.value.toLowerCase().replace(/[^a-z0-9\s]/g, '').replace(/\s+/g, '-').substring(0, 50);
                               setFormData({...formData, seo_toc: newToc});
-                            }} placeholder="e.g., Exam Overview" className="w-full border-2 border-purple-200 rounded px-2 py-1.5 text-sm" /></div>
-                          <div><label className="block text-xs text-gray-600 mb-1">Anchor ID</label>
+                            }} placeholder="e.g., Exam Overview" className="w-full border-2 border-purple-200 rounded px-3 py-2 text-sm" />
+                          </div>
+                          <div>
+                            <label className="block text-xs text-gray-600 mb-1">Anchor ID</label>
                             <input type="text" value={item.anchor || ''} onChange={(e) => {
+                              const newToc = [...(formData.seo_toc || [])];
+                              newToc[index].anchor = e.target.value;
+                              setFormData({...formData, seo_toc: newToc});
+                            }} placeholder="exam-overview" className="w-full border-2 border-gray-200 rounded px-3 py-2 text-sm font-mono bg-gray-50" />
+                          </div>
+                        </div>
+                        
+                        {/* Rich Text Content */}
+                        <div>
+                          <label className="block text-xs text-gray-600 mb-1">Section Content (Rich Text)</label>
+                          <SimpleRichTextEditor
+                            value={item.content || ''}
+                            onChange={(content) => {
+                              const newToc = [...(formData.seo_toc || [])];
+                              newToc[index].content = content;
+                              setFormData({...formData, seo_toc: newToc});
+                            }}
+                            placeholder="Section content with bullets, links, formatting..."
+                          />
+                        </div>
+
+                        {/* Text Blocks for additional rich content */}
+                        <div>
+                          <label className="block text-xs text-gray-600 mb-1">Text Blocks (Optional Rich Content)</label>
+                          <div className="space-y-2">
+                            {(item.blocks || []).map((block, bIdx) => (
+                              <div key={bIdx} className="relative border border-gray-200 rounded-lg p-2 bg-gray-50">
+                                <div className="absolute top-2 right-2 flex gap-1">
+                                  <button type="button" onClick={() => {
+                                    const newToc = [...(formData.seo_toc || [])];
+                                    newToc[index].blocks = (newToc[index].blocks || []).filter((_, i) => i !== bIdx);
+                                    setFormData({...formData, seo_toc: newToc});
+                                  }} className="text-red-500 hover:bg-red-50 p-1 rounded text-xs">
+                                    <FiTrash2 size={12} />
+                                  </button>
+                                </div>
+                                <SimpleRichTextEditor
+                                  value={block.content || ''}
+                                  onChange={(content) => {
+                                    const newToc = [...(formData.seo_toc || [])];
+                                    if (!newToc[index].blocks) newToc[index].blocks = [];
+                                    newToc[index].blocks[bIdx] = { ...block, content };
+                                    setFormData({...formData, seo_toc: newToc});
+                                  }}
+                                  placeholder="Additional content block..."
+                                />
+                              </div>
+                            ))}
+                            <button type="button" onClick={() => {
+                              const newToc = [...(formData.seo_toc || [])];
+                              if (!newToc[index].blocks) newToc[index].blocks = [];
+                              newToc[index].blocks.push({ content: '' });
+                              setFormData({...formData, seo_toc: newToc});
+                            }} className="text-xs text-purple-600 hover:text-purple-800 flex items-center gap-1">
+                              <FiPlus size={12} /> Add Text Block
+                            </button>
+                          </div>
+                        </div>
+
+                        {/* TOC Images */}
+                        <div>
+                          <label className="block text-xs text-gray-600 mb-1">Images (with Auto Alt Tags)</label>
+                          <div className="space-y-2">
+                            {(item.images || []).map((img, imgIdx) => (
+                              <div key={imgIdx} className="flex items-center gap-2 p-2 bg-gray-50 rounded border border-gray-200">
+                                {img.url && <img src={img.url} alt={img.alt} className="w-16 h-16 object-cover rounded" />}
+                                <div className="flex-1 space-y-1">
+                                  <input type="text" value={img.url || ''} onChange={(e) => {
+                                    const newToc = [...(formData.seo_toc || [])];
+                                    if (!newToc[index].images) newToc[index].images = [];
+                                    newToc[index].images[imgIdx] = { 
+                                      ...img, 
+                                      url: e.target.value,
+                                      alt: img.alt || generateAltTag(formData.name, item.title, imgIdx)
+                                    };
+                                    setFormData({...formData, seo_toc: newToc});
+                                  }} placeholder="Image URL" className="w-full border border-gray-200 rounded px-2 py-1 text-xs" />
+                                  <div className="flex gap-2">
+                                    <input type="text" value={img.alt || ''} onChange={(e) => {
+                                      const newToc = [...(formData.seo_toc || [])];
+                                      newToc[index].images[imgIdx].alt = e.target.value;
+                                      setFormData({...formData, seo_toc: newToc});
+                                    }} placeholder="Alt text" className="flex-1 border border-gray-200 rounded px-2 py-1 text-xs" />
+                                    <button type="button" onClick={() => {
+                                      const newToc = [...(formData.seo_toc || [])];
+                                      newToc[index].images[imgIdx].alt = generateAltTag(formData.name, item.title, imgIdx);
+                                      setFormData({...formData, seo_toc: newToc});
+                                    }} className="text-xs text-blue-600 hover:text-blue-800 px-2 py-1 border border-blue-200 rounded bg-blue-50" title="Auto Generate Alt">
+                                      🪄 Auto
+                                    </button>
+                                  </div>
+                                </div>
+                                <button type="button" onClick={() => {
+                                  const newToc = [...(formData.seo_toc || [])];
+                                  newToc[index].images = (newToc[index].images || []).filter((_, i) => i !== imgIdx);
+                                  setFormData({...formData, seo_toc: newToc});
+                                }} className="text-red-500 hover:bg-red-50 p-1 rounded">
+                                  <FiTrash2 size={12} />
+                                </button>
+                              </div>
+                            ))}
+                            <button type="button" onClick={() => {
+                              const newToc = [...(formData.seo_toc || [])];
+                              if (!newToc[index].images) newToc[index].images = [];
+                              newToc[index].images.push({ url: '', alt: generateAltTag(formData.name, item.title, newToc[index].images.length), caption: '' });
+                              setFormData({...formData, seo_toc: newToc});
+                            }} className="text-xs text-green-600 hover:text-green-800 flex items-center gap-1">
+                              <FiImage size={12} /> Add Image
+                            </button>
+                          </div>
+                        </div>
+
+                        {/* TOC Videos */}
+                        <div>
+                          <label className="block text-xs text-gray-600 mb-1">Videos (with Auto Alt Tags)</label>
+                          <div className="space-y-2">
+                            {(item.videos || []).map((vid, vidIdx) => (
+                              <div key={vidIdx} className="flex items-center gap-2 p-2 bg-gray-50 rounded border border-gray-200">
+                                <FiVideo className="text-red-500" />
+                                <div className="flex-1 space-y-1">
+                                  <input type="text" value={vid.url || ''} onChange={(e) => {
+                                    const newToc = [...(formData.seo_toc || [])];
+                                    if (!newToc[index].videos) newToc[index].videos = [];
+                                    newToc[index].videos[vidIdx] = { 
+                                      ...vid, 
+                                      url: e.target.value,
+                                      alt: vid.alt || generateVideoAlt(formData.name, item.title, vidIdx)
+                                    };
+                                    setFormData({...formData, seo_toc: newToc});
+                                  }} placeholder="YouTube/Video URL" className="w-full border border-gray-200 rounded px-2 py-1 text-xs" />
+                                  <div className="flex gap-2">
+                                    <input type="text" value={vid.title || ''} onChange={(e) => {
+                                      const newToc = [...(formData.seo_toc || [])];
+                                      newToc[index].videos[vidIdx].title = e.target.value;
+                                      setFormData({...formData, seo_toc: newToc});
+                                    }} placeholder="Video Title" className="flex-1 border border-gray-200 rounded px-2 py-1 text-xs" />
+                                    <input type="text" value={vid.alt || ''} onChange={(e) => {
+                                      const newToc = [...(formData.seo_toc || [])];
+                                      newToc[index].videos[vidIdx].alt = e.target.value;
+                                      setFormData({...formData, seo_toc: newToc});
+                                    }} placeholder="Alt text" className="flex-1 border border-gray-200 rounded px-2 py-1 text-xs" />
+                                    <button type="button" onClick={() => {
+                                      const newToc = [...(formData.seo_toc || [])];
+                                      newToc[index].videos[vidIdx].alt = generateVideoAlt(formData.name, item.title, vidIdx);
+                                      setFormData({...formData, seo_toc: newToc});
+                                    }} className="text-xs text-blue-600 hover:text-blue-800 px-2 py-1 border border-blue-200 rounded bg-blue-50" title="Auto Generate Alt">
+                                      🪄 Auto
+                                    </button>
+                                  </div>
+                                </div>
+                                <button type="button" onClick={() => {
+                                  const newToc = [...(formData.seo_toc || [])];
+                                  newToc[index].videos = (newToc[index].videos || []).filter((_, i) => i !== vidIdx);
+                                  setFormData({...formData, seo_toc: newToc});
+                                }} className="text-red-500 hover:bg-red-50 p-1 rounded">
+                                  <FiTrash2 size={12} />
+                                </button>
+                              </div>
+                            ))}
+                            <button type="button" onClick={() => {
+                              const newToc = [...(formData.seo_toc || [])];
+                              if (!newToc[index].videos) newToc[index].videos = [];
+                              newToc[index].videos.push({ url: '', title: '', alt: generateVideoAlt(formData.name, item.title, newToc[index].videos.length) });
+                              setFormData({...formData, seo_toc: newToc});
+                            }} className="text-xs text-red-600 hover:text-red-800 flex items-center gap-1">
+                              <FiVideo size={12} /> Add Video
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* Delete TOC Item */}
+                      <button type="button" onClick={() => setFormData({...formData, seo_toc: (formData.seo_toc || []).filter((_, i) => i !== index)})} className="text-red-500 hover:bg-red-50 p-2 rounded">
+                        <FiTrash2 />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              
+              {/* Add TOC Section */}
+              <button type="button" onClick={() => setFormData({...formData, seo_toc: [...(formData.seo_toc || []), { title: '', anchor: '', content: '', blocks: [], images: [], videos: [] }]})}
+                className="flex items-center gap-2 px-4 py-2 border border-dashed border-purple-400 rounded-lg text-purple-600 hover:bg-purple-100 w-full justify-center">
+                <FiPlus className="w-4 h-4" /> Add TOC Section
+              </button>
+              
+              {/* Quick Add Templates */}
+              <div className="mt-3 flex flex-wrap gap-2">
+                <span className="text-xs text-purple-700">Quick Add:</span>
+                {['Overview', 'Eligibility', 'Syllabus', 'Exam Pattern', 'How to Apply', 'Important Dates', 'Cut-off', 'Result', 'FAQs'].map(template => {
+                  const anchor = template.toLowerCase().replace(/\s+/g, '-');
+                  return (
+                    <button key={template} type="button" onClick={() => {
+                      if (!(formData.seo_toc || []).some(t => t.anchor === anchor)) {
+                        setFormData({...formData, seo_toc: [...(formData.seo_toc || []), { title: template, anchor, content: '', blocks: [], images: [], videos: [] }]});
+                      }
+                    }} className="text-xs px-2 py-1 border border-purple-300 rounded-full hover:bg-purple-200 text-purple-700">
+                      + {template}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
                               const newToc = [...(formData.seo_toc || [])];
                               newToc[index].anchor = e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '');
                               setFormData({...formData, seo_toc: newToc});
