@@ -3621,11 +3621,27 @@ const CourseDetailForm = () => {
                                             <tr>
                                               {(block.headers || []).map((header, hIndex) => (
                                                 <th key={hIndex} className="border-2 border-teal-200 bg-teal-50 p-2">
-                                                  <input type="text" value={header} onChange={(e) => {
-                                                    const newToc = [...(formData.seo_toc || [])];
-                                                    newToc[index].blocks[blockIndex].headers[hIndex] = e.target.value;
-                                                    setFormData({...formData, seo_toc: newToc});
-                                                  }} className="w-full border-0 bg-transparent text-center font-bold text-sm" placeholder={`Header ${hIndex + 1}`} />
+                                                  <div className="flex items-center gap-1">
+                                                    <input type="text" value={header} onChange={(e) => {
+                                                      const newToc = [...(formData.seo_toc || [])];
+                                                      newToc[index].blocks[blockIndex].headers[hIndex] = e.target.value;
+                                                      setFormData({...formData, seo_toc: newToc});
+                                                    }} className="w-full border-0 bg-transparent text-center font-bold text-sm" placeholder={`Header ${hIndex + 1}`} />
+                                                    {block.headers.length > 1 && (
+                                                      <button type="button" onClick={() => {
+                                                        const newToc = [...(formData.seo_toc || [])];
+                                                        newToc[index].blocks[blockIndex].headers.splice(hIndex, 1);
+                                                        newToc[index].blocks[blockIndex].rows = newToc[index].blocks[blockIndex].rows.map(row => {
+                                                          const newRow = [...row];
+                                                          newRow.splice(hIndex, 1);
+                                                          return newRow;
+                                                        });
+                                                        setFormData({...formData, seo_toc: newToc});
+                                                      }} className="text-red-500 hover:text-red-700 text-xs flex-shrink-0" title="Delete Column">
+                                                        ✕
+                                                      </button>
+                                                    )}
+                                                  </div>
                                                 </th>
                                               ))}
                                               <th className="border-2 border-teal-200 bg-teal-50 p-2 w-20">
@@ -3634,7 +3650,7 @@ const CourseDetailForm = () => {
                                                   newToc[index].blocks[blockIndex].headers.push('');
                                                   newToc[index].blocks[blockIndex].rows = newToc[index].blocks[blockIndex].rows.map(row => [...row, '']);
                                                   setFormData({...formData, seo_toc: newToc});
-                                                }} className="text-teal-600 hover:bg-teal-100 p-1 rounded">
+                                                }} className="text-teal-600 hover:bg-teal-100 p-1 rounded" title="Add Column">
                                                   <FiPlus size={14} />
                                                 </button>
                                               </th>
@@ -3653,13 +3669,15 @@ const CourseDetailForm = () => {
                                                   </td>
                                                 ))}
                                                 <td className="border-2 border-gray-200 p-2">
-                                                  <button type="button" onClick={() => {
-                                                    const newToc = [...(formData.seo_toc || [])];
-                                                    newToc[index].blocks[blockIndex].rows = newToc[index].blocks[blockIndex].rows.filter((_, i) => i !== rIndex);
-                                                    setFormData({...formData, seo_toc: newToc});
-                                                  }} className="text-red-500 hover:bg-red-50 p-1 rounded">
-                                                    <FiTrash2 size={12} />
-                                                  </button>
+                                                  {block.rows.length > 1 && (
+                                                    <button type="button" onClick={() => {
+                                                      const newToc = [...(formData.seo_toc || [])];
+                                                      newToc[index].blocks[blockIndex].rows = newToc[index].blocks[blockIndex].rows.filter((_, i) => i !== rIndex);
+                                                      setFormData({...formData, seo_toc: newToc});
+                                                    }} className="text-red-500 hover:bg-red-50 p-1 rounded" title="Delete Row">
+                                                      <FiTrash2 size={12} />
+                                                    </button>
+                                                  )}
                                                 </td>
                                               </tr>
                                             ))}
