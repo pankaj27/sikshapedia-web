@@ -3610,47 +3610,6 @@ const ExamDetailForm = () => {
                 })}
               </div>
             </div>
-                              const newToc = [...(formData.seo_toc || [])];
-                              newToc[index].anchor = e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '');
-                              setFormData({...formData, seo_toc: newToc});
-                            }} placeholder="exam-overview" className="w-full border rounded px-2 py-1.5 text-sm font-mono bg-gray-50" /></div>
-                        </div>
-                        <div><label className="block text-xs text-gray-600 mb-1">Section Content *</label>
-                          <textarea value={item.content || ''} onChange={(e) => {
-                            const newToc = [...(formData.seo_toc || [])];
-                            newToc[index].content = e.target.value;
-                            setFormData({...formData, seo_toc: newToc});
-                          }} placeholder="Write content for this section..." rows="4" className="w-full border rounded px-2 py-1.5 text-sm" /></div>
-                        <button type="button" onClick={() => {
-                          const html = `<h2 id="${item.anchor}">${item.title}</h2>\n<div class="toc-section">\n${item.content}\n</div>`;
-                          navigator.clipboard.writeText(html);
-                          alert('Section HTML copied!');
-                        }} className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded hover:bg-purple-200">📋 Copy Section HTML</button>
-                      </div>
-                      <button type="button" onClick={() => setFormData({...formData, seo_toc: (formData.seo_toc || []).filter((_, i) => i !== index)})} className="text-red-500 hover:bg-red-50 p-1.5 rounded"><FiTrash2 /></button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              
-              <button type="button" onClick={() => setFormData({...formData, seo_toc: [...(formData.seo_toc || []), { title: '', anchor: '', content: '' }]})}
-                className="text-sm text-purple-700 hover:bg-purple-100 px-3 py-1.5 rounded border border-purple-300 flex items-center gap-1"><FiPlus /> Add TOC Section</button>
-              
-              {/* Quick Add Templates */}
-              <div className="mt-4 p-3 bg-white border border-purple-200 rounded-lg">
-                <p className="text-xs font-medium text-purple-800 mb-2">💡 Quick Add Sections:</p>
-                <div className="flex flex-wrap gap-2">
-                  {['About', 'Eligibility', 'Application Process', 'Exam Pattern', 'Syllabus', 'Preparation Tips', 'Cutoff', 'Result', 'Counseling', 'FAQs'].map((template, i) => (
-                    <button key={i} type="button" onClick={() => {
-                      const anchor = template.toLowerCase().replace(/\s+/g, '-');
-                      if (!(formData.seo_toc || []).some(t => t.anchor === anchor)) {
-                        setFormData({...formData, seo_toc: [...(formData.seo_toc || []), { title: template, anchor, content: '' }]});
-                      }
-                    }} className="text-xs bg-purple-50 border border-purple-200 text-purple-700 px-2 py-1 rounded hover:bg-purple-100">+ {template}</button>
-                  ))}
-                </div>
-              </div>
-            </div>
 
             {/* Table Builder */}
             <div className="border-2 border-teal-300 rounded-lg p-4 bg-teal-50">
