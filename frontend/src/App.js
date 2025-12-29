@@ -347,6 +347,7 @@ function App() {
               <Route path="/courses/listing/:category" element={<CourseListingPage />} />
               <Route path="/courses/:stream/:subStream" element={<CourseListingPage />} />
               <Route path="/courses/:slug" element={<CourseDetailPage />} />
+              <Route path="/courses/:slug/:section" element={<CourseDetailPage />} />
                   
               {/* User & Dashboard - Old dashboard moved to /old-dashboard */}
               <Route path="/old-dashboard" element={<StudentDashboard />} />
