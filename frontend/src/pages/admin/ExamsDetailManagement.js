@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Link } from '../../components/CustomLink';
-import { FiPlus, FiEdit, FiTrash2, FiSearch } from 'react-icons/fi';
+import { FiPlus, FiEdit, FiTrash2, FiSearch, FiEye } from 'react-icons/fi';
 import { Button } from '../../components/ui/button';
 import AdminLayout from '../../components/admin/AdminLayout';
 import api from '../../api/axios';
