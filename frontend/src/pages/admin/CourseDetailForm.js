@@ -797,6 +797,36 @@ const CourseDetailForm = () => {
     await api.patch(`/courses-detail/${id}/section/${section}`, sectionData);
   };
 
+  // Handle individual section save (for Save Section buttons)
+  const handleSectionSave = async (section) => {
+    if (!id) {
+      alert('Please save the form first as draft before saving individual sections.');
+      return;
+    }
+    
+    setSectionSaving(prev => ({ ...prev, [section]: true }));
+    setSectionSaved(prev => ({ ...prev, [section]: false }));
+    
+    try {
+      const sectionData = getSectionData(section);
+      await saveSectionData(section, sectionData);
+      
+      setSectionSaved(prev => ({ ...prev, [section]: true }));
+      alert(`${section.charAt(0).toUpperCase() + section.slice(1)} section saved successfully!`);
+      
+      // Reset saved state after 3 seconds
+      setTimeout(() => {
+        setSectionSaved(prev => ({ ...prev, [section]: false }));
+      }, 3000);
+      
+    } catch (error) {
+      console.error(`[CourseDetailForm] Error saving ${section}:`, error);
+      alert(`Failed to save ${section} section: ${error.response?.data?.detail || error.message}`);
+    } finally {
+      setSectionSaving(prev => ({ ...prev, [section]: false }));
+    }
+  };
+
   // Save all sections sequentially (one by one to avoid timeout)
   const handleSequentialSaveAll = async (targetStatus) => {
     if (!id) {
