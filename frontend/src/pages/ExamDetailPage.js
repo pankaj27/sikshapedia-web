@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { FiDownload, FiFileText, FiCalendar, FiInfo, FiBook, FiAward, FiDollarSign, FiLoader, FiChevronDown, FiChevronUp } from 'react-icons/fi';
 import { Button } from '../components/ui/button';
@@ -13,6 +13,8 @@ import AuthorInfo from '../components/AuthorInfo';
 import { Link } from '../components/CustomLink';
 const ExamDetailPage = () => {
   const { id } = useParams();
+  const [searchParams] = useSearchParams();
+  const isPreview = searchParams.get('preview') === 'true';
   const [activeTab, setActiveTab] = useState('questionPapers');
   const [activeSection, setActiveSection] = useState(null); // Start with null, will be set to first item
   const [examFromApi, setExamFromApi] = useState(null);
@@ -24,8 +26,9 @@ const ExamDetailPage = () => {
     const fetchExam = async () => {
       try {
         setLoading(true);
-        // Try to fetch from exams-detail first (detailed exams)
-        let response = await api.get(`/exams-detail?limit=100`);
+        // If preview mode, fetch all exams (including draft/pending), otherwise only published
+        const apiUrl = isPreview ? '/exams-detail?limit=100' : '/exams-detail?status=published&limit=100';
+        let response = await api.get(apiUrl);
         let exam = response.data?.find(e => e.slug === id || e.id === id || e.name?.toLowerCase().replace(/\s+/g, '-') === id);
         
         if (!exam) {
@@ -45,7 +48,7 @@ const ExamDetailPage = () => {
     };
     
     fetchExam();
-  }, [id]);
+  }, [id, isPreview]);
 
   // Transform API data - No fallback mock data
   const exam = examFromApi ? {
