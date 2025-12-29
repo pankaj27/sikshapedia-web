@@ -658,6 +658,69 @@ Added `isMenuEnabled()` checks to all configurable sections in CourseDetailPage.
 - Admin credentials working: admin@admissionbuddy.co / admin123
 - Course Detail Form accessible at /admin/courses-detail/edit/{id}
 - Menu Configuration section present with toggle switches
+
+
+---
+
+## Test Session: Course Detail Page E2E Testing (Dec 29, 2025)
+
+### Test Objective
+Complete end-to-end testing of Course Detail functionality:
+1. Admin creates/edits a course with all fields
+2. Verify data displays correctly on public pages
+3. Test URL-based navigation (separate pages for each section)
+4. Test menu consistency between main page and sub pages
+5. Test dynamic menu configuration (enable/disable)
+
+### Test Flow
+
+**Phase 1: Admin Course Entry**
+- Login to admin panel
+- Navigate to Courses Detail
+- Create or edit a course with ALL fields filled:
+  - Basic: Name, Full Name, Duration, Degree Type
+  - Fees: Average fees
+  - Eligibility, Age Limit, Entrance Exams
+  - Admission Process, Selection Criteria
+  - Syllabus (multiple semesters with subjects)
+  - Top Colleges (with rank, location, rating, fees)
+  - Career Options, Job Roles, Salary Range
+  - FAQs (multiple Q&A)
+  - SEO Content
+  - Menu Configuration
+
+**Phase 2: Public Page Verification**
+- Navigate to `/courses/{slug}` - Main page
+- Verify all data displays correctly
+- Check menu tabs show only sections with data
+
+**Phase 3: URL Navigation Testing**
+- Click on each menu tab
+- Verify URL changes to `/courses/{slug}/{section}`
+- Verify correct section content loads
+- Verify page title changes per section
+- Test "Main" button returns to main page
+
+**Phase 4: Menu Consistency Testing**
+- Compare menus on main page vs sub pages
+- Verify same menus appear on both
+- Verify menus only show for sections with data
+
+**Phase 5: Dynamic Menu Toggle**
+- In admin, disable a menu item (e.g., FAQs)
+- Save and verify on public page
+- That section should be hidden
+- Re-enable and verify it reappears
+
+### Admin Credentials
+- URL: /admin/login
+- Email: admin@admissionbuddy.co
+- Password: admin123
+
+### Test Course
+- URL: /courses/btech-cs-test (created via API)
+- Has all fields populated
+
 - Save functionality working for course updates
 
 **✅ FRONTEND INTEGRATION VERIFIED:**
