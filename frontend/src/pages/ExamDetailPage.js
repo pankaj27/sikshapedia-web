@@ -282,9 +282,10 @@ const ExamDetailPage = () => {
             {/* SEO Intro Preview - Always visible, truncated when collapsed */}
             {exam.seoIntro && (
               <div className="mb-4">
-                <p className={`text-gray-700 text-lg leading-relaxed ${!showSeoContent ? 'line-clamp-3' : ''}`}>
-                  {exam.seoIntro}
-                </p>
+                <div 
+                  className={`text-gray-700 text-lg leading-relaxed prose prose-lg max-w-none ${!showSeoContent ? 'line-clamp-3' : ''}`}
+                  dangerouslySetInnerHTML={{ __html: exam.seoIntro }}
+                />
               </div>
             )}
 
