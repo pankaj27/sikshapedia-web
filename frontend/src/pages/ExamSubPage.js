@@ -198,7 +198,7 @@ const ExamSubPage = () => {
             <div className="w-16 h-16 md:w-20 md:h-20 bg-white rounded-xl shadow-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
               {exam.logo_url ? (
                 <img 
-                  src={exam.logo_url.startsWith('/api') ? exam.logo_url : `/api${exam.logo_url}`} 
+                  src={exam.logo_url.startsWith('http') ? exam.logo_url : (exam.logo_url.startsWith('/api') ? exam.logo_url : `/api${exam.logo_url}`)} 
                   alt={`${exam.name} logo`} 
                   className="w-full h-full object-contain p-2"
                   onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }}
