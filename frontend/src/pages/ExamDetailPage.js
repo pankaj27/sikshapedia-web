@@ -170,15 +170,38 @@ const ExamDetailPage = () => {
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-8">
         <div className="container mx-auto px-6">
-          <h1 className="text-3xl font-bold mb-2">{exam.fullName || exam.name}</h1>
-          <p className="text-lg">{exam.description || `Complete information about ${exam.name}`}</p>
-          {exam.streams?.length > 0 && (
-            <div className="flex gap-2 mt-3">
-              {exam.streams.map((stream, idx) => (
-                <span key={idx} className="px-3 py-1 bg-white/20 rounded-full text-sm">{stream}</span>
-              ))}
+          <div className="flex items-start gap-6">
+            {/* Exam Logo */}
+            <div className="w-20 h-20 md:w-24 md:h-24 bg-white rounded-xl shadow-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
+              {exam.logoUrl ? (
+                <img 
+                  src={exam.logoUrl.startsWith('/api') ? exam.logoUrl : `/api${exam.logoUrl}`} 
+                  alt={`${exam.name} logo`} 
+                  className="w-full h-full object-contain p-2"
+                  onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }}
+                />
+              ) : null}
+              <div className={`w-full h-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center ${exam.logoUrl ? 'hidden' : ''}`}>
+                <span className="text-white text-2xl md:text-3xl font-bold">{exam.name?.charAt(0)}</span>
+              </div>
             </div>
-          )}
+            
+            {/* Exam Info */}
+            <div className="flex-1">
+              <h1 className="text-3xl font-bold mb-2">{exam.fullName || exam.name}</h1>
+              {exam.conductor && (
+                <p className="text-blue-100 text-sm mb-2">Conducted by: {exam.conductor}</p>
+              )}
+              <p className="text-lg opacity-90">{exam.description || `Complete information about ${exam.name}`}</p>
+              {exam.streams?.length > 0 && (
+                <div className="flex flex-wrap gap-2 mt-3">
+                  {exam.streams.map((stream, idx) => (
+                    <span key={idx} className="px-3 py-1 bg-white/20 rounded-full text-sm">{stream}</span>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </div>
 
