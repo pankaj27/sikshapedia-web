@@ -381,6 +381,138 @@ const RichTextToolbar = ({ editor, collegeName, onOpenImageModal, onOpenVideoMod
   );
 };
 
+// Simple Rich Text Editor for TOC Text Blocks
+const SimpleRichTextEditorForTOC = ({ value, onChange, placeholder }) => {
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      Link.configure({ openOnClick: false }),
+      TextStyle,
+      Color,
+      Underline,
+      TextAlign.configure({
+        types: ['heading', 'paragraph'],
+      }),
+    ],
+    content: value || '',
+    onUpdate: ({ editor }) => {
+      onChange(editor.getHTML());
+    },
+  });
+
+  // Update editor content when value changes externally
+  useEffect(() => {
+    if (editor && value !== editor.getHTML()) {
+      editor.commands.setContent(value || '');
+    }
+  }, [value, editor]);
+
+  if (!editor) return null;
+
+  const addLink = () => {
+    const url = window.prompt('Enter URL:');
+    if (url) {
+      editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
+    }
+  };
+
+  return (
+    <div className="border-2 border-gray-200 rounded-lg overflow-hidden">
+      {/* Simple Toolbar */}
+      <div className="flex flex-wrap gap-1 p-2 bg-gray-100 border-b border-gray-200">
+        <button type="button" onClick={() => editor.chain().focus().toggleBold().run()}
+          className={`p-1.5 rounded hover:bg-gray-200 ${editor.isActive('bold') ? 'bg-blue-100 text-blue-700' : ''}`}
+          title="Bold">
+          <FiBold size={14} />
+        </button>
+        <button type="button" onClick={() => editor.chain().focus().toggleItalic().run()}
+          className={`p-1.5 rounded hover:bg-gray-200 ${editor.isActive('italic') ? 'bg-blue-100 text-blue-700' : ''}`}
+          title="Italic">
+          <FiItalic size={14} />
+        </button>
+        <button type="button" onClick={() => editor.chain().focus().toggleUnderline().run()}
+          className={`p-1.5 rounded hover:bg-gray-200 ${editor.isActive('underline') ? 'bg-blue-100 text-blue-700' : ''}`}
+          title="Underline">
+          <FiUnderlineIcon size={14} />
+        </button>
+        
+        <div className="w-px h-5 bg-gray-300 mx-1 self-center" />
+        
+        {/* Colors */}
+        {['#000000', '#ef4444', '#22c55e', '#3b82f6', '#8b5cf6'].map(color => (
+          <button key={color} type="button" onClick={() => editor.chain().focus().setColor(color).run()}
+            className="w-4 h-4 rounded border border-gray-300 hover:scale-110 transition-transform"
+            style={{ backgroundColor: color }} title={color} />
+        ))}
+        
+        <div className="w-px h-5 bg-gray-300 mx-1 self-center" />
+        
+        {/* Link */}
+        <button type="button" onClick={addLink}
+          className={`p-1.5 rounded hover:bg-gray-200 ${editor.isActive('link') ? 'bg-blue-100 text-blue-700' : ''}`}
+          title="Add Link">
+          <FiLink size={14} />
+        </button>
+        
+        {/* Bullet List */}
+        <button type="button" onClick={() => editor.chain().focus().toggleBulletList().run()}
+          className={`p-1.5 rounded hover:bg-gray-200 ${editor.isActive('bulletList') ? 'bg-blue-100 text-blue-700' : ''}`}
+          title="Bullet List">
+          <FiList size={14} />
+        </button>
+        
+        <div className="w-px h-5 bg-gray-300 mx-1 self-center" />
+        
+        {/* Text Alignment */}
+        <button type="button" onClick={() => editor.chain().focus().setTextAlign('left').run()}
+          className={`p-1.5 rounded hover:bg-gray-200 ${editor.isActive({ textAlign: 'left' }) ? 'bg-blue-100 text-blue-700' : ''}`}
+          title="Align Left">
+          <FiAlignLeft size={14} />
+        </button>
+        <button type="button" onClick={() => editor.chain().focus().setTextAlign('center').run()}
+          className={`p-1.5 rounded hover:bg-gray-200 ${editor.isActive({ textAlign: 'center' }) ? 'bg-blue-100 text-blue-700' : ''}`}
+          title="Align Center">
+          <FiAlignCenter size={14} />
+        </button>
+        <button type="button" onClick={() => editor.chain().focus().setTextAlign('right').run()}
+          className={`p-1.5 rounded hover:bg-gray-200 ${editor.isActive({ textAlign: 'right' }) ? 'bg-blue-100 text-blue-700' : ''}`}
+          title="Align Right">
+          <FiAlignRight size={14} />
+        </button>
+        <button type="button" onClick={() => editor.chain().focus().setTextAlign('justify').run()}
+          className={`p-1.5 rounded hover:bg-gray-200 ${editor.isActive({ textAlign: 'justify' }) ? 'bg-blue-100 text-blue-700' : ''}`}
+          title="Justify">
+          <FiAlignJustify size={14} />
+        </button>
+      </div>
+      
+      {/* Editor Content with CSS for bullet lists */}
+      <style>{`
+        .toc-editor .ProseMirror ul {
+          list-style-type: disc;
+          padding-left: 1.5em;
+          margin: 0.5em 0;
+        }
+        .toc-editor .ProseMirror ol {
+          list-style-type: decimal;
+          padding-left: 1.5em;
+          margin: 0.5em 0;
+        }
+        .toc-editor .ProseMirror li {
+          margin: 0.25em 0;
+        }
+        .toc-editor .ProseMirror li p {
+          margin: 0;
+        }
+      `}</style>
+      <EditorContent 
+        editor={editor} 
+        className="toc-editor prose prose-sm max-w-none p-3 min-h-[100px] focus:outline-none [&_.ProseMirror]:outline-none [&_.ProseMirror]:min-h-[80px]"
+      />
+    </div>
+  );
+};
+
 // Rich Text Editor Component
 const RichTextEditor = ({ value, onChange, placeholder, collegeName }) => {
   const [imageModalOpen, setImageModalOpen] = useState(false);
