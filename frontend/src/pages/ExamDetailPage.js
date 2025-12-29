@@ -192,7 +192,14 @@ const ExamDetailPage = () => {
               {exam.conductor && (
                 <p className="text-blue-100 text-sm mb-2">Conducted by: {exam.conductor}</p>
               )}
-              <p className="text-lg opacity-90">{exam.description || `Complete information about ${exam.name}`}</p>
+              {exam.description ? (
+                <div 
+                  className="text-lg opacity-90"
+                  dangerouslySetInnerHTML={{ __html: exam.description }}
+                />
+              ) : (
+                <p className="text-lg opacity-90">Complete information about {exam.name}</p>
+              )}
               {exam.streams?.length > 0 && (
                 <div className="flex flex-wrap gap-2 mt-3">
                   {exam.streams.map((stream, idx) => (
