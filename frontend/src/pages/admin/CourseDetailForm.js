@@ -291,6 +291,9 @@ const CourseDetailForm = () => {
   // Section-wise save states
   const [sectionSaving, setSectionSaving] = useState({});
   const [sectionSaved, setSectionSaved] = useState({});
+  
+  // Search state for Related Exams
+  const [examSearch, setExamSearch] = useState('');
 
   // Get admin user from localStorage (admin login stores in adminUser)
   const adminUserStr = localStorage.getItem('adminUser');
