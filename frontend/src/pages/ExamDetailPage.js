@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import { FiDownload, FiFileText, FiCalendar, FiInfo, FiBook, FiAward, FiDollarSign, FiLoader, FiChevronDown, FiChevronUp } from 'react-icons/fi';
 import { Button } from '../components/ui/button';
 import { SidebarSponsoredAd } from '../components/SponsoredAds';
+import { ApplyNowWidget, AskQuestionWidget, CounsellingWidget } from '../components/widgets/ActionWidgets';
 import api from '../api/axios';
 import ReviewsSection from '../components/ReviewsSection';
 import QuestionsSection from '../components/QuestionsSection';
