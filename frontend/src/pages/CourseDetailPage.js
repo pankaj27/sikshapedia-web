@@ -214,70 +214,29 @@ const CourseDetailPage = () => {
   // FAQs - only from database
   const faqs = course.faqs || [];
 
-  // Get SEO metadata for current section from menu_config
+  // Get SEO metadata for main page (overview)
   const getSectionMeta = () => {
     const menuConfig = course?.menu_config;
-    const currentSection = urlSection || 'overview';
     
     if (menuConfig?.items?.length > 0) {
-      const menuItem = menuConfig.items.find(item => item.id === currentSection);
+      const menuItem = menuConfig.items.find(item => item.id === 'overview');
       if (menuItem) {
         return {
-          title: menuItem.meta_title || `${courseName} - ${menuItem.label} | AdmissionBuddy`,
-          description: menuItem.meta_description || `Get complete ${menuItem.label.toLowerCase()} details for ${courseName}. Explore eligibility, fees, colleges, career options.`,
-          keywords: menuItem.meta_keywords || `${courseName}, ${courseName} ${menuItem.label.toLowerCase()}`,
-          pageHeading: menuItem.page_heading || `${courseName} - ${menuItem.label}`
+          title: menuItem.meta_title || `${fullName} - Course Details, Eligibility, Fees ${new Date().getFullYear()} | AdmissionBuddy`,
+          description: menuItem.meta_description || `Get complete information about ${fullName}. Explore eligibility, fee structure, top colleges, career options.`,
+          keywords: menuItem.meta_keywords || `${courseName}, ${courseName} course, ${courseName} eligibility, ${courseName} fees`,
+          pageHeading: menuItem.page_heading || fullName
         };
       }
     }
     
-    // Default meta for each section
-    const defaultMeta = {
-      overview: {
-        title: `${fullName} - Course Details, Eligibility, Fees ${new Date().getFullYear()} | AdmissionBuddy`,
-        description: `Get complete information about ${fullName}. Explore eligibility, fee structure, top colleges, career options, and admission process.`,
-        keywords: `${courseName}, ${courseName} course, ${courseName} eligibility, ${courseName} fees`,
-        pageHeading: fullName
-      },
-      syllabus: {
-        title: `${courseName} Syllabus ${new Date().getFullYear()} - Subjects, Curriculum | AdmissionBuddy`,
-        description: `Check ${courseName} syllabus and curriculum. Get semester wise subjects, practical components, and course structure.`,
-        keywords: `${courseName} syllabus, ${courseName} subjects, ${courseName} curriculum`,
-        pageHeading: `${courseName} Syllabus`
-      },
-      eligibility: {
-        title: `${courseName} Eligibility ${new Date().getFullYear()} - Qualification, Age Limit | AdmissionBuddy`,
-        description: `Know ${courseName} eligibility criteria. Check educational qualification, age limit, and entrance exam requirements.`,
-        keywords: `${courseName} eligibility, ${courseName} qualification, ${courseName} requirements`,
-        pageHeading: `${courseName} Eligibility Criteria`
-      },
-      admission: {
-        title: `${courseName} Admission Process ${new Date().getFullYear()} - How to Apply | AdmissionBuddy`,
-        description: `Complete guide to ${courseName} admission. Know application process, important dates, and how to apply.`,
-        keywords: `${courseName} admission, ${courseName} apply, ${courseName} application`,
-        pageHeading: `${courseName} Admission Process`
-      },
-      colleges: {
-        title: `Top ${courseName} Colleges in India ${new Date().getFullYear()} | AdmissionBuddy`,
-        description: `Find top colleges for ${courseName} in India. Compare fees, placements, rankings of best institutes.`,
-        keywords: `${courseName} colleges, best ${courseName} colleges, top ${courseName} institutes`,
-        pageHeading: `Top Colleges for ${courseName}`
-      },
-      career: {
-        title: `${courseName} Career Options ${new Date().getFullYear()} - Jobs, Salary, Scope | AdmissionBuddy`,
-        description: `Explore career options after ${courseName}. Know about job roles, salary packages, and future scope.`,
-        keywords: `${courseName} career, ${courseName} jobs, ${courseName} salary, ${courseName} scope`,
-        pageHeading: `${courseName} Career Options & Jobs`
-      },
-      faqs: {
-        title: `${courseName} FAQs - Frequently Asked Questions | AdmissionBuddy`,
-        description: `Get answers to frequently asked questions about ${courseName}. Know about eligibility, fees, duration, scope.`,
-        keywords: `${courseName} FAQs, ${courseName} questions, about ${courseName}`,
-        pageHeading: `${courseName} - Frequently Asked Questions`
-      }
+    // Default meta for overview
+    return {
+      title: `${fullName} - Course Details, Eligibility, Fees ${new Date().getFullYear()} | AdmissionBuddy`,
+      description: `Get complete information about ${fullName}. Explore eligibility, fee structure, top colleges, career options, and admission process.`,
+      keywords: `${courseName}, ${courseName} course, ${courseName} eligibility, ${courseName} fees`,
+      pageHeading: fullName
     };
-    
-    return defaultMeta[currentSection] || defaultMeta.overview;
   };
 
   const sectionMeta = getSectionMeta();
