@@ -280,9 +280,8 @@ const ExamDetailPage = () => {
       </div>
       )}
 
-      {/* SEO Content Section - Only show if NO menu_config content exists */}
-      {/* If menu_config has overview content, skip this section to avoid duplicate */}
-      {!(exam.menuConfig?.items?.[0]?.content) && (exam.seoIntro || exam.seoFullContent || exam.seoToc?.length > 0 || exam.seoTables?.length > 0 || exam.seoFaqs?.length > 0 || exam.seoVideoUrl) && (
+      {/* SEO Content Section - Dynamic from Admin Panel (Collapsible) */}
+      {(exam.seoIntro || exam.seoFullContent || exam.seoToc?.length > 0 || exam.seoTables?.length > 0 || exam.seoFaqs?.length > 0 || exam.seoVideoUrl) && (
         <div className="bg-white border-b py-6">
           <div className="container mx-auto px-6">
             {/* SEO Intro Preview - Always visible, truncated when collapsed */}
