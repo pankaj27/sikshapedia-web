@@ -795,14 +795,15 @@ const ExamDetailPage = () => {
               </div>
             </div>
 
-            {/* Video Section */}
+            {/* Video Section - Only show if videos data exists */}
+            {exam.videos && exam.videos.length > 0 && (
             <div className="bg-white rounded-lg shadow-md p-6">
               <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
                 <FiBook className="text-orange-600" />
                 Related Videos
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {(exam.videos || []).map((video, idx) => (
+                {exam.videos.map((video, idx) => (
                   <div key={idx} className="cursor-pointer group">
                     <div className="relative rounded-lg overflow-hidden shadow-md">
                       <img src={video.thumbnail} alt={video.title} className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" />
@@ -821,6 +822,7 @@ const ExamDetailPage = () => {
                 ))}
               </div>
             </div>
+            )}
 
             {/* Ask Question Section */}
             <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg shadow-md p-6 border-2 border-blue-200">
