@@ -184,6 +184,71 @@ const SimpleRichTextEditor = ({ value, onChange, placeholder }) => {
   );
 };
 
+// Rich Text Editor with Table Support for Description/Overview
+const RichTextEditorWithTable = ({ value, onChange, placeholder, minHeight = '200px' }) => {
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      Link.configure({ openOnClick: false }),
+      TextStyle,
+      Color,
+      Underline,
+      Table.configure({
+        resizable: true,
+      }),
+      TableRow,
+      TableHeader,
+      TableCell,
+    ],
+    content: value || '',
+    onUpdate: ({ editor }) => {
+      onChange(editor.getHTML());
+    },
+  });
+
+  // Update editor content when value changes externally
+  useEffect(() => {
+    if (editor && value !== editor.getHTML()) {
+      editor.commands.setContent(value || '');
+    }
+  }, [value, editor]);
+
+  return (
+    <div className="border-2 border-gray-200 rounded-lg overflow-hidden">
+      <SimpleRichTextToolbar editor={editor} showTableOptions={true} />
+      <style>{`
+        .ProseMirror table {
+          border-collapse: collapse;
+          margin: 1em 0;
+          width: 100%;
+        }
+        .ProseMirror th,
+        .ProseMirror td {
+          border: 1px solid #ccc;
+          padding: 8px 12px;
+          text-align: left;
+          min-width: 80px;
+        }
+        .ProseMirror th {
+          background-color: #f3f4f6;
+          font-weight: 600;
+        }
+        .ProseMirror tr:hover td {
+          background-color: #f9fafb;
+        }
+        .ProseMirror .selectedCell {
+          background-color: #dbeafe;
+        }
+      `}</style>
+      <EditorContent 
+        editor={editor} 
+        className="prose prose-sm max-w-none p-3 focus:outline-none [&_.ProseMirror]:outline-none"
+        style={{ minHeight }}
+      />
+    </div>
+  );
+};
+
 // Menu icon options
 const menuIconOptions = [
   { id: 'info', label: 'Info', icon: <FiInfo size={16} /> },
