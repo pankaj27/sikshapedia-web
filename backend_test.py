@@ -8271,6 +8271,13 @@ class APITester:
         self.test_section_wise_college_creation()  # Test the specific functionality requested
         
         print("\n" + "=" * 80)
+        print("📝 EXAM DETAIL SECTION-WISE SAVE TESTING")
+        print("=" * 80)
+        
+        # **NEW: Exam Detail Section-wise Save Feature Testing**
+        self.test_exam_detail_section_wise_save()  # Test exam section-wise save functionality
+        
+        print("\n" + "=" * 80)
         print("🏫 ADDITIONAL COLLEGE ROUTE TESTING")
         print("=" * 80)
         
