@@ -3620,24 +3620,29 @@ const CourseDetailForm = () => {
                                           <thead>
                                             {/* Delete Column buttons row */}
                                             {block.headers && block.headers.length > 1 && (
-                                              <tr>
+                                              <tr className="bg-red-100">
                                                 {block.headers.map((_, hIndex) => (
-                                                  <th key={hIndex} className="border-x-2 border-t-2 border-red-200 bg-red-50 p-1 text-center">
-                                                    <button type="button" onClick={() => {
-                                                      const newToc = [...(formData.seo_toc || [])];
-                                                      newToc[index].blocks[blockIndex].headers.splice(hIndex, 1);
-                                                      newToc[index].blocks[blockIndex].rows = newToc[index].blocks[blockIndex].rows.map(row => {
-                                                        const newRow = [...row];
-                                                        newRow.splice(hIndex, 1);
-                                                        return newRow;
-                                                      });
-                                                      setFormData({...formData, seo_toc: newToc});
-                                                    }} className="bg-red-500 text-white hover:bg-red-600 rounded text-xs px-2 py-0.5 font-bold" title="Delete Column">
-                                                      ✕
+                                                  <th key={hIndex} className="border border-red-300 p-1 text-center">
+                                                    <button 
+                                                      type="button" 
+                                                      onClick={() => {
+                                                        const newToc = [...(formData.seo_toc || [])];
+                                                        newToc[index].blocks[blockIndex].headers.splice(hIndex, 1);
+                                                        newToc[index].blocks[blockIndex].rows = newToc[index].blocks[blockIndex].rows.map(row => {
+                                                          const newRow = [...row];
+                                                          newRow.splice(hIndex, 1);
+                                                          return newRow;
+                                                        });
+                                                        setFormData({...formData, seo_toc: newToc});
+                                                      }} 
+                                                      style={{backgroundColor: '#ef4444', color: 'white', padding: '2px 8px', borderRadius: '4px', fontSize: '12px'}}
+                                                      title="Delete Column"
+                                                    >
+                                                      ✕ Del
                                                     </button>
                                                   </th>
                                                 ))}
-                                                <th className="border-x-2 border-t-2 border-teal-200 bg-teal-50 p-1 w-12"></th>
+                                                <th className="border border-teal-200 bg-teal-50 p-1 w-12"></th>
                                               </tr>
                                             )}
                                             {/* Headers row */}
