@@ -155,23 +155,46 @@ const CourseSubPage = () => {
   const degreeType = course.degree_type || '';
   const basePath = `/courses/${slug}`;
 
-  // Menu items
+  // Check data existence for menu items
+  const eligibility = course.eligibility || '';
+  const hasSyllabus = course.syllabus && course.syllabus.length > 0;
+  const hasTopColleges = course.top_colleges && course.top_colleges.length > 0;
+  const hasFaqs = course.faqs && course.faqs.length > 0;
+  const hasCareerData = (course.job_opportunities && course.job_opportunities.length > 0) || 
+                        course.career_prospects || 
+                        (course.career_options && course.career_options.length > 0) ||
+                        (course.job_roles && course.job_roles.length > 0);
+  const hasAdmissionData = !!(course.admission_process && course.admission_process.trim()) || 
+                           !!(course.selection_criteria && course.selection_criteria.trim());
+  const hasFees = course.average_fees > 0 || course.fee_details;
+  const hasSalary = (course.salary_range?.min > 0 || course.salary_range?.max > 0) || course.salary_details;
+  const hasGallery = (course.gallery_images && course.gallery_images.length > 0) || 
+                     (course.images && course.images.length > 0);
+
+  // Default menu items - show based on data existence
   const defaultMenuItems = [
     { id: 'overview', label: 'Overview', enabled: true },
-    { id: 'syllabus', label: 'Syllabus', enabled: true },
-    { id: 'career', label: 'Career Options', enabled: true },
-    { id: 'fees', label: 'Fee Structure', enabled: true },
-    { id: 'eligibility', label: 'Eligibility', enabled: true },
-    { id: 'admission', label: 'Admission Process', enabled: true },
-    { id: 'colleges', label: 'Top Colleges', enabled: true },
-    { id: 'salary', label: 'Salary & Scope', enabled: true },
-    { id: 'faqs', label: 'FAQs', enabled: true },
-    { id: 'gallery', label: 'Gallery', enabled: true },
+    { id: 'syllabus', label: 'Syllabus', enabled: hasSyllabus },
+    { id: 'career', label: 'Career Options', enabled: hasCareerData },
+    { id: 'fees', label: 'Fee Structure', enabled: hasFees },
+    { id: 'eligibility', label: 'Eligibility', enabled: !!eligibility },
+    { id: 'admission', label: 'Admission Process', enabled: hasAdmissionData },
+    { id: 'colleges', label: 'Top Colleges', enabled: hasTopColleges },
+    { id: 'salary', label: 'Salary & Scope', enabled: hasSalary },
+    { id: 'faqs', label: 'FAQs', enabled: hasFaqs },
+    { id: 'gallery', label: 'Gallery', enabled: hasGallery },
   ];
 
-  const menuItems = (course.menu_config?.items?.length > 0 ? course.menu_config.items : defaultMenuItems)
-    .filter(item => item.enabled)
-    .sort((a, b) => (a.order || 0) - (b.order || 0));
+  // Use menu_config if available, otherwise use default with data-based filtering
+  const menuItems = (course.menu_config?.items?.length > 0 
+    ? course.menu_config.items.filter(item => {
+        // Check both enabled status AND data existence
+        if (!item.enabled) return false;
+        const defaultItem = defaultMenuItems.find(d => d.id === item.id);
+        return defaultItem ? defaultItem.enabled : true;
+      })
+    : defaultMenuItems.filter(item => item.enabled)
+  ).sort((a, b) => (a.order || 0) - (b.order || 0));
 
   // SEO values
   const getSeoValues = () => {
