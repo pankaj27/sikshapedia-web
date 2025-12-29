@@ -143,6 +143,7 @@ const CourseDetailPage = () => {
     { id: 'syllabus', label: 'Syllabus', show: hasSyllabus },
     { id: 'colleges', label: 'Top Colleges', show: hasTopColleges },
     { id: 'career', label: 'Career & Jobs', show: hasCareerData },
+    { id: 'fees', label: 'Fee Structure', show: course.average_fees > 0 || course.fee_details },
     { id: 'faqs', label: 'FAQs', show: hasFaqs },
   ];
 
