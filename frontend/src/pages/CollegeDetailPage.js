@@ -911,16 +911,30 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
                     <div className="bg-gray-50 rounded-lg p-6 border">
                       <h3 className="font-bold text-lg mb-4">Table of Contents</h3>
                       <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-2">
-                        {college.seo_toc.map((section, idx) => (
-                          <a
-                            key={`seo-${idx}`}
-                            href={`#${section.anchor || `seo-section-${idx}`}`}
-                            className="text-left text-sm text-orange-600 hover:underline flex gap-2"
-                          >
-                            <span className="font-semibold flex-shrink-0">{String(idx + 1).padStart(2, '0')}.</span>
-                            <span>{section.title}</span>
-                          </a>
-                        ))}
+                        {college.seo_toc.map((section, idx) => {
+                          const anchorId = section.anchor || `seo-section-${idx}`;
+                          return (
+                            <a
+                              key={`seo-${idx}`}
+                              href={`#${anchorId}`}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                const element = document.getElementById(anchorId);
+                                if (element) {
+                                  const offset = 160;
+                                  const elementPosition = element.getBoundingClientRect().top;
+                                  const offsetPosition = elementPosition + window.pageYOffset - offset;
+                                  window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+                                  window.history.pushState(null, '', `#${anchorId}`);
+                                }
+                              }}
+                              className="text-left text-sm text-orange-600 hover:underline flex gap-2"
+                            >
+                              <span className="font-semibold flex-shrink-0">{String(idx + 1).padStart(2, '0')}.</span>
+                              <span>{section.title}</span>
+                            </a>
+                          );
+                        })}
                       </div>
                     </div>
                   )}
