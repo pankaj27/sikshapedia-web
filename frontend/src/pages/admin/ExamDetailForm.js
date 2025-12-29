@@ -4,7 +4,8 @@ import {
   FiSave, FiX, FiPlus, FiTrash2, FiSend, FiCheck, FiUpload, FiLink, FiFile,
   FiChevronDown, FiChevronRight, FiCalendar, FiBook, FiUsers, FiAward,
   FiFileText, FiClipboard, FiExternalLink, FiDownload, FiEdit2, FiLoader,
-  FiImage, FiVideo, FiList, FiGrid, FiMove, FiCopy, FiSettings
+  FiImage, FiVideo, FiList, FiGrid, FiMove, FiCopy, FiSettings,
+  FiBold, FiItalic, FiUnderline as FiUnderlineIcon, FiAlignLeft, FiAlignCenter, FiAlignRight, FiAlignJustify
 } from 'react-icons/fi';
 import api from '../../api/axios';
 import { Button } from '../../components/ui/button';
@@ -15,6 +16,324 @@ import AdminLayout from '../../components/admin/AdminLayout';
 import { SeoMetaSection } from '../../components/admin/college-form';
 import useAutoSaveDraft from '../../hooks/useAutoSaveDraft';
 import DraftRestoreBanner, { AutoSaveIndicator } from '../../components/admin/DraftRestoreBanner';
+
+// Tiptap imports for Rich Text Editor
+import { useEditor, EditorContent } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import Link from '@tiptap/extension-link';
+import TextStyle from '@tiptap/extension-text-style';
+import { Color } from '@tiptap/extension-color';
+import Underline from '@tiptap/extension-underline';
+import TextAlign from '@tiptap/extension-text-align';
+import Table from '@tiptap/extension-table';
+import TableRow from '@tiptap/extension-table-row';
+import TableHeader from '@tiptap/extension-table-header';
+import TableCell from '@tiptap/extension-table-cell';
+
+// Brand name constant for alt tags
+const BRAND_NAME = 'admissionbuddy';
+
+// Auto-generate alt tag based on context
+const generateAltTag = (examName, context, index) => {
+  const name = examName || 'Exam';
+  const ctx = context || 'content';
+  return `${name} - ${ctx} ${index + 1} | ${BRAND_NAME}`.trim();
+};
+
+// Auto-generate video alt tag
+const generateVideoAlt = (examName, context, index) => {
+  const name = examName || 'Exam';
+  const ctx = context || 'video';
+  return `${name} - ${ctx} video ${index + 1} | ${BRAND_NAME}`.trim();
+};
+
+// Rich Text Toolbar Component
+const RichTextToolbar = ({ editor, showTableOptions = false }) => {
+  if (!editor) return null;
+
+  const addLink = () => {
+    const url = window.prompt('Enter URL:');
+    if (url) {
+      editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
+    }
+  };
+
+  const removeLink = () => {
+    editor.chain().focus().unsetLink().run();
+  };
+
+  const setColor = (color) => {
+    editor.chain().focus().setColor(color).run();
+  };
+
+  const insertTable = () => {
+    const rows = parseInt(window.prompt('Number of rows:', '3')) || 3;
+    const cols = parseInt(window.prompt('Number of columns:', '3')) || 3;
+    editor.chain().focus().insertTable({ rows, cols, withHeaderRow: true }).run();
+  };
+
+  return (
+    <div className="flex flex-wrap gap-1 p-2 bg-gray-100 border-b border-gray-200 rounded-t-lg">
+      {/* Text Formatting */}
+      <button type="button" onClick={() => editor.chain().focus().toggleBold().run()}
+        className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('bold') ? 'bg-blue-100 text-blue-700' : ''}`}
+        title="Bold">
+        <FiBold size={16} />
+      </button>
+      <button type="button" onClick={() => editor.chain().focus().toggleItalic().run()}
+        className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('italic') ? 'bg-blue-100 text-blue-700' : ''}`}
+        title="Italic">
+        <FiItalic size={16} />
+      </button>
+      <button type="button" onClick={() => editor.chain().focus().toggleUnderline().run()}
+        className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('underline') ? 'bg-blue-100 text-blue-700' : ''}`}
+        title="Underline">
+        <FiUnderlineIcon size={16} />
+      </button>
+      
+      <div className="w-px h-6 bg-gray-300 mx-1 self-center" />
+      
+      {/* Colors */}
+      <div className="flex items-center gap-1">
+        <span className="text-xs text-gray-500 px-1">Color:</span>
+        {['#000000', '#ef4444', '#f59e0b', '#22c55e', '#3b82f6', '#8b5cf6', '#ec4899'].map(color => (
+          <button key={color} type="button" onClick={() => setColor(color)}
+            className="w-5 h-5 rounded border border-gray-300 hover:scale-110 transition-transform"
+            style={{ backgroundColor: color }} title={color} />
+        ))}
+      </div>
+      
+      <div className="w-px h-6 bg-gray-300 mx-1 self-center" />
+      
+      {/* Link */}
+      <button type="button" onClick={addLink}
+        className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('link') ? 'bg-blue-100 text-blue-700' : ''}`}
+        title="Add Link">
+        <FiLink size={16} />
+      </button>
+      {editor.isActive('link') && (
+        <button type="button" onClick={removeLink}
+          className="p-2 rounded hover:bg-gray-200 bg-red-50 text-red-600"
+          title="Remove Link">
+          <FiX size={16} />
+        </button>
+      )}
+      
+      <div className="w-px h-6 bg-gray-300 mx-1 self-center" />
+      
+      {/* Lists */}
+      <button type="button" onClick={() => editor.chain().focus().toggleBulletList().run()}
+        className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('bulletList') ? 'bg-blue-100 text-blue-700' : ''}`}
+        title="Bullet List">
+        <FiList size={16} />
+      </button>
+      
+      <div className="w-px h-6 bg-gray-300 mx-1 self-center" />
+      
+      {/* Text Alignment */}
+      <button type="button" onClick={() => editor.chain().focus().setTextAlign('left').run()}
+        className={`p-2 rounded hover:bg-gray-200 ${editor.isActive({ textAlign: 'left' }) ? 'bg-blue-100 text-blue-700' : ''}`}
+        title="Align Left">
+        <FiAlignLeft size={16} />
+      </button>
+      <button type="button" onClick={() => editor.chain().focus().setTextAlign('center').run()}
+        className={`p-2 rounded hover:bg-gray-200 ${editor.isActive({ textAlign: 'center' }) ? 'bg-blue-100 text-blue-700' : ''}`}
+        title="Align Center">
+        <FiAlignCenter size={16} />
+      </button>
+      <button type="button" onClick={() => editor.chain().focus().setTextAlign('right').run()}
+        className={`p-2 rounded hover:bg-gray-200 ${editor.isActive({ textAlign: 'right' }) ? 'bg-blue-100 text-blue-700' : ''}`}
+        title="Align Right">
+        <FiAlignRight size={16} />
+      </button>
+      <button type="button" onClick={() => editor.chain().focus().setTextAlign('justify').run()}
+        className={`p-2 rounded hover:bg-gray-200 ${editor.isActive({ textAlign: 'justify' }) ? 'bg-blue-100 text-blue-700' : ''}`}
+        title="Justify">
+        <FiAlignJustify size={16} />
+      </button>
+
+      {/* Table Options */}
+      {showTableOptions && (
+        <>
+          <div className="w-px h-6 bg-gray-300 mx-1 self-center" />
+          
+          <button type="button" onClick={insertTable}
+            className="p-2 rounded hover:bg-gray-200 flex items-center gap-1 text-xs"
+            title="Insert Table">
+            <FiGrid size={16} /> Table
+          </button>
+          
+          {editor.isActive('table') && (
+            <div className="flex items-center gap-1 ml-1 pl-1 border-l border-gray-300">
+              <button type="button" onClick={() => editor.chain().focus().addColumnAfter().run()}
+                className="px-2 py-1 text-xs rounded hover:bg-green-100 text-green-700 border border-green-300"
+                title="Add Column">
+                + Col
+              </button>
+              <button type="button" onClick={() => editor.chain().focus().deleteColumn().run()}
+                className="px-2 py-1 text-xs rounded hover:bg-red-100 text-red-700 border border-red-300"
+                title="Delete Column">
+                - Col
+              </button>
+              <button type="button" onClick={() => editor.chain().focus().addRowAfter().run()}
+                className="px-2 py-1 text-xs rounded hover:bg-green-100 text-green-700 border border-green-300"
+                title="Add Row">
+                + Row
+              </button>
+              <button type="button" onClick={() => editor.chain().focus().deleteRow().run()}
+                className="px-2 py-1 text-xs rounded hover:bg-red-100 text-red-700 border border-red-300"
+                title="Delete Row">
+                - Row
+              </button>
+              <button type="button" onClick={() => editor.chain().focus().deleteTable().run()}
+                className="px-2 py-1 text-xs rounded hover:bg-red-100 text-red-700 border border-red-300"
+                title="Delete Table">
+                <FiTrash2 size={14} />
+              </button>
+            </div>
+          )}
+        </>
+      )}
+    </div>
+  );
+};
+
+// Rich Text Editor with Table Support
+const RichTextEditorWithTable = ({ value, onChange, placeholder, minHeight = '200px' }) => {
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      Link.configure({ openOnClick: false }),
+      TextStyle,
+      Color,
+      Underline,
+      TextAlign.configure({
+        types: ['heading', 'paragraph'],
+      }),
+      Table.configure({
+        resizable: true,
+      }),
+      TableRow,
+      TableHeader,
+      TableCell,
+    ],
+    content: value || '',
+    onUpdate: ({ editor }) => {
+      onChange(editor.getHTML());
+    },
+  });
+
+  useEffect(() => {
+    if (editor && value !== editor.getHTML()) {
+      editor.commands.setContent(value || '');
+    }
+  }, [value, editor]);
+
+  return (
+    <div className="border-2 border-gray-200 rounded-lg overflow-hidden">
+      <RichTextToolbar editor={editor} showTableOptions={true} />
+      <style>{`
+        .rich-editor .ProseMirror table {
+          border-collapse: collapse;
+          margin: 1em 0;
+          width: 100%;
+        }
+        .rich-editor .ProseMirror th,
+        .rich-editor .ProseMirror td {
+          border: 1px solid #ccc;
+          padding: 8px 12px;
+          text-align: left;
+          min-width: 80px;
+        }
+        .rich-editor .ProseMirror th {
+          background-color: #f3f4f6;
+          font-weight: 600;
+        }
+        .rich-editor .ProseMirror tr:hover td {
+          background-color: #f9fafb;
+        }
+        .rich-editor .ProseMirror .selectedCell {
+          background-color: #dbeafe;
+        }
+        .rich-editor .ProseMirror ul {
+          list-style-type: disc;
+          padding-left: 1.5em;
+          margin: 0.5em 0;
+        }
+        .rich-editor .ProseMirror ol {
+          list-style-type: decimal;
+          padding-left: 1.5em;
+          margin: 0.5em 0;
+        }
+        .rich-editor .ProseMirror li {
+          margin: 0.25em 0;
+        }
+        .rich-editor .ProseMirror li p {
+          margin: 0;
+        }
+      `}</style>
+      <EditorContent 
+        editor={editor} 
+        className="rich-editor prose prose-sm max-w-none p-3 focus:outline-none [&_.ProseMirror]:outline-none"
+        style={{ minHeight }}
+      />
+    </div>
+  );
+};
+
+// Simple Rich Text Editor (without table)
+const SimpleRichTextEditor = ({ value, onChange, placeholder }) => {
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      Link.configure({ openOnClick: false }),
+      TextStyle,
+      Color,
+      Underline,
+      TextAlign.configure({
+        types: ['heading', 'paragraph'],
+      }),
+    ],
+    content: value || '',
+    onUpdate: ({ editor }) => {
+      onChange(editor.getHTML());
+    },
+  });
+
+  useEffect(() => {
+    if (editor && value !== editor.getHTML()) {
+      editor.commands.setContent(value || '');
+    }
+  }, [value, editor]);
+
+  return (
+    <div className="border-2 border-gray-200 rounded-lg overflow-hidden">
+      <RichTextToolbar editor={editor} />
+      <style>{`
+        .simple-editor .ProseMirror ul {
+          list-style-type: disc;
+          padding-left: 1.5em;
+          margin: 0.5em 0;
+        }
+        .simple-editor .ProseMirror ol {
+          list-style-type: decimal;
+          padding-left: 1.5em;
+          margin: 0.5em 0;
+        }
+        .simple-editor .ProseMirror li {
+          margin: 0.25em 0;
+        }
+        .simple-editor .ProseMirror li p {
+          margin: 0;
+        }
+      `}</style>
+      <EditorContent 
+        editor={editor} 
+        className="simple-editor prose prose-sm max-w-none p-3 min-h-[100px] focus:outline-none [&_.ProseMirror]:outline-none [&_.ProseMirror]:min-h-[80px]"
+      />
+    </div>
+  );
+};
 
 // Collapsible Section Component
 const CollapsibleSection = ({ title, children, defaultOpen = false, icon = null, badge = null, color = 'indigo' }) => {
