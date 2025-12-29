@@ -235,20 +235,27 @@ const ExamSubPage = () => {
       <div className="bg-white border-b shadow-sm sticky top-16 z-30">
         <div className="container mx-auto px-6">
           <div className="flex items-center gap-4 overflow-x-auto py-3 scrollbar-hide">
-            {menuItems.map((item) => (
-              <Link
-                key={item.id}
-                to={`/exams/${exam.slug || id}/${item.id}${isPreview ? '?preview=true' : ''}`}
-                className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${
-                  item.id === section
-                    ? 'bg-orange-500 text-white'
-                    : 'text-gray-700 hover:bg-gray-100'
-                }`}
-              >
-                {getMenuIcon(item.id)}
-                {item.label}
-              </Link>
-            ))}
+            {menuItems.map((item, idx) => {
+              const isFirstItem = idx === 0;
+              // First menu item links to main page, others to sub-pages
+              const linkTo = isFirstItem 
+                ? `/exams/${exam.slug || id}${isPreview ? '?preview=true' : ''}`
+                : `/exams/${exam.slug || id}/${item.id}${isPreview ? '?preview=true' : ''}`;
+              return (
+                <Link
+                  key={item.id}
+                  to={linkTo}
+                  className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${
+                    item.id === section
+                      ? 'bg-orange-500 text-white'
+                      : 'text-gray-700 hover:bg-gray-100'
+                  }`}
+                >
+                  {getMenuIcon(item.id)}
+                  {item.label}
+                </Link>
+              );
+            })}
           </div>
         </div>
       </div>
