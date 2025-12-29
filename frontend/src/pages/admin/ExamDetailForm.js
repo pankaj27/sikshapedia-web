@@ -1652,6 +1652,17 @@ const ExamDetailForm = () => {
             <div><label className="block text-sm font-medium text-gray-700 mb-1">Counseling Date</label>
               <input type="date" name="counseling_date" value={formData.counseling_date} onChange={handleChange} className="w-full border border-gray-300 rounded-lg px-4 py-2.5" /></div>
           </div>
+          {/* Section Save Button */}
+          {id && (
+            <div className="mt-4 pt-4 border-t border-gray-200 flex justify-end">
+              <SectionSaveButton 
+                section="dates" 
+                onSave={handleSectionSave} 
+                isSaving={sectionSaving.dates} 
+                isSaved={sectionSaved.dates}
+              />
+            </div>
+          )}
         </CollapsibleSection>
 
         {/* Exam Pattern & Details */}
