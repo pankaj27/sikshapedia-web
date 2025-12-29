@@ -99,7 +99,7 @@ const ExamsDetailManagement = () => {
           <tbody className="bg-white divide-y divide-gray-200">
             {filteredExams.length === 0 ? (
               <tr>
-                <td colSpan="8" className="px-6 py-8 text-center text-gray-500">
+                <td colSpan="7" className="px-6 py-8 text-center text-gray-500">
                   No exams found. Add your first detailed exam!
                 </td>
               </tr>
