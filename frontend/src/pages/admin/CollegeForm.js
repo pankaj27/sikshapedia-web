@@ -4191,12 +4191,16 @@ const CollegeForm = () => {
                                         }} className="w-full border-2 rounded-lg px-3 py-2 text-sm" placeholder="e.g., Overview, Key Points" />
                                       </div>
                                       <div>
-                                        <label className="block text-xs font-medium text-gray-700 mb-1">Content</label>
-                                        <textarea value={block.content || ''} onChange={(e) => {
-                                          const newToc = [...(formData.seo_toc || [])];
-                                          newToc[index].blocks[blockIndex].content = e.target.value;
-                                          setFormData({...formData, seo_toc: newToc});
-                                        }} rows={5} className="w-full border-2 rounded-lg px-3 py-2 text-sm" placeholder="Write your content here..." />
+                                        <label className="block text-xs font-medium text-gray-700 mb-1">Content (Rich Text)</label>
+                                        <SimpleRichTextEditorForTOC 
+                                          value={block.content || ''} 
+                                          onChange={(html) => {
+                                            const newToc = [...(formData.seo_toc || [])];
+                                            newToc[index].blocks[blockIndex].content = html;
+                                            setFormData({...formData, seo_toc: newToc});
+                                          }}
+                                          placeholder="Write your content here..."
+                                        />
                                       </div>
                                     </div>
                                   )}
