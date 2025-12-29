@@ -24,7 +24,7 @@ import useAutoSaveDraft from '../../hooks/useAutoSaveDraft';
 import DraftRestoreBanner, { AutoSaveIndicator } from '../../components/admin/DraftRestoreBanner';
 
 // Simple Rich Text Toolbar for Short Description
-const SimpleRichTextToolbar = ({ editor }) => {
+const SimpleRichTextToolbar = ({ editor, showTableOptions = false }) => {
   if (!editor) return null;
 
   const addLink = () => {
@@ -40,6 +40,12 @@ const SimpleRichTextToolbar = ({ editor }) => {
 
   const setColor = (color) => {
     editor.chain().focus().setColor(color).run();
+  };
+
+  const insertTable = () => {
+    const rows = parseInt(window.prompt('Number of rows:', '3')) || 3;
+    const cols = parseInt(window.prompt('Number of columns:', '3')) || 3;
+    editor.chain().focus().insertTable({ rows, cols, withHeaderRow: true }).run();
   };
 
   return (
@@ -97,6 +103,49 @@ const SimpleRichTextToolbar = ({ editor }) => {
         title="Bullet List">
         <FiList size={16} />
       </button>
+
+      {/* Table Options */}
+      {showTableOptions && (
+        <>
+          <div className="w-px h-6 bg-gray-300 mx-1 self-center" />
+          
+          <button type="button" onClick={insertTable}
+            className="p-2 rounded hover:bg-gray-200 flex items-center gap-1 text-xs"
+            title="Insert Table">
+            <FiGrid size={16} /> Table
+          </button>
+          
+          {editor.isActive('table') && (
+            <div className="flex items-center gap-1 ml-1 pl-1 border-l border-gray-300">
+              <button type="button" onClick={() => editor.chain().focus().addColumnAfter().run()}
+                className="px-2 py-1 text-xs rounded hover:bg-green-100 text-green-700 border border-green-300"
+                title="Add Column">
+                + Col
+              </button>
+              <button type="button" onClick={() => editor.chain().focus().deleteColumn().run()}
+                className="px-2 py-1 text-xs rounded hover:bg-red-100 text-red-700 border border-red-300"
+                title="Delete Column">
+                - Col
+              </button>
+              <button type="button" onClick={() => editor.chain().focus().addRowAfter().run()}
+                className="px-2 py-1 text-xs rounded hover:bg-green-100 text-green-700 border border-green-300"
+                title="Add Row">
+                + Row
+              </button>
+              <button type="button" onClick={() => editor.chain().focus().deleteRow().run()}
+                className="px-2 py-1 text-xs rounded hover:bg-red-100 text-red-700 border border-red-300"
+                title="Delete Row">
+                - Row
+              </button>
+              <button type="button" onClick={() => editor.chain().focus().deleteTable().run()}
+                className="px-2 py-1 text-xs rounded hover:bg-red-100 text-red-700 border border-red-300"
+                title="Delete Table">
+                <FiTrash2 size={14} />
+              </button>
+            </div>
+          )}
+        </>
+      )}
     </div>
   );
 };
