@@ -563,6 +563,242 @@ const ExamDetailForm = () => {
     }
   };
 
+  // ============================================
+  // Section-wise Saving Functions (to avoid Network Error on large forms)
+  // ============================================
+
+  // Get section data based on section name
+  const getSectionData = (section) => {
+    switch (section) {
+      case 'basic':
+        return {
+          name: formData.name,
+          slug: formData.slug,
+          full_name: formData.full_name,
+          exam_type: formData.exam_type,
+          exam_level: formData.exam_level,
+          conducting_body: formData.conducting_body,
+          state: formData.state,
+          description: formData.description,
+          streams: formData.streams || [],
+          is_popular: formData.is_popular,
+          is_featured: formData.is_featured,
+          popular_order: formData.popular_order,
+          display_priority: formData.display_priority
+        };
+      case 'dates':
+        return {
+          exam_date: formData.exam_date,
+          application_start: formData.application_start,
+          application_end: formData.application_end,
+          result_date: formData.result_date,
+          counseling_date: formData.counseling_date
+        };
+      case 'pattern':
+        return {
+          exam_pattern: formData.exam_pattern,
+          exam_syllabus: formData.exam_syllabus,
+          eligibility: formData.eligibility,
+          age_limit: formData.age_limit,
+          application_fee: formData.application_fee,
+          exam_duration: formData.exam_duration,
+          exam_mode: formData.exam_mode,
+          total_marks: formData.total_marks,
+          total_questions: formData.total_questions,
+          negative_marking: formData.negative_marking,
+          marking_scheme: formData.marking_scheme,
+          languages_offered: formData.languages_offered || [],
+          sections: formData.sections || []
+        };
+      case 'content':
+        return {
+          key_summary: formData.key_summary || [],
+          preparation_tips: formData.preparation_tips || [],
+          previous_year_cutoffs: formData.previous_year_cutoffs || [],
+          question_papers: formData.question_papers || [],
+          study_materials: formData.study_materials || [],
+          important_links: formData.important_links || [],
+          total_applicants: formData.total_applicants,
+          total_seats: formData.total_seats,
+          difficulty_level: formData.difficulty_level,
+          official_website: formData.official_website,
+          exam_centers: formData.exam_centers || [],
+          accepted_by: formData.accepted_by || []
+        };
+      case 'media':
+        return {
+          logo_url: formData.logo_url,
+          content_images: formData.content_images || [],
+          content_videos: formData.content_videos || [],
+          seo_images: formData.seo_images || [],
+          seo_video_url: formData.seo_video_url,
+          seo_video_title: formData.seo_video_title,
+          seo_video_description: formData.seo_video_description
+        };
+      case 'seo':
+        return {
+          meta_title: formData.meta_title,
+          meta_description: formData.meta_description,
+          meta_keywords: formData.meta_keywords,
+          og_title: formData.og_title,
+          og_description: formData.og_description,
+          og_image_url: formData.og_image_url,
+          canonical_url: formData.canonical_url,
+          robots_meta: formData.robots_meta,
+          schema_type: formData.schema_type,
+          seo_intro: formData.seo_intro,
+          seo_full_content: formData.seo_full_content,
+          seo_toc: formData.seo_toc || [],
+          seo_tables: formData.seo_tables || [],
+          seo_faqs: formData.seo_faqs || []
+        };
+      case 'menu':
+        return {
+          menu_config: formData.menu_config,
+          sidebar_widgets: formData.sidebar_widgets
+        };
+      default:
+        return {};
+    }
+  };
+
+  // Save a single section
+  const saveSectionData = async (section, sectionData) => {
+    // Remove null/undefined values
+    Object.keys(sectionData).forEach(key => {
+      if (sectionData[key] === null || sectionData[key] === undefined) {
+        delete sectionData[key];
+      }
+    });
+    
+    console.log(`[ExamDetailForm] Saving ${section} section:`, JSON.stringify(sectionData).length, 'bytes');
+    await api.patch(`/exams-detail/${id}/section/${section}`, sectionData);
+  };
+
+  // Handle individual section save (for Save Section buttons)
+  const handleSectionSave = async (section) => {
+    if (!id) {
+      alert('অনুগ্রহ করে প্রথমে Draft হিসেবে সেভ করুন তারপর আলাদা সেকশন সেভ করতে পারবেন।');
+      return;
+    }
+    
+    setSectionSaving(prev => ({ ...prev, [section]: true }));
+    setSectionSaved(prev => ({ ...prev, [section]: false }));
+    
+    try {
+      const sectionData = getSectionData(section);
+      await saveSectionData(section, sectionData);
+      
+      setSectionSaved(prev => ({ ...prev, [section]: true }));
+      
+      // Reset saved state after 3 seconds
+      setTimeout(() => {
+        setSectionSaved(prev => ({ ...prev, [section]: false }));
+      }, 3000);
+      
+    } catch (error) {
+      console.error(`[ExamDetailForm] Error saving ${section}:`, error);
+      alert(`${section} সেকশন সেভ করতে সমস্যা হয়েছে: ${error.response?.data?.detail || error.message}`);
+    } finally {
+      setSectionSaving(prev => ({ ...prev, [section]: false }));
+    }
+  };
+
+  // Save all sections sequentially (one by one to avoid timeout/Network Error)
+  const handleSequentialSaveAll = async (targetStatus) => {
+    if (!id) {
+      alert('অনুগ্রহ করে প্রথমে Draft হিসেবে সেভ করুন।');
+      return false;
+    }
+
+    const sections = ['basic', 'dates', 'pattern', 'content', 'media', 'seo', 'menu'];
+    let allSaved = true;
+
+    for (const section of sections) {
+      try {
+        setSectionSaving(prev => ({ ...prev, [section]: true }));
+        const sectionData = getSectionData(section);
+        await saveSectionData(section, sectionData);
+        setSectionSaved(prev => ({ ...prev, [section]: true }));
+        console.log(`[ExamDetailForm] ${section} section saved`);
+      } catch (error) {
+        console.error(`[ExamDetailForm] Error saving ${section}:`, error);
+        allSaved = false;
+        alert(`${section} সেকশন সেভ করতে সমস্যা: ${error.response?.data?.detail || error.message}`);
+        break;
+      } finally {
+        setSectionSaving(prev => ({ ...prev, [section]: false }));
+      }
+    }
+
+    if (allSaved) {
+      // Now update the status
+      try {
+        await api.patch(`/exams-detail/${id}/section/basic`, { status: targetStatus });
+        const statusMsg = targetStatus === 'published' 
+          ? 'সব সেকশন সেভ হয়েছে এবং এক্সাম প্রকাশিত হয়েছে!' 
+          : targetStatus === 'pending'
+            ? 'সব সেকশন সেভ হয়েছে এবং রিভিউয়ের জন্য জমা হয়েছে!'
+            : 'সব সেকশন ড্রাফট হিসেবে সেভ হয়েছে!';
+        alert(statusMsg);
+        navigate('/admin/exams-detail');
+        return true;
+      } catch (error) {
+        alert(`স্ট্যাটাস আপডেট করতে সমস্যা: ${error.response?.data?.detail || error.message}`);
+        return false;
+      }
+    }
+
+    return false;
+  };
+
+  // Save as Draft handler - uses section-wise saving on edit mode
+  const handleSaveDraft = async () => {
+    setSaving(true);
+    try {
+      if (id) {
+        // Edit mode - use section-wise saving to avoid Network Error
+        await handleSequentialSaveAll('draft');
+      } else {
+        // New exam - use single POST request (first time creation)
+        const dataToSave = { ...formData, status: 'draft' };
+        const response = await api.post('/exams-detail', dataToSave);
+        clearExamDraft();
+        alert('এক্সাম তৈরি হয়েছে! এখন আলাদা সেকশন সেভ করতে পারবেন।');
+        // Navigate to edit mode with the new ID
+        navigate(`/admin/exams-detail?edit=${response.data.id}`);
+      }
+    } catch (error) {
+      console.error('Error saving draft:', error);
+      alert(`সেভ করতে সমস্যা: ${error.response?.data?.detail || error.message}`);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  // Handle Publish - uses section-wise saving
+  const handlePublish = async () => {
+    setSaving(true);
+    try {
+      if (id) {
+        // Edit mode - use section-wise saving
+        await handleSequentialSaveAll('pending');
+      } else {
+        // New exam - create first then update status
+        const dataToSave = { ...formData, status: 'pending' };
+        await api.post('/exams-detail', dataToSave);
+        clearExamDraft();
+        alert('এক্সাম তৈরি এবং রিভিউয়ের জন্য জমা হয়েছে!');
+        navigate('/admin/exams-detail');
+      }
+    } catch (error) {
+      console.error('Error publishing:', error);
+      alert(`প্রকাশ করতে সমস্যা: ${error.response?.data?.detail || error.message}`);
+    } finally {
+      setSaving(false);
+    }
+  };
+
   // Fetch master location data
   useEffect(() => {
     const fetchMasterData = async () => {
