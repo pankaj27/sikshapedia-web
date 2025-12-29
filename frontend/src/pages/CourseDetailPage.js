@@ -260,9 +260,9 @@ const CourseDetailPage = () => {
       <section className="relative bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 text-white overflow-hidden">
         <div className="absolute inset-0 opacity-10" style={{backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '32px 32px'}}></div>
         
-        <div className="relative container mx-auto px-4 py-8">
+        <div className="relative container mx-auto px-4 py-5">
           {/* Breadcrumb */}
-          <div className="flex items-center gap-2 text-blue-200 text-sm mb-6">
+          <div className="flex items-center gap-2 text-blue-200 text-sm mb-3">
             <Link to="/" className="hover:text-white transition-colors">Home</Link>
             <FiChevronRight size={14} />
             <Link to="/courses" className="hover:text-white transition-colors">Courses</Link>
@@ -270,69 +270,54 @@ const CourseDetailPage = () => {
             <span className="text-white font-medium">{courseName}</span>
           </div>
 
-          <div className="grid lg:grid-cols-3 gap-8">
-            {/* Left Content */}
-            <div className="lg:col-span-2">
-              <div className="flex items-center gap-3 mb-4">
-                {degreeType && <span className="px-3 py-1 bg-yellow-500 text-yellow-900 rounded-full text-xs font-bold uppercase">{degreeType}</span>}
-                {duration && <span className="px-3 py-1 bg-white/20 rounded-full text-xs font-medium">{duration}</span>}
-              </div>
-              
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold mb-4 leading-tight">
-                {fullName}
-              </h1>
-              
-              {description && (
-                <p className="text-blue-100 text-lg mb-6 max-w-2xl">
-                  {description.replace(/<[^>]*>/g, '').substring(0, 200)}{description.replace(/<[^>]*>/g, '').length > 200 ? '...' : ''}
-                </p>
-              )}
+          <div className="flex items-center gap-3 mb-2">
+            {degreeType && <span className="px-3 py-1 bg-yellow-500 text-yellow-900 rounded-full text-xs font-bold uppercase">{degreeType}</span>}
+            {duration && <span className="px-3 py-1 bg-white/20 rounded-full text-xs font-medium">{duration}</span>}
+          </div>
+          
+          <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold mb-3 leading-tight">
+            {fullName}
+          </h1>
 
-              {/* Quick Stats - Only show stats that have data */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                {duration && (
-                  <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
-                    <FiClock className="text-yellow-400 mb-2" size={24} />
-                    <p className="text-2xl font-bold">{duration}</p>
-                    <p className="text-blue-200 text-sm">Duration</p>
-                  </div>
-                )}
-                {avgFees > 0 && (
-                  <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
-                    <FiDollarSign className="text-green-400 mb-2" size={24} />
-                    <p className="text-2xl font-bold">₹{(avgFees/100000).toFixed(1)}L</p>
-                    <p className="text-blue-200 text-sm">Avg. Fees/Year</p>
-                  </div>
-                )}
-                {totalColleges > 0 && (
-                  <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
-                    <HiOutlineOfficeBuilding className="text-purple-400 mb-2" size={24} />
-                    <p className="text-2xl font-bold">{totalColleges}+</p>
-                    <p className="text-blue-200 text-sm">Colleges</p>
-                  </div>
-                )}
-                {(course.salary_range?.min > 0 || course.salary_range?.max > 0) && (
-                  <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
-                    <FiTrendingUp className="text-orange-400 mb-2" size={24} />
-                    <p className="text-2xl font-bold">₹{course.salary_range?.min ? (course.salary_range.min/100000).toFixed(1) : '0'}-{course.salary_range?.max ? (course.salary_range.max/100000).toFixed(1) : '0'}L</p>
-                    <p className="text-blue-200 text-sm">Salary Range</p>
-                  </div>
-                )}
+          {/* Quick Stats - Compact horizontal layout */}
+          <div className="flex flex-wrap gap-4 mb-4 text-sm">
+            {duration && (
+              <div className="flex items-center gap-2">
+                <FiClock className="text-yellow-400" size={18} />
+                <span className="font-semibold">{duration}</span>
               </div>
+            )}
+            {avgFees > 0 && (
+              <div className="flex items-center gap-2">
+                <FiDollarSign className="text-green-400" size={18} />
+                <span className="font-semibold">₹{(avgFees/100000).toFixed(1)}L/Year</span>
+              </div>
+            )}
+            {totalColleges > 0 && (
+              <div className="flex items-center gap-2">
+                <HiOutlineOfficeBuilding className="text-purple-400" size={18} />
+                <span className="font-semibold">{totalColleges}+ Colleges</span>
+              </div>
+            )}
+            {(course.salary_range?.min > 0 || course.salary_range?.max > 0) && (
+              <div className="flex items-center gap-2">
+                <FiTrendingUp className="text-orange-400" size={18} />
+                <span className="font-semibold">₹{course.salary_range?.min ? (course.salary_range.min/100000).toFixed(1) : '0'}-{course.salary_range?.max ? (course.salary_range.max/100000).toFixed(1) : '0'}L Salary</span>
+              </div>
+            )}
+          </div>
 
-              {/* Action Buttons */}
-              <div className="flex flex-wrap gap-3">
-                <button onClick={() => setActiveWidget('apply')} className="px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-xl transition-all flex items-center gap-2 shadow-lg shadow-orange-500/30">
-                  <FiSend size={18} /> Apply Now
-                </button>
-                <button onClick={() => setActiveWidget('counselling')} className="px-6 py-3 bg-white/20 hover:bg-white/30 text-white font-semibold rounded-xl transition-all flex items-center gap-2 backdrop-blur-sm">
-                  <FiPhone size={18} /> Free Counselling
-                </button>
-                <button onClick={() => setIsSaved(!isSaved)} className={`px-4 py-3 rounded-xl transition-all flex items-center gap-2 ${isSaved ? 'bg-red-500 text-white' : 'bg-white/10 hover:bg-white/20 text-white'}`}>
-                  <FiHeart size={18} fill={isSaved ? 'white' : 'none'} />
-                </button>
-              </div>
-            </div>
+          {/* Action Buttons */}
+          <div className="flex flex-wrap gap-3">
+            <button onClick={() => setActiveWidget('apply')} className="px-5 py-2.5 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg transition-all flex items-center gap-2 shadow-lg shadow-orange-500/30 text-sm">
+              <FiSend size={16} /> Apply Now
+            </button>
+            <button onClick={() => setActiveWidget('counselling')} className="px-5 py-2.5 bg-white/20 hover:bg-white/30 text-white font-semibold rounded-lg transition-all flex items-center gap-2 backdrop-blur-sm text-sm">
+              <FiPhone size={16} /> Free Counselling
+            </button>
+            <button onClick={() => setIsSaved(!isSaved)} className={`px-3 py-2.5 rounded-lg transition-all flex items-center gap-2 ${isSaved ? 'bg-red-500 text-white' : 'bg-white/10 hover:bg-white/20 text-white'}`}>
+              <FiHeart size={16} fill={isSaved ? 'white' : 'none'} />
+            </button>
           </div>
         </div>
       </section>
