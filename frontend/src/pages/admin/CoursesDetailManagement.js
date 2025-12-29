@@ -162,6 +162,15 @@ const CoursesDetailManagement = () => {
                     <Button
                       variant="outline"
                       size="sm"
+                      onClick={() => window.open(`/courses/${course.slug}`, '_blank')}
+                      className="mr-2 text-green-600 hover:text-green-700 hover:bg-green-50"
+                      title="Preview Course Page"
+                    >
+                      <FiEye className="mr-1" /> Preview
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
                       onClick={() => navigate(`/admin/courses-detail/edit/${course.id}`)}
                       className="mr-2"
                     >
