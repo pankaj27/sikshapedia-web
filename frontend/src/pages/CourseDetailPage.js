@@ -357,9 +357,9 @@ const CourseDetailPage = () => {
             {navTabs.map((tab) => {
               const Icon = tab.icon;
               return (
-                <button
+                <Link
                   key={tab.id}
-                  onClick={() => { setActiveTab(tab.id); scrollToSection(tab.id); }}
+                  to={getSectionUrl(tab.id)}
                   className={`flex items-center gap-2 px-4 py-3 rounded-lg font-medium text-sm whitespace-nowrap transition-all ${
                     activeTab === tab.id 
                       ? 'bg-orange-100 text-orange-700' 
@@ -368,7 +368,7 @@ const CourseDetailPage = () => {
                 >
                   <Icon size={16} />
                   {tab.label}
-                </button>
+                </Link>
               );
             })}
           </div>
