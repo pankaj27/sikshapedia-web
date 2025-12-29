@@ -346,7 +346,7 @@ function App() {
               <Route path="/courses/education" element={<DynamicCourseListingPage />} />
               <Route path="/course-finder" element={<CourseFinderPage />} />
               <Route path="/courses/listing/:category" element={<CourseListingPage />} />
-              <Route path="/courses/:slug/:section" element={<CourseDetailPage />} />
+              <Route path="/courses/:slug/:section" element={<CourseSubPage />} />
               <Route path="/courses/:stream/:subStream" element={<CourseListingPage />} />
               <Route path="/courses/:slug" element={<CourseDetailPage />} />
                   
