@@ -33,6 +33,7 @@ const DiplomaCoursesPage = lazy(() => import('./pages/DiplomaCoursesPage'));
 const DynamicCourseListingPage = lazy(() => import('./pages/DynamicCourseListingPage'));
 const CourseListingPage = lazy(() => import('./pages/CourseListingPage'));
 const CourseDetailPage = lazy(() => import('./pages/CourseDetailPage'));
+const CourseSubPage = lazy(() => import('./pages/CourseSubPage'));
 const CourseFinderPage = lazy(() => import('./pages/CourseFinderPage'));
 const StudentDashboard = lazy(() => import('./pages/EnhancedStudentDashboardV2'));
 const GlobalSearchPage = lazy(() => import('./pages/GlobalSearchPage'));
