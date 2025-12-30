@@ -1870,11 +1870,17 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
                       <>
                         <h2 className="text-xl sm:text-2xl font-bold mb-4">{college.name} Campus Gallery</h2>
                         <div className="grid grid-cols-3 gap-4 mb-8">
-                          {(college.campus_images || college.images.slice(1)).slice(0, 6).map((img, i) => (
-                            <div key={i} className="rounded-lg aspect-video overflow-hidden border">
-                              <img loading="lazy" src={img} alt={`Campus ${i + 1}`} className="w-full h-full object-cover" />
-                            </div>
-                          ))}
+                          {(college.campus_images || college.images.slice(1)).slice(0, 6).map((img, i) => {
+                            // Handle both string URLs and object format {url: '...', alt: '...'}
+                            const imgUrl = typeof img === 'string' ? img : img?.url;
+                            const imgAlt = typeof img === 'object' && img?.alt ? img.alt : `Campus ${i + 1}`;
+                            if (!imgUrl) return null;
+                            return (
+                              <div key={i} className="rounded-lg aspect-video overflow-hidden border">
+                                <img loading="lazy" src={imgUrl} alt={imgAlt} className="w-full h-full object-cover" />
+                              </div>
+                            );
+                          })}
                         </div>
                       </>
                     )}
