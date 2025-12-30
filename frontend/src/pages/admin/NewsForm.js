@@ -1009,16 +1009,53 @@ const NewsForm = () => {
                             <FiTrash2 />
                           </button>
                         </div>
-                        <div className="grid grid-cols-2 gap-3">
-                          <div className="col-span-2">
+                        
+                        {/* Upload or URL option */}
+                        <div className="mb-3">
+                          <div className="flex gap-2 mb-2">
                             <input
-                              type="url"
-                              value={img.url}
-                              onChange={(e) => updateGalleryImage(idx, 'url', e.target.value)}
-                              className="w-full border rounded px-3 py-2 text-sm"
-                              placeholder="Image URL"
+                              type="file"
+                              accept="image/*"
+                              onChange={async (e) => {
+                                const file = e.target.files?.[0];
+                                if (file) {
+                                  const formDataUpload = new FormData();
+                                  formDataUpload.append('file', file);
+                                  try {
+                                    const response = await api.post('/upload/image?type=content', formDataUpload, {
+                                      headers: { 'Content-Type': 'multipart/form-data' }
+                                    });
+                                    updateGalleryImage(idx, 'url', response.data.url);
+                                  } catch (error) {
+                                    console.error('Upload failed:', error);
+                                    alert('Upload failed. Please use URL instead.');
+                                  }
+                                }
+                              }}
+                              id={`gallery-upload-${idx}`}
+                              className="hidden"
                             />
+                            <label 
+                              htmlFor={`gallery-upload-${idx}`} 
+                              className="flex-1 flex items-center justify-center gap-2 px-4 py-2 border-2 border-dashed border-orange-300 rounded-lg cursor-pointer hover:bg-orange-50 transition-colors"
+                            >
+                              <FiUpload className="text-orange-500" />
+                              <span className="text-sm text-orange-600 font-medium">Upload Image</span>
+                            </label>
                           </div>
+                          <div className="flex items-center gap-2 text-xs text-gray-400">
+                            <span>or paste URL:</span>
+                          </div>
+                          <input
+                            type="url"
+                            value={img.url}
+                            onChange={(e) => updateGalleryImage(idx, 'url', e.target.value)}
+                            className="w-full border rounded px-3 py-2 text-sm mt-1"
+                            placeholder="https://example.com/image.jpg"
+                          />
+                        </div>
+                        
+                        <div className="grid grid-cols-2 gap-3">
                           <div>
                             <input
                               type="text"
@@ -1039,7 +1076,7 @@ const NewsForm = () => {
                           </div>
                         </div>
                         {img.url && (
-                          <img src={img.url} alt={img.alt} className="mt-3 w-full h-24 object-cover rounded" />
+                          <img src={img.url} alt={img.alt} className="mt-3 w-full h-32 object-cover rounded border" />
                         )}
                       </div>
                     ))}
