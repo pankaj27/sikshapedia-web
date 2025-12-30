@@ -4240,7 +4240,8 @@ async def update_college_media_section(college_id: str, data: dict, current_user
         'banner_alt', 'images', 'videos', 'campus_images', 'campus_video_url',
         'campus_video_title', 'campus_video_description',
         'description', 'highlights', 'brochure_url', 
-        'virtual_tour_url', 'virtual_tour_title', 'virtual_tour_description'
+        'virtual_tour_url', 'virtual_tour_title', 'virtual_tour_description',
+        'description_tables'  # Tables for description section
     ]
     
     update_data = {k: v for k, v in data.items() if k in allowed_fields}
