@@ -2239,7 +2239,9 @@ const CollegeForm = () => {
           virtual_tour_description: formData.virtual_tour_description,
           description: formData.description,
           highlights: formData.highlights,
-          brochure_url: formData.brochure_url
+          brochure_url: formData.brochure_url,
+          // Tables for description section
+          description_tables: formData.description_tables || []
         };
       case 'courses':
         return {
