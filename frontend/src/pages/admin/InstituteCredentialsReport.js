@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import AdminLayout from '../../components/admin/AdminLayout';
-import { FiDownload, FiSearch, FiEye, FiEyeOff, FiCopy, FiCheck, FiMail, FiPhone } from 'react-icons/fi';
+import { FiDownload, FiSearch, FiEye, FiEyeOff, FiCopy, FiCheck, FiMail, FiPhone, FiRefreshCw, FiZap } from 'react-icons/fi';
 import api from '../../api/axios';
 
 const InstituteCredentialsReport = () => {
@@ -9,6 +9,8 @@ const InstituteCredentialsReport = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [showPasswords, setShowPasswords] = useState({});
   const [copiedId, setCopiedId] = useState(null);
+  const [generating, setGenerating] = useState(false);
+  const [generationResult, setGenerationResult] = useState(null);
 
   useEffect(() => {
     fetchCredentials();
