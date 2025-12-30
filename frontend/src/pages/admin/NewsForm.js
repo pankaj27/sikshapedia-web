@@ -98,6 +98,20 @@ const RichTextToolbar = ({ editor, showTableOptions = false, showImageOption = f
 
       <div className="w-px h-6 bg-gray-300 mx-1 self-center" />
 
+      {/* Headings */}
+      <button type="button" onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+        className={`px-2 py-1 rounded hover:bg-gray-200 text-sm font-bold ${editor.isActive('heading', { level: 2 }) ? 'bg-blue-100 text-blue-700' : ''}`}
+        title="Heading 2">
+        H2
+      </button>
+      <button type="button" onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
+        className={`px-2 py-1 rounded hover:bg-gray-200 text-sm font-bold ${editor.isActive('heading', { level: 3 }) ? 'bg-blue-100 text-blue-700' : ''}`}
+        title="Heading 3">
+        H3
+      </button>
+
+      <div className="w-px h-6 bg-gray-300 mx-1 self-center" />
+
       {/* Lists */}
       <button type="button" onClick={() => editor.chain().focus().toggleBulletList().run()}
         className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('bulletList') ? 'bg-blue-100 text-blue-700' : ''}`}
