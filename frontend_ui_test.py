@@ -14,7 +14,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
 
 # Configuration
-FRONTEND_URL = "https://exam-editor.preview.emergentagent.com"
+FRONTEND_URL = "https://campusportal-13.preview.emergentagent.com"
 ADMIN_CREDENTIALS = {
     "email": "admin@admissionbuddy.co",
     "password": "admin123"

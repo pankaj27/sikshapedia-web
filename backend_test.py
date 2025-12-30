@@ -11,7 +11,7 @@ import time
 from typing import Dict, Any, Optional
 
 # Backend URL from frontend .env
-BASE_URL = "https://exam-editor.preview.emergentagent.com/api"
+BASE_URL = "https://campusportal-13.preview.emergentagent.com/api"
 
 # Test credentials
 ADMIN_CREDENTIALS = {
@@ -8684,7 +8684,7 @@ class APITester:
             return
         
         # Test 1: Main page loading simulation
-        main_page_url = "https://exam-editor.preview.emergentagent.com/exams/gate-2025"
+        main_page_url = "https://campusportal-13.preview.emergentagent.com/exams/gate-2025"
         self.log_test("Main Page URL Structure", True, f"Expected URL: {main_page_url}")
         
         # Test 2: Page title verification

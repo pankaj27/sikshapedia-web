@@ -7,7 +7,7 @@ import requests
 import json
 import time
 
-BASE_URL = "https://exam-editor.preview.emergentagent.com/api"
+BASE_URL = "https://campusportal-13.preview.emergentagent.com/api"
 
 ADMIN_CREDENTIALS = {
     "email": "admin@admissionbuddy.co",
