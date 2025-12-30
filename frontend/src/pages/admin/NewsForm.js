@@ -739,14 +739,18 @@ const NewsForm = () => {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Summary *</label>
-                      <textarea
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Summary * 
+                        <span className="text-xs text-orange-500 ml-2">
+                          Rich text editor with bullet, image, link, justify, table (add/delete column and row)
+                        </span>
+                      </label>
+                      <RichTextEditorWithTable
                         value={formData.summary}
-                        onChange={(e) => handleChange('summary', e.target.value)}
-                        className="w-full border rounded-lg px-4 py-2.5"
-                        rows="3"
+                        onChange={(value) => handleChange('summary', value)}
                         placeholder="Brief summary of the news article"
-                        required
+                        minHeight="120px"
+                        showImage={true}
                       />
                     </div>
 
