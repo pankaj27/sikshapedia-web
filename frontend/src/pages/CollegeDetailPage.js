@@ -1991,6 +1991,82 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
                   />
                 </section>
 
+                {/* HOW TO REACH - Separate Card above Location */}
+                {college?.how_to_reach && (college.how_to_reach.by_metro || college.how_to_reach.by_bus || college.how_to_reach.by_train || college.how_to_reach.by_road || college.how_to_reach.by_air) && (
+                  <section id="how-to-reach" className="scroll-mt-40 mb-8">
+                    <h2 className="text-xl sm:text-2xl font-bold mb-4">How to Reach {college.name}</h2>
+                    <div className="bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-200 rounded-xl p-6">
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {college.how_to_reach.by_train && (
+                          <div className="bg-white rounded-lg p-4 shadow-sm border border-emerald-100">
+                            <div className="flex items-start gap-3">
+                              <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0">
+                                <span className="text-xl">🚂</span>
+                              </div>
+                              <div>
+                                <h4 className="font-semibold text-gray-900 mb-1">By Train</h4>
+                                <p className="text-sm text-gray-600">{college.how_to_reach.by_train}</p>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                        {college.how_to_reach.by_road && (
+                          <div className="bg-white rounded-lg p-4 shadow-sm border border-emerald-100">
+                            <div className="flex items-start gap-3">
+                              <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                                <span className="text-xl">🚗</span>
+                              </div>
+                              <div>
+                                <h4 className="font-semibold text-gray-900 mb-1">By Road</h4>
+                                <p className="text-sm text-gray-600">{college.how_to_reach.by_road}</p>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                        {college.how_to_reach.by_air && (
+                          <div className="bg-white rounded-lg p-4 shadow-sm border border-emerald-100">
+                            <div className="flex items-start gap-3">
+                              <div className="w-10 h-10 rounded-full bg-sky-100 flex items-center justify-center flex-shrink-0">
+                                <span className="text-xl">✈️</span>
+                              </div>
+                              <div>
+                                <h4 className="font-semibold text-gray-900 mb-1">By Air</h4>
+                                <p className="text-sm text-gray-600">{college.how_to_reach.by_air}</p>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                        {college.how_to_reach.by_metro && (
+                          <div className="bg-white rounded-lg p-4 shadow-sm border border-emerald-100">
+                            <div className="flex items-start gap-3">
+                              <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center flex-shrink-0">
+                                <span className="text-xl">🚇</span>
+                              </div>
+                              <div>
+                                <h4 className="font-semibold text-gray-900 mb-1">By Metro</h4>
+                                <p className="text-sm text-gray-600">{college.how_to_reach.by_metro}</p>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                        {college.how_to_reach.by_bus && (
+                          <div className="bg-white rounded-lg p-4 shadow-sm border border-emerald-100">
+                            <div className="flex items-start gap-3">
+                              <div className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center flex-shrink-0">
+                                <span className="text-xl">🚌</span>
+                              </div>
+                              <div>
+                                <h4 className="font-semibold text-gray-900 mb-1">By Bus</h4>
+                                <p className="text-sm text-gray-600">{college.how_to_reach.by_bus}</p>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </section>
+                )}
+
                 {/* LOCATION & MAP */}
                 <section id="location">
                   <h2 className="text-xl sm:text-2xl font-bold mb-3">{college.name} Location & Address</h2>
