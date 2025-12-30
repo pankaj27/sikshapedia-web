@@ -3110,7 +3110,7 @@ const CollegeForm = () => {
                 className="w-full border rounded px-3 py-2"
               >
                 <option value="">Select Year</option>
-                {Array.from({ length: 201 }, (_, i) => 2100 - i).map(year => (
+                {Array.from({ length: 301 }, (_, i) => 2100 - i).map(year => (
                   <option key={year} value={year}>{year}</option>
                 ))}
               </select>
