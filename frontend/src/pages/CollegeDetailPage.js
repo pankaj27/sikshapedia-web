@@ -2135,20 +2135,6 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
                           </GuestGate>
                         </div>
 
-                        {/* How to Reach - Only show if data exists */}
-                        {college?.how_to_reach && (college.how_to_reach.by_metro || college.how_to_reach.by_bus || college.how_to_reach.by_train || college.how_to_reach.by_road || college.how_to_reach.by_air) && (
-                          <div className="pt-4 border-t">
-                            <h4 className="font-bold text-sm mb-2 text-gray-900">How to Reach</h4>
-                            <div className="space-y-2 text-sm text-gray-600">
-                              {college.how_to_reach.by_metro && <p>• <strong>By Metro:</strong> {college.how_to_reach.by_metro}</p>}
-                              {college.how_to_reach.by_bus && <p>• <strong>By Bus:</strong> {college.how_to_reach.by_bus}</p>}
-                              {college.how_to_reach.by_train && <p>• <strong>By Train:</strong> {college.how_to_reach.by_train}</p>}
-                              {college.how_to_reach.by_road && <p>• <strong>By Road:</strong> {college.how_to_reach.by_road}</p>}
-                              {college.how_to_reach.by_air && <p>• <strong>By Air:</strong> {college.how_to_reach.by_air}</p>}
-                            </div>
-                          </div>
-                        )}
-
                         <Button 
                           className="w-full bg-orange-600 hover:bg-orange-700 text-white"
                           onClick={() => {
