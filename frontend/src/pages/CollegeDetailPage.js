@@ -1851,50 +1851,26 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
                   </section>
                 )}
 
-                {/* FACILITIES - Only show if data exists AND menu is enabled */}
-                {isMenuEnabled('facilities') && college?.facilities && college.facilities.length > 0 && (
-                  <section id="facilities" className={college?.menu_config?.auto_from_toc ? 'hidden' : ''}>
-                    <h2 className="text-xl sm:text-2xl font-bold mb-3">{college.name} Campus & Facilities</h2>
-                    <p className="text-gray-700 text-sm mb-4">
-                      {college.name} campus provides world-class facilities and infrastructure for students. Major facilities are highlighted below:
-                    </p>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                      {college.facilities.map((facility, idx) => {
-                        const isObject = typeof facility === 'object';
-                        const facilityName = isObject ? facility.name : facility;
-                        const facilityData = getFacilityIcon(facilityName);
-                        const IconComponent = facilityData.icon;
-                        
-                        return (
-                          <div 
-                            key={idx} 
-                            className="group flex flex-col items-center p-4 bg-white rounded-xl border border-gray-100 hover:border-orange-200 hover:shadow-lg transition-all duration-300 cursor-pointer"
-                          >
-                            <div className={`w-14 h-14 ${facilityData.color} rounded-full flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300 shadow-md`}>
-                              <IconComponent className="text-white" size={26} />
-                            </div>
-                            <span className="text-sm font-medium text-gray-700 text-center group-hover:text-orange-600 transition-colors">
-                              {facilityData.label}
-                            </span>
-                          </div>
-                        );
-                      })}
-                    </div>
-
+                {/* CAMPUS IMAGES & VIDEO - Only show if data exists */}
+                {((college.campus_images?.length > 0 || college.images?.length > 1) || (college.campus_video_url || college.seo_video_url || college.videos?.[0])) && (
+                  <section id="campus-media" className="scroll-mt-40">
                     {/* Campus Images */}
                     {(college.campus_images?.length > 0 || college.images?.length > 1) && (
-                      <div className="grid grid-cols-3 gap-4 mt-6 mb-8">
-                        {(college.campus_images || college.images.slice(1)).slice(0, 6).map((img, i) => (
-                          <div key={i} className="rounded-lg aspect-video overflow-hidden border">
-                            <img loading="lazy" src={img} alt={`Campus ${i + 1}`} className="w-full h-full object-cover" />
-                          </div>
-                        ))}
-                      </div>
+                      <>
+                        <h2 className="text-xl sm:text-2xl font-bold mb-4">{college.name} Campus Gallery</h2>
+                        <div className="grid grid-cols-3 gap-4 mb-8">
+                          {(college.campus_images || college.images.slice(1)).slice(0, 6).map((img, i) => (
+                            <div key={i} className="rounded-lg aspect-video overflow-hidden border">
+                              <img loading="lazy" src={img} alt={`Campus ${i + 1}`} className="w-full h-full object-cover" />
+                            </div>
+                          ))}
+                        </div>
+                      </>
                     )}
 
                     {/* CAMPUS VIDEO */}
                     {(college.campus_video_url || college.seo_video_url || college.videos?.[0]) && (
-                      <div className="mt-8">
+                      <div className="mt-4">
                         <h3 className="text-xl sm:text-2xl font-bold mb-4">{college.video_title || 'Campus Video Tour'}</h3>
                         <div className="rounded-lg aspect-video overflow-hidden border">
                           <iframe
