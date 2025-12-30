@@ -1026,34 +1026,20 @@ const NewsForm = () => {
                 <h2 className="text-lg font-semibold mb-4">📄 Article Content</h2>
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Content (HTML supported)</label>
-                    <textarea
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Content
+                      <span className="text-xs text-orange-500 ml-2">
+                        Rich text editor with all formatting options
+                      </span>
+                    </label>
+                    <RichTextEditorWithTable
                       value={formData.content}
-                      onChange={(e) => handleChange('content', e.target.value)}
-                      className="w-full border rounded-lg px-4 py-3 font-mono text-sm"
-                      rows="20"
-                      placeholder="<h2>Section Title</h2>
-<p>Your content here...</p>
-
-<h3>Subsection</h3>
-<ul>
-  <li>Point 1</li>
-  <li>Point 2</li>
-</ul>"
+                      onChange={(value) => handleChange('content', value)}
+                      placeholder="Write your article content here..."
+                      minHeight="400px"
+                      showImage={true}
                     />
-                    <p className="text-xs text-gray-500 mt-1">Supports HTML tags: h2, h3, p, ul, ol, li, strong, em, a, table, etc.</p>
                   </div>
-                  
-                  {/* Content Preview */}
-                  {formData.content && (
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Preview</label>
-                      <div 
-                        className="border rounded-lg p-4 prose max-w-none bg-gray-50"
-                        dangerouslySetInnerHTML={{ __html: formData.content }}
-                      />
-                    </div>
-                  )}
                 </div>
               </div>
             )}
