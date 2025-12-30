@@ -545,9 +545,12 @@ const NewsForm = () => {
     handleChange('toc_items', [...formData.toc_items, { id: `section-${Date.now()}`, title: '', level: 1 }]);
   };
 
-  const updateTocItem = (index, field, value) => {
+  const updateTocItem = (index, field, value, extraField = null, extraValue = null) => {
     const newItems = [...formData.toc_items];
     newItems[index] = { ...newItems[index], [field]: value };
+    if (extraField && extraValue !== null) {
+      newItems[index][extraField] = extraValue;
+    }
     handleChange('toc_items', newItems);
   };
 
