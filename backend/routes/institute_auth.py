@@ -709,3 +709,171 @@ async def get_credentials_report(request: Request, db=Depends(get_db)):
     )
     
     return report or {"message": "No credentials report found"}
+
+
+# ============ BULK CREDENTIALS GENERATOR (Admin Only) ============
+
+@router.post("/bulk-generate-credentials")
+async def bulk_generate_credentials(
+    background_tasks: BackgroundTasks,
+    db=Depends(get_db)
+):
+    """
+    Generate credentials for ALL institutions that don't have credentials yet.
+    Admin only endpoint - called from admin panel.
+    """
+    generated = []
+    skipped = []
+    errors = []
+    
+    # Get all existing institution IDs that have credentials
+    existing_creds = await db.institute_credentials.find({}, {"institution_id": 1, "_id": 0}).to_list(10000)
+    existing_ids = set(c["institution_id"] for c in existing_creds)
+    
+    # Get next serial number
+    count = await db.institute_credentials.count_documents({})
+    serial_number = count + 1
+    
+    # Process colleges
+    colleges = await db.colleges.find(
+        {"status": "published"},
+        {"_id": 0, "id": 1, "name": 1, "contact_email": 1, "contact_phone": 1, "email": 1, "phone": 1}
+    ).to_list(10000)
+    
+    for college in colleges:
+        inst_id = college.get("id")
+        if not inst_id or inst_id in existing_ids:
+            skipped.append({"id": inst_id, "name": college.get("name"), "reason": "Already has credentials"})
+            continue
+        
+        try:
+            # Use contact_email or email field
+            email = college.get("contact_email") or college.get("email") or ""
+            phone = college.get("contact_phone") or college.get("phone") or ""
+            name = college.get("name", "Unknown Institution")
+            
+            # Generate login ID
+            prefix = ''.join(name.upper().split())[:4]
+            login_id = f"{prefix}{serial_number:04d}"
+            password = generate_password()
+            password_hash = hash_password(password)
+            
+            credentials = {
+                "id": f"inst_cred_{uuid4().hex[:12]}",
+                "institution_id": inst_id,
+                "institution_name": name,
+                "login_id": login_id,
+                "password_hash": password_hash,
+                "email": email,
+                "phone": phone,
+                "is_active": True,
+                "last_login": None,
+                "password_changed": False,
+                "created_at": datetime.now(timezone.utc).isoformat()
+            }
+            
+            await db.institute_credentials.insert_one(credentials)
+            
+            # Store in credential_reports for admin view
+            credential_report = {
+                "id": f"cred_report_{uuid4().hex[:12]}",
+                "institution_id": inst_id,
+                "institution_name": name,
+                "login_email": email,
+                "login_id": login_id,
+                "temp_password": password,
+                "contact_email": email,
+                "contact_phone": phone,
+                "email_sent": False,
+                "whatsapp_sent": False,
+                "created_at": datetime.now(timezone.utc).isoformat()
+            }
+            await db.credential_reports.insert_one(credential_report)
+            
+            generated.append({
+                "id": inst_id,
+                "name": name,
+                "login_id": login_id,
+                "type": "college"
+            })
+            
+            existing_ids.add(inst_id)
+            serial_number += 1
+            
+        except Exception as e:
+            errors.append({"id": inst_id, "name": college.get("name"), "error": str(e)})
+    
+    # Process schools (institutions collection with type School)
+    schools = await db.colleges.find(
+        {"status": "published", "institution_type": "School"},
+        {"_id": 0, "id": 1, "name": 1, "contact_email": 1, "contact_phone": 1, "email": 1, "phone": 1}
+    ).to_list(10000)
+    
+    for school in schools:
+        inst_id = school.get("id")
+        if not inst_id or inst_id in existing_ids:
+            continue
+        
+        try:
+            email = school.get("contact_email") or school.get("email") or ""
+            phone = school.get("contact_phone") or school.get("phone") or ""
+            name = school.get("name", "Unknown School")
+            
+            prefix = ''.join(name.upper().split())[:4]
+            login_id = f"{prefix}{serial_number:04d}"
+            password = generate_password()
+            password_hash = hash_password(password)
+            
+            credentials = {
+                "id": f"inst_cred_{uuid4().hex[:12]}",
+                "institution_id": inst_id,
+                "institution_name": name,
+                "login_id": login_id,
+                "password_hash": password_hash,
+                "email": email,
+                "phone": phone,
+                "is_active": True,
+                "last_login": None,
+                "password_changed": False,
+                "created_at": datetime.now(timezone.utc).isoformat()
+            }
+            
+            await db.institute_credentials.insert_one(credentials)
+            
+            credential_report = {
+                "id": f"cred_report_{uuid4().hex[:12]}",
+                "institution_id": inst_id,
+                "institution_name": name,
+                "login_email": email,
+                "login_id": login_id,
+                "temp_password": password,
+                "contact_email": email,
+                "contact_phone": phone,
+                "email_sent": False,
+                "whatsapp_sent": False,
+                "created_at": datetime.now(timezone.utc).isoformat()
+            }
+            await db.credential_reports.insert_one(credential_report)
+            
+            generated.append({
+                "id": inst_id,
+                "name": name,
+                "login_id": login_id,
+                "type": "school"
+            })
+            
+            existing_ids.add(inst_id)
+            serial_number += 1
+            
+        except Exception as e:
+            errors.append({"id": inst_id, "name": school.get("name"), "error": str(e)})
+    
+    return {
+        "success": True,
+        "message": f"Generated credentials for {len(generated)} institutions",
+        "generated_count": len(generated),
+        "skipped_count": len(skipped),
+        "error_count": len(errors),
+        "generated": generated,
+        "errors": errors if errors else None
+    }
