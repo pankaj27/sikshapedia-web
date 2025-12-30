@@ -191,49 +191,99 @@ const NewsPage = () => {
           <div className="flex gap-6">
             {/* Main Section */}
             <main className="flex-1 space-y-6">
-              {/* Featured News */}
+              {/* Featured News - Large Hero Card */}
               {featuredNews && (
                 <Link
                   to={`/news/${featuredNews.slug || featuredNews.id}`}
-                  className={`block bg-gradient-to-r ${featuredNews.gradient} rounded-xl p-6 text-white hover:shadow-xl transition-shadow`}
+                  className="block relative rounded-2xl overflow-hidden group hover:shadow-2xl transition-all duration-300"
                 >
-                  <div className="flex justify-between items-start mb-4">
-                    <span className="text-xs bg-white/20 px-3 py-1 rounded-full">{featuredNews.tag || featuredNews.category}</span>
-                    <span className="text-xs opacity-75">{featuredNews.published_date || featuredNews.date}</span>
+                  {/* Large Featured Image */}
+                  <div className="relative h-[400px]">
+                    {featuredNews.featured_image ? (
+                      <img 
+                        src={featuredNews.featured_image} 
+                        alt={featuredNews.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                    ) : (
+                      <div className={`w-full h-full bg-gradient-to-br ${featuredNews.gradient}`}></div>
+                    )}
+                    {/* Gradient Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
+                    
+                    {/* Content */}
+                    <div className="absolute bottom-0 left-0 right-0 p-8">
+                      <div className="flex items-center gap-3 mb-4">
+                        <span className="px-4 py-1.5 bg-orange-500 text-white text-sm font-bold rounded-full">
+                          {featuredNews.category || 'Featured'}
+                        </span>
+                        <span className="text-white/80 text-sm">{featuredNews.published_date || featuredNews.date}</span>
+                      </div>
+                      <h1 className="text-3xl md:text-4xl font-bold text-white mb-3 group-hover:text-orange-300 transition-colors">
+                        {featuredNews.title}
+                      </h1>
+                      <p className="text-white/80 text-lg line-clamp-2 mb-4">
+                        {featuredNews.summary || featuredNews.description || featuredNews.excerpt}
+                      </p>
+                      <div className="flex items-center gap-4 text-white/70 text-sm">
+                        {featuredNews.author && <span>By {featuredNews.author}</span>}
+                        {featuredNews.views && <span>• {featuredNews.views} views</span>}
+                        <span className="text-orange-400 font-semibold">Read Full Story →</span>
+                      </div>
+                    </div>
                   </div>
-                  <h1 className="text-xl font-bold mb-3">{featuredNews.title}</h1>
-                  <p className="text-sm opacity-90 line-clamp-2">{featuredNews.description || featuredNews.excerpt}</p>
                 </Link>
               )}
 
-              {/* News Grid */}
-              <div className="grid grid-cols-3 gap-4">
-                {filteredNews.map((item, idx) => (
+              {/* News Grid - Modern Cards with Images */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredNews.slice(featuredNews ? 1 : 0).map((item, idx) => (
                   <React.Fragment key={item.id || idx}>
                     {/* Content Middle Ad - Show after 6th item */}
-                    {idx === 6 && (
-                      <div className="col-span-3 py-2">
+                    {idx === 5 && (
+                      <div className="col-span-full py-2">
                         <AdBanner pageName="news" position="content-middle" />
                       </div>
                     )}
                     <Link
                       to={`/news/${item.slug || item.id}`}
-                      className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow group overflow-hidden"
+                      className="bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 group overflow-hidden flex flex-col"
                     >
-                      <div className={`h-2 bg-gradient-to-r ${item.gradient}`}></div>
-                      <div className="p-4">
-                        <div className="flex items-center gap-2 mb-2">
-                          <span className="text-xs bg-blue-100 text-blue-600 px-2 py-0.5 rounded">{item.tag || item.category}</span>
-                        </div>
-                        <h3 className="text-base font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-orange-600 transition-colors">
+                      {/* Card Image */}
+                      <div className="relative h-48 overflow-hidden">
+                        {item.featured_image ? (
+                          <img 
+                            src={item.featured_image} 
+                            alt={item.title}
+                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                          />
+                        ) : (
+                          <div className={`w-full h-full bg-gradient-to-br ${item.gradient} flex items-center justify-center`}>
+                            <span className="text-6xl opacity-30">📰</span>
+                          </div>
+                        )}
+                        {/* Category Badge */}
+                        <span className="absolute top-3 left-3 px-3 py-1 bg-orange-500 text-white text-xs font-bold rounded-full shadow-lg">
+                          {item.category}
+                        </span>
+                      </div>
+                      
+                      {/* Card Content */}
+                      <div className="p-5 flex-1 flex flex-col">
+                        <h3 className="text-lg font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-orange-600 transition-colors">
                           {item.title}
                         </h3>
-                        <p className="text-xs text-gray-600 mb-3 line-clamp-2">
-                          {item.description || item.excerpt} <span className="text-blue-600 font-semibold">Read More</span>
+                        <p className="text-sm text-gray-600 mb-4 line-clamp-2 flex-1">
+                          {item.summary || item.description || item.excerpt}
                         </p>
-                        <div className="flex items-center justify-between text-xs">
-                          <span className="text-gray-500">{item.published_date || item.date}</span>
-                          {item.views && <span className="text-gray-400">{item.views} views</span>}
+                        <div className="flex items-center justify-between text-xs pt-3 border-t border-gray-100">
+                          <div className="flex items-center gap-2 text-gray-500">
+                            <span>{item.published_date || item.date}</span>
+                            {item.views && <span>• {item.views} views</span>}
+                          </div>
+                          <span className="text-orange-600 font-semibold group-hover:translate-x-1 transition-transform">
+                            Read →
+                          </span>
                         </div>
                       </div>
                     </Link>
