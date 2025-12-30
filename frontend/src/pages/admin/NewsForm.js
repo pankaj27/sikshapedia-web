@@ -22,6 +22,262 @@ import Image from '@tiptap/extension-image';
 import { Table, TableRow, TableHeader, TableCell } from '@tiptap/extension-table';
 
 import { Link } from '../../components/CustomLink';
+
+// Rich Text Toolbar Component
+const RichTextToolbar = ({ editor, showTableOptions = false, showImageOption = false }) => {
+  if (!editor) return null;
+
+  const COLORS = ['#000000', '#dc2626', '#ea580c', '#16a34a', '#2563eb', '#7c3aed'];
+
+  const insertTable = () => {
+    editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run();
+  };
+
+  const addImage = () => {
+    const url = window.prompt('Enter image URL:');
+    if (url) {
+      editor.chain().focus().setImage({ src: url }).run();
+    }
+  };
+
+  const addLink = () => {
+    const url = window.prompt('Enter URL:');
+    if (url) {
+      editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
+    }
+  };
+
+  return (
+    <div className="flex flex-wrap items-center gap-1 p-2 border-b bg-gray-50">
+      {/* Text Formatting */}
+      <button type="button" onClick={() => editor.chain().focus().toggleBold().run()}
+        className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('bold') ? 'bg-blue-100 text-blue-700' : ''}`}
+        title="Bold">
+        <FiBold size={16} />
+      </button>
+      <button type="button" onClick={() => editor.chain().focus().toggleItalic().run()}
+        className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('italic') ? 'bg-blue-100 text-blue-700' : ''}`}
+        title="Italic">
+        <FiItalic size={16} />
+      </button>
+      <button type="button" onClick={() => editor.chain().focus().toggleUnderline().run()}
+        className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('underline') ? 'bg-blue-100 text-blue-700' : ''}`}
+        title="Underline">
+        <FiUnderline size={16} />
+      </button>
+
+      <div className="w-px h-6 bg-gray-300 mx-1 self-center" />
+
+      {/* Colors */}
+      {COLORS.map(color => (
+        <button key={color} type="button"
+          onClick={() => editor.chain().focus().setColor(color).run()}
+          className="w-6 h-6 rounded border border-gray-300 hover:scale-110 transition-transform"
+          style={{ backgroundColor: color }}
+          title={`Color: ${color}`}
+        />
+      ))}
+
+      <div className="w-px h-6 bg-gray-300 mx-1 self-center" />
+
+      {/* Link */}
+      <button type="button" onClick={addLink}
+        className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('link') ? 'bg-blue-100 text-blue-700' : ''}`}
+        title="Add Link">
+        <FiLink size={16} />
+      </button>
+
+      {/* Image */}
+      {showImageOption && (
+        <button type="button" onClick={addImage}
+          className="p-2 rounded hover:bg-gray-200"
+          title="Add Image">
+          <FiImage size={16} />
+        </button>
+      )}
+
+      <div className="w-px h-6 bg-gray-300 mx-1 self-center" />
+
+      {/* Lists */}
+      <button type="button" onClick={() => editor.chain().focus().toggleBulletList().run()}
+        className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('bulletList') ? 'bg-blue-100 text-blue-700' : ''}`}
+        title="Bullet List">
+        <FiList size={16} />
+      </button>
+      <button type="button" onClick={() => editor.chain().focus().toggleOrderedList().run()}
+        className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('orderedList') ? 'bg-blue-100 text-blue-700' : ''}`}
+        title="Numbered List">
+        <span className="text-sm font-bold">1.</span>
+      </button>
+
+      <div className="w-px h-6 bg-gray-300 mx-1 self-center" />
+
+      {/* Text Alignment */}
+      <button type="button" onClick={() => editor.chain().focus().setTextAlign('left').run()}
+        className={`p-2 rounded hover:bg-gray-200 ${editor.isActive({ textAlign: 'left' }) ? 'bg-blue-100 text-blue-700' : ''}`}
+        title="Align Left">
+        <FiAlignLeft size={16} />
+      </button>
+      <button type="button" onClick={() => editor.chain().focus().setTextAlign('center').run()}
+        className={`p-2 rounded hover:bg-gray-200 ${editor.isActive({ textAlign: 'center' }) ? 'bg-blue-100 text-blue-700' : ''}`}
+        title="Align Center">
+        <FiAlignCenter size={16} />
+      </button>
+      <button type="button" onClick={() => editor.chain().focus().setTextAlign('right').run()}
+        className={`p-2 rounded hover:bg-gray-200 ${editor.isActive({ textAlign: 'right' }) ? 'bg-blue-100 text-blue-700' : ''}`}
+        title="Align Right">
+        <FiAlignRight size={16} />
+      </button>
+      <button type="button" onClick={() => editor.chain().focus().setTextAlign('justify').run()}
+        className={`p-2 rounded hover:bg-gray-200 ${editor.isActive({ textAlign: 'justify' }) ? 'bg-blue-100 text-blue-700' : ''}`}
+        title="Justify">
+        <FiAlignJustify size={16} />
+      </button>
+
+      {/* Table Options */}
+      {showTableOptions && (
+        <>
+          <div className="w-px h-6 bg-gray-300 mx-1 self-center" />
+          
+          <button type="button" onClick={insertTable}
+            className="p-2 rounded hover:bg-gray-200 flex items-center gap-1 text-xs"
+            title="Insert Table">
+            <FiGrid size={16} /> Table
+          </button>
+          
+          {editor.isActive('table') && (
+            <div className="flex items-center gap-1 ml-1 pl-1 border-l border-gray-300">
+              <button type="button" onClick={() => editor.chain().focus().addColumnAfter().run()}
+                className="px-2 py-1 text-xs rounded hover:bg-green-100 text-green-700 border border-green-300"
+                title="Add Column">
+                + Col
+              </button>
+              <button type="button" onClick={() => editor.chain().focus().deleteColumn().run()}
+                className="px-2 py-1 text-xs rounded hover:bg-red-100 text-red-700 border border-red-300"
+                title="Delete Column">
+                - Col
+              </button>
+              <button type="button" onClick={() => editor.chain().focus().addRowAfter().run()}
+                className="px-2 py-1 text-xs rounded hover:bg-green-100 text-green-700 border border-green-300"
+                title="Add Row">
+                + Row
+              </button>
+              <button type="button" onClick={() => editor.chain().focus().deleteRow().run()}
+                className="px-2 py-1 text-xs rounded hover:bg-red-100 text-red-700 border border-red-300"
+                title="Delete Row">
+                - Row
+              </button>
+              <button type="button" onClick={() => editor.chain().focus().deleteTable().run()}
+                className="px-2 py-1 text-xs rounded hover:bg-red-100 text-red-700 border border-red-300"
+                title="Delete Table">
+                <FiTrash2 size={14} />
+              </button>
+            </div>
+          )}
+        </>
+      )}
+    </div>
+  );
+};
+
+// Rich Text Editor with Table & Image Support
+const RichTextEditorWithTable = ({ value, onChange, placeholder, minHeight = '150px', showImage = false }) => {
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      TiptapLink.configure({ openOnClick: false }),
+      TextStyle,
+      Color,
+      Underline,
+      TextAlign.configure({
+        types: ['heading', 'paragraph'],
+      }),
+      Image,
+      Table.configure({
+        resizable: true,
+      }),
+      TableRow,
+      TableHeader,
+      TableCell,
+    ],
+    content: value || '',
+    onUpdate: ({ editor }) => {
+      onChange(editor.getHTML());
+    },
+  });
+
+  useEffect(() => {
+    if (editor && value !== editor.getHTML()) {
+      editor.commands.setContent(value || '');
+    }
+  }, [value, editor]);
+
+  return (
+    <div className="border-2 border-gray-200 rounded-lg overflow-hidden">
+      <RichTextToolbar editor={editor} showTableOptions={true} showImageOption={showImage} />
+      <style>{`
+        .rich-editor .ProseMirror table {
+          border-collapse: collapse;
+          margin: 1em 0;
+          width: 100%;
+        }
+        .rich-editor .ProseMirror th,
+        .rich-editor .ProseMirror td {
+          border: 1px solid #ccc;
+          padding: 8px 12px;
+          text-align: left;
+          min-width: 80px;
+        }
+        .rich-editor .ProseMirror th {
+          background-color: #f3f4f6;
+          font-weight: 600;
+        }
+        .rich-editor .ProseMirror tr:hover td {
+          background-color: #f9fafb;
+        }
+        .rich-editor .ProseMirror ul {
+          list-style-type: disc;
+          padding-left: 1.5em;
+          margin: 0.5em 0;
+        }
+        .rich-editor .ProseMirror ol {
+          list-style-type: decimal;
+          padding-left: 1.5em;
+          margin: 0.5em 0;
+        }
+        .rich-editor .ProseMirror li {
+          margin: 0.25em 0;
+        }
+        .rich-editor .ProseMirror img {
+          max-width: 100%;
+          height: auto;
+          margin: 1em 0;
+          border-radius: 8px;
+        }
+        .rich-editor .ProseMirror p {
+          margin: 0.5em 0;
+        }
+        .rich-editor .ProseMirror a {
+          color: #2563eb;
+          text-decoration: underline;
+        }
+      `}</style>
+      <div className="rich-editor">
+        <EditorContent 
+          editor={editor} 
+          className="prose max-w-none p-3 focus:outline-none"
+          style={{ minHeight }}
+        />
+      </div>
+      {placeholder && !value && (
+        <div className="text-gray-400 text-sm px-3 pb-2 pointer-events-none">
+          {placeholder}
+        </div>
+      )}
+    </div>
+  );
+};
+
 const TABS = [
   { id: 'basic', label: 'Basic Info', icon: FiSettings },
   { id: 'media', label: 'Media', icon: FiImage },
