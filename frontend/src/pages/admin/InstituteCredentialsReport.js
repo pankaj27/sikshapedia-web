@@ -116,14 +116,57 @@ const InstituteCredentialsReport = () => {
             <h1 className="text-2xl font-bold text-gray-900">Institute Credentials Report</h1>
             <p className="text-gray-600 mt-1">View login credentials for all registered institutes</p>
           </div>
-          <button
-            onClick={exportToCSV}
-            className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
-          >
-            <FiDownload className="w-4 h-4" />
-            Export CSV
-          </button>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={handleBulkGenerate}
+              disabled={generating}
+              className="flex items-center gap-2 px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {generating ? (
+                <>
+                  <FiRefreshCw className="w-4 h-4 animate-spin" />
+                  Generating...
+                </>
+              ) : (
+                <>
+                  <FiZap className="w-4 h-4" />
+                  Generate All Credentials
+                </>
+              )}
+            </button>
+            <button
+              onClick={exportToCSV}
+              className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
+            >
+              <FiDownload className="w-4 h-4" />
+              Export CSV
+            </button>
+          </div>
         </div>
+
+        {/* Generation Result Alert */}
+        {generationResult && (
+          <div className={`mb-6 p-4 rounded-lg ${generationResult.success ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200'}`}>
+            <div className="flex items-start justify-between">
+              <div>
+                <p className={`font-semibold ${generationResult.success ? 'text-green-800' : 'text-red-800'}`}>
+                  {generationResult.success ? '✅ ' : '❌ '}{generationResult.message}
+                </p>
+                {generationResult.success && generationResult.generated_count > 0 && (
+                  <p className="text-sm text-green-700 mt-1">
+                    {generationResult.generated_count} নতুন credentials তৈরি হয়েছে, {generationResult.skipped_count} skip করা হয়েছে
+                  </p>
+                )}
+              </div>
+              <button 
+                onClick={() => setGenerationResult(null)}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                ✕
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Search */}
         <div className="mb-6">
