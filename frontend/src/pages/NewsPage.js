@@ -98,6 +98,12 @@ const NewsPage = () => {
     }
   };
 
+  // Helper function to strip HTML tags
+  const stripHtml = (html) => {
+    if (!html) return '';
+    return html.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').trim();
+  };
+
   // Big Stories - get top stories from news
   const bigStoriesCount = settings?.big_stories_count || 5;
   const bigStories = news.slice(0, bigStoriesCount).map(item => ({
