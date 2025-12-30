@@ -208,7 +208,10 @@ const NewsDetailPage = () => {
               {/* Summary */}
               {article.summary && (
                 <div className="bg-blue-50 border-l-4 border-blue-500 p-4 mb-6">
-                  <p className="text-gray-800 leading-relaxed">{article.summary}</p>
+                  <div 
+                    className="prose prose-sm max-w-none text-gray-800 leading-relaxed"
+                    dangerouslySetInnerHTML={{ __html: article.summary }}
+                  />
                 </div>
               )}
 
