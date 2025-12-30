@@ -1064,7 +1064,7 @@ const NewsForm = () => {
                 <div className="flex items-center justify-between mb-6">
                   <div>
                     <h2 className="text-lg font-semibold">📑 Table of Contents</h2>
-                    <p className="text-sm text-gray-500">Article-এর sections যোগ করুন (frontend-এ navigation হিসেবে দেখাবে)</p>
+                    <p className="text-sm text-gray-500">Add sections for easy navigation on frontend</p>
                   </div>
                   <label className="flex items-center gap-2 bg-orange-50 px-4 py-2 rounded-lg border border-orange-200">
                     <input
@@ -1073,7 +1073,7 @@ const NewsForm = () => {
                       onChange={(e) => handleChange('toc_enabled', e.target.checked)}
                       className="rounded text-orange-500"
                     />
-                    <span className="text-sm font-medium text-orange-700">TOC চালু করুন</span>
+                    <span className="text-sm font-medium text-orange-700">Enable TOC</span>
                   </label>
                 </div>
                 
@@ -1082,14 +1082,14 @@ const NewsForm = () => {
                     {/* Instructions */}
                     <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
                       <p className="text-sm text-blue-700">
-                        💡 <strong>সহজ নিয়ম:</strong> শুধু section-এর নাম লিখুন। বাকি সব automatic হবে!
+                        💡 <strong>Simple:</strong> Just enter section names. IDs will be auto-generated!
                       </p>
                     </div>
                     
                     {formData.toc_items.length === 0 ? (
                       <div className="text-center py-8 bg-gray-50 rounded-lg border-2 border-dashed">
-                        <p className="text-gray-500 mb-2">কোনো section নেই</p>
-                        <p className="text-sm text-gray-400">নিচের button-এ click করে section যোগ করুন</p>
+                        <p className="text-gray-500 mb-2">No sections added yet</p>
+                        <p className="text-sm text-gray-400">Click the button below to add sections</p>
                       </div>
                     ) : (
                       formData.toc_items.map((item, idx) => (
@@ -1107,7 +1107,7 @@ const NewsForm = () => {
                               updateTocItem(idx, 'id', newId || `section-${idx + 1}`);
                             }}
                             className="flex-1 border-2 border-gray-200 rounded-lg px-4 py-2.5 text-base focus:border-orange-400 focus:ring-0"
-                            placeholder="Section-এর নাম লিখুন (যেমন: Introduction, Features, FAQ)"
+                            placeholder="Enter section name (e.g., Introduction, Features, FAQ)"
                           />
                           <button 
                             type="button" 
@@ -1127,7 +1127,7 @@ const NewsForm = () => {
                       onClick={addTocItem} 
                       className="w-full border-2 border-dashed border-orange-300 hover:border-orange-400 hover:bg-orange-50 py-3"
                     >
-                      <FiPlus className="mr-2" /> নতুন Section যোগ করুন
+                      <FiPlus className="mr-2" /> Add New Section
                     </Button>
                     
                     {/* Preview */}
