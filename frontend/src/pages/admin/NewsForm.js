@@ -1061,58 +1061,88 @@ const NewsForm = () => {
             {/* TOC Tab */}
             {activeTab === 'toc' && (
               <div className="bg-white rounded-lg shadow-sm border p-6">
-                <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center justify-between mb-6">
                   <div>
                     <h2 className="text-lg font-semibold">📑 Table of Contents</h2>
-                    <p className="text-sm text-gray-500">Define sections for easy navigation</p>
+                    <p className="text-sm text-gray-500">Article-এর sections যোগ করুন (frontend-এ navigation হিসেবে দেখাবে)</p>
                   </div>
-                  <label className="flex items-center gap-2">
+                  <label className="flex items-center gap-2 bg-orange-50 px-4 py-2 rounded-lg border border-orange-200">
                     <input
                       type="checkbox"
                       checked={formData.toc_enabled}
                       onChange={(e) => handleChange('toc_enabled', e.target.checked)}
-                      className="rounded"
+                      className="rounded text-orange-500"
                     />
-                    <span className="text-sm">Enable TOC</span>
+                    <span className="text-sm font-medium text-orange-700">TOC চালু করুন</span>
                   </label>
                 </div>
                 
                 {formData.toc_enabled && (
                   <div className="space-y-3">
-                    {formData.toc_items.map((item, idx) => (
-                      <div key={idx} className="flex items-center gap-3 bg-gray-50 p-3 rounded-lg">
-                        <FiMove className="text-gray-400 cursor-grab" />
-                        <select
-                          value={item.level}
-                          onChange={(e) => updateTocItem(idx, 'level', parseInt(e.target.value))}
-                          className="border rounded px-2 py-1.5 text-sm w-20"
-                        >
-                          <option value={1}>H2</option>
-                          <option value={2}>H3</option>
-                          <option value={3}>H4</option>
-                        </select>
-                        <input
-                          type="text"
-                          value={item.title}
-                          onChange={(e) => updateTocItem(idx, 'title', e.target.value)}
-                          className="flex-1 border rounded px-3 py-1.5"
-                          placeholder="Section title"
-                        />
-                        <input
-                          type="text"
-                          value={item.id}
-                          onChange={(e) => updateTocItem(idx, 'id', e.target.value)}
-                          className="w-40 border rounded px-3 py-1.5 text-sm"
-                          placeholder="section-id"
-                        />
-                        <button type="button" onClick={() => removeTocItem(idx)} className="text-red-500">
-                          <FiTrash2 />
-                        </button>
+                    {/* Instructions */}
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
+                      <p className="text-sm text-blue-700">
+                        💡 <strong>সহজ নিয়ম:</strong> শুধু section-এর নাম লিখুন। বাকি সব automatic হবে!
+                      </p>
+                    </div>
+                    
+                    {formData.toc_items.length === 0 ? (
+                      <div className="text-center py-8 bg-gray-50 rounded-lg border-2 border-dashed">
+                        <p className="text-gray-500 mb-2">কোনো section নেই</p>
+                        <p className="text-sm text-gray-400">নিচের button-এ click করে section যোগ করুন</p>
                       </div>
-                    ))}
-                    <Button type="button" variant="outline" onClick={addTocItem} className="w-full border-dashed">
-                      <FiPlus className="mr-2" /> Add TOC Item
+                    ) : (
+                      formData.toc_items.map((item, idx) => (
+                        <div key={idx} className="flex items-center gap-3 bg-gray-50 p-4 rounded-lg hover:bg-gray-100 transition-colors">
+                          <div className="flex items-center justify-center w-8 h-8 bg-orange-100 text-orange-600 rounded-full font-bold text-sm">
+                            {idx + 1}
+                          </div>
+                          <input
+                            type="text"
+                            value={item.title}
+                            onChange={(e) => {
+                              const newTitle = e.target.value;
+                              const newId = newTitle.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+                              updateTocItem(idx, 'title', newTitle);
+                              updateTocItem(idx, 'id', newId || `section-${idx + 1}`);
+                            }}
+                            className="flex-1 border-2 border-gray-200 rounded-lg px-4 py-2.5 text-base focus:border-orange-400 focus:ring-0"
+                            placeholder="Section-এর নাম লিখুন (যেমন: Introduction, Features, FAQ)"
+                          />
+                          <button 
+                            type="button" 
+                            onClick={() => removeTocItem(idx)} 
+                            className="p-2 text-red-500 hover:bg-red-100 rounded-lg transition-colors"
+                            title="Delete"
+                          >
+                            <FiTrash2 size={18} />
+                          </button>
+                        </div>
+                      ))
+                    )}
+                    
+                    <Button 
+                      type="button" 
+                      variant="outline" 
+                      onClick={addTocItem} 
+                      className="w-full border-2 border-dashed border-orange-300 hover:border-orange-400 hover:bg-orange-50 py-3"
+                    >
+                      <FiPlus className="mr-2" /> নতুন Section যোগ করুন
                     </Button>
+                    
+                    {/* Preview */}
+                    {formData.toc_items.length > 0 && (
+                      <div className="mt-6 p-4 bg-gray-100 rounded-lg">
+                        <h4 className="text-sm font-semibold text-gray-600 mb-2">Preview:</h4>
+                        <ul className="space-y-1">
+                          {formData.toc_items.map((item, idx) => (
+                            <li key={idx} className="text-sm text-blue-600 hover:underline cursor-pointer">
+                              • {item.title || `Section ${idx + 1}`}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
