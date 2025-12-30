@@ -4362,7 +4362,8 @@ async def update_college_seo_content_section(college_id: str, data: dict, curren
     
     allowed_fields = [
         'seo_intro', 'seo_full_content', 'seo_toc', 'seo_faqs', 'custom_tables',
-        'overview_content', 'faq_content', 'rating', 'rating_count'
+        'overview_content', 'faq_content', 'rating', 'rating_count',
+        'seo_tables', 'seo_images'  # Additional SEO fields
     ]
     
     update_data = {k: v for k, v in data.items() if k in allowed_fields}
