@@ -1095,6 +1095,45 @@ const NewsForm = () => {
             {activeTab === 'content' && (
               <div className="bg-white rounded-lg shadow-sm border p-6">
                 <h2 className="text-lg font-semibold mb-4">📄 Article Content</h2>
+                
+                {/* TOC Headings Helper */}
+                {formData.toc_enabled && formData.toc_items?.length > 0 && (
+                  <div className="mb-4 p-4 bg-green-50 border border-green-200 rounded-lg">
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="font-medium text-green-800">📑 TOC Sections Detected</h4>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        className="border-green-500 text-green-700 hover:bg-green-100"
+                        onClick={() => {
+                          // Generate headings from TOC items
+                          const headings = formData.toc_items.map(item => {
+                            const id = item.id || item.title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+                            return `<h2 id="${id}">${item.title}</h2>\n<p>Content for ${item.title} section...</p>`;
+                          }).join('\n\n');
+                          
+                          // Append to existing content or set new
+                          const newContent = formData.content ? formData.content + '\n\n' + headings : headings;
+                          handleChange('content', newContent);
+                        }}
+                      >
+                        Insert TOC Headings
+                      </Button>
+                    </div>
+                    <p className="text-sm text-green-700 mb-2">
+                      Click "Insert TOC Headings" to auto-generate section headings with correct IDs.
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {formData.toc_items.map((item, idx) => (
+                        <span key={idx} className="px-2 py-1 bg-green-100 text-green-800 rounded text-xs">
+                          {item.title} → id="{item.id || item.title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')}"
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
