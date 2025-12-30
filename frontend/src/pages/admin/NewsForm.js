@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { FiArrowLeft, FiSave, FiSend, FiImage, FiVideo, FiList, FiGrid, FiSettings, FiSearch, FiPlus, FiTrash2, FiMove, FiEye, FiUpload } from 'react-icons/fi';
+import { FiArrowLeft, FiSave, FiSend, FiImage, FiVideo, FiList, FiGrid, FiSettings, FiSearch, FiPlus, FiTrash2, FiMove, FiEye, FiUpload, FiBold, FiItalic, FiUnderline, FiLink, FiAlignLeft, FiAlignCenter, FiAlignRight, FiAlignJustify } from 'react-icons/fi';
 import { Button } from '../../components/ui/button';
 import api from '../../api/axios';
 import { generateSlug } from '../../utils/slugify';
@@ -9,6 +9,17 @@ import { useAuth } from '../../contexts/AuthContext';
 import AdminLayout from '../../components/admin/AdminLayout';
 import useAutoSaveDraft from '../../hooks/useAutoSaveDraft';
 import DraftRestoreBanner, { AutoSaveIndicator } from '../../components/admin/DraftRestoreBanner';
+
+// Tiptap Rich Text Editor imports
+import { useEditor, EditorContent } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import TiptapLink from '@tiptap/extension-link';
+import { TextStyle } from '@tiptap/extension-text-style';
+import { Color } from '@tiptap/extension-color';
+import Underline from '@tiptap/extension-underline';
+import TextAlign from '@tiptap/extension-text-align';
+import Image from '@tiptap/extension-image';
+import { Table, TableRow, TableHeader, TableCell } from '@tiptap/extension-table';
 
 import { Link } from '../../components/CustomLink';
 const TABS = [
