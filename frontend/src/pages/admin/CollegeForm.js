@@ -2286,6 +2286,8 @@ const CollegeForm = () => {
           seo_full_content: formData.seo_full_content,
           seo_toc: formData.seo_toc,
           seo_faqs: formData.seo_faqs,
+          seo_tables: formData.seo_tables || [],
+          seo_images: formData.seo_images || [],
           custom_tables: formData.custom_tables
         };
       default:
