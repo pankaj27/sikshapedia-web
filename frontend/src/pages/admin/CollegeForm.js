@@ -1440,6 +1440,11 @@ const CollegeForm = () => {
         seo_video_url: collegeData.seo_video_url || '',
         seo_video_title: collegeData.seo_video_title || '',
         seo_video_description: collegeData.seo_video_description || '',
+        // Description tables - MUST be preserved from backend
+        description_tables: Array.isArray(collegeData.description_tables) ? collegeData.description_tables : [],
+        seo_tables: Array.isArray(collegeData.seo_tables) ? collegeData.seo_tables : [],
+        seo_toc: Array.isArray(collegeData.seo_toc) ? collegeData.seo_toc : [],
+        seo_images: Array.isArray(collegeData.seo_images) ? collegeData.seo_images : [],
         // Map top-level state/city/address/pincode to location object
         // Backend stores at top-level, form uses nested location object
         location: {
