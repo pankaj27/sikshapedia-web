@@ -1156,12 +1156,11 @@ const NewsForm = () => {
                           </div>
                           <input
                             type="text"
-                            value={item.title}
+                            value={item.title || ''}
                             onChange={(e) => {
                               const newTitle = e.target.value;
-                              const newId = newTitle.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
-                              updateTocItem(idx, 'title', newTitle);
-                              updateTocItem(idx, 'id', newId || `section-${idx + 1}`);
+                              const newId = newTitle.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') || `section-${idx + 1}`;
+                              updateTocItem(idx, 'title', newTitle, 'id', newId);
                             }}
                             className="flex-1 border-2 border-gray-200 rounded-lg px-4 py-2.5 text-base focus:border-orange-400 focus:ring-0"
                             placeholder="Enter section name (e.g., Introduction, Features, FAQ)"
