@@ -280,7 +280,7 @@ const NewsPage = () => {
                           {item.title}
                         </h3>
                         <p className="text-sm text-gray-600 mb-4 line-clamp-2 flex-1">
-                          {item.summary || item.description || item.excerpt}
+                          {stripHtml(item.summary || item.description || item.excerpt)}
                         </p>
                         <div className="flex items-center justify-between text-xs pt-3 border-t border-gray-100">
                           <div className="flex items-center gap-2 text-gray-500">
