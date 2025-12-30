@@ -55,6 +55,33 @@ const InstituteCredentialsReport = () => {
     );
   });
 
+  const handleBulkGenerate = async () => {
+    if (!window.confirm('এটি সব institution-এর জন্য credentials তৈরি করবে যাদের এখনও credentials নেই। Continue করতে চান?')) {
+      return;
+    }
+    
+    setGenerating(true);
+    setGenerationResult(null);
+    
+    try {
+      const response = await api.post('/institute/bulk-generate-credentials');
+      setGenerationResult(response.data);
+      
+      // Refresh credentials list
+      if (response.data.generated_count > 0) {
+        await fetchCredentials();
+      }
+    } catch (error) {
+      console.error('Error generating credentials:', error);
+      setGenerationResult({
+        success: false,
+        message: error.response?.data?.detail || 'Failed to generate credentials'
+      });
+    } finally {
+      setGenerating(false);
+    }
+  };
+
   const exportToCSV = () => {
     const headers = ['Institution Name', 'Login ID', 'Login Email', 'Password', 'Contact Email', 'Contact Phone', 'Created At'];
     const rows = filteredCredentials.map(cred => [
