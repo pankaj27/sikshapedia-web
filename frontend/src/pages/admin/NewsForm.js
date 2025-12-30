@@ -506,7 +506,7 @@ const NewsForm = () => {
     const formDataUpload = new FormData();
     formDataUpload.append('file', file);
     try {
-      const response = await api.post('/upload/image', formDataUpload, {
+      const response = await api.post('/upload/image?type=content', formDataUpload, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       handleChange(field, response.data.url);
