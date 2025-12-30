@@ -63,7 +63,21 @@ const NewsDetailPage = () => {
   };
 
   const scrollToSection = (sectionId) => {
-    const element = document.getElementById(sectionId);
+    // First try to find by exact ID
+    let element = document.getElementById(sectionId);
+    
+    // If not found, try to find heading by text content
+    if (!element) {
+      const headings = document.querySelectorAll('h2, h3');
+      for (const heading of headings) {
+        const headingText = heading.textContent?.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+        if (headingText === sectionId || heading.textContent?.toLowerCase().includes(sectionId.replace(/-/g, ' '))) {
+          element = heading;
+          break;
+        }
+      }
+    }
+    
     if (element) {
       element.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
