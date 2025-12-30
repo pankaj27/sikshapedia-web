@@ -943,21 +943,38 @@ const NewsForm = () => {
                   <h2 className="text-lg font-semibold mb-4">🎬 Video</h2>
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Video Embed URL</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Video URL</label>
                       <input
                         type="url"
                         value={formData.video_url || ''}
-                        onChange={(e) => handleChange('video_url', e.target.value)}
+                        onChange={(e) => {
+                          let url = e.target.value;
+                          // Auto-convert YouTube URLs to embed format
+                          if (url.includes('youtube.com/watch?v=')) {
+                            const videoId = url.split('v=')[1]?.split('&')[0];
+                            if (videoId) url = `https://www.youtube.com/embed/${videoId}`;
+                          } else if (url.includes('youtu.be/')) {
+                            const videoId = url.split('youtu.be/')[1]?.split('?')[0];
+                            if (videoId) url = `https://www.youtube.com/embed/${videoId}`;
+                          } else if (url.includes('vimeo.com/') && !url.includes('player.vimeo.com')) {
+                            const videoId = url.split('vimeo.com/')[1]?.split('?')[0];
+                            if (videoId) url = `https://player.vimeo.com/video/${videoId}`;
+                          }
+                          handleChange('video_url', url);
+                        }}
                         className="w-full border rounded-lg px-4 py-2.5"
-                        placeholder="https://www.youtube.com/embed/... or https://player.vimeo.com/..."
+                        placeholder="Paste any YouTube or Vimeo URL"
                       />
-                      <p className="text-xs text-gray-500 mt-1">Use embed URL from YouTube or Vimeo</p>
+                      <p className="text-xs text-gray-500 mt-1">
+                        Supports: youtube.com/watch, youtu.be, vimeo.com (auto-converts to embed)
+                      </p>
                     </div>
                     {formData.video_url && (
-                      <div className="aspect-video">
+                      <div className="aspect-video bg-black rounded-lg overflow-hidden">
                         <iframe
                           src={formData.video_url}
-                          className="w-full h-full rounded-lg"
+                          className="w-full h-full"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                           allowFullScreen
                         />
                       </div>
