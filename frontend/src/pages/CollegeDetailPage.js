@@ -1263,33 +1263,7 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
                 </section>
               )}
 
-              {/* ADMISSION DATES - Menu Tab Content */}
-              {college?.admission_dates && college.admission_dates.length > 0 && (
-                <section id="admission-dates" className="scroll-mt-40">
-                  <h2 className="text-xl sm:text-2xl font-bold mb-3">{college.name} Important Dates {new Date().getFullYear() + 1}</h2>
-                  <p className="text-gray-700 text-sm mb-4">Key dates for admission process:</p>
-                  <GuestGate title="Admission Dates">
-                    <div className="overflow-x-auto">
-                      <table className="w-full border-collapse border">
-                        <thead>
-                          <tr className="bg-orange-50">
-                            <th className="border px-4 py-3 text-left text-sm font-bold">Events</th>
-                            <th className="border px-4 py-3 text-left text-sm font-bold">Dates</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {college.admission_dates.map((item, idx) => (
-                            <tr key={idx} className="hover:bg-gray-50">
-                              <td className="border px-4 py-3 text-sm">{item.event || item.title}</td>
-                              <td className="border px-4 py-3 text-sm font-semibold">{item.date}</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  </GuestGate>
-                </section>
-              )}
+              {/* ADMISSION DATES section removed - Now combined with ADMISSIONS section below */}
 
               {/* COURSES & FEES - Menu Tab Content */}
               {college?.courses && college.courses.length > 0 && (
