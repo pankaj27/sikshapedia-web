@@ -1597,7 +1597,7 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
 
               {/* COURSES & FEES - Removed duplicate, using only the GuestGate protected one above */}
 
-                {/* ADMISSIONS - Only show if menu enabled AND there's admission data */}
+                {/* ADMISSIONS - Combined section for Admission Process and Dates */}
                 {isMenuEnabled('admission') && (college?.admission_process || college?.admission_dates?.length > 0 || college?.courses?.filter(c => typeof c === 'object' && c.eligibility && c.selection_criteria).length > 0) && (
                   <section id="admission" className={college?.menu_config?.auto_from_toc ? 'hidden' : ''}>
                     <h2 className="text-xl sm:text-2xl font-bold mb-3">{college.name} Admission {year}</h2>
@@ -1605,21 +1605,11 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
                       Admission details and eligibility criteria for {college.name}:
                     </p>
 
-                    {/* Admission Process */}
-                    {college?.admission_process && (
-                      <div className="mb-6">
-                        <h3 className="text-xl font-bold mb-3">Admission Process</h3>
-                        <div 
-                          className="prose max-w-none text-gray-700 bg-orange-50 border border-orange-200 rounded-lg p-4"
-                          dangerouslySetInnerHTML={{ __html: college.admission_process }}
-                        />
-                      </div>
-                    )}
-
+                    {/* Admission Dates - Show first if available */}
                     {college?.admission_dates && college.admission_dates.length > 0 && (
-                      <>
-                        <h3 className="text-xl font-bold mb-3">Admission Dates {year}</h3>
-                        <div className="overflow-x-auto mb-6">
+                      <div className="mb-6">
+                        <h3 className="text-lg font-bold mb-3">Important Dates</h3>
+                        <div className="overflow-x-auto">
                           <table className="w-full border-collapse border">
                             <thead>
                               <tr className="bg-orange-50">
@@ -1637,7 +1627,18 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
                             </tbody>
                           </table>
                         </div>
-                      </>
+                      </div>
+                    )}
+
+                    {/* Admission Process */}
+                    {college?.admission_process && (
+                      <div className="mb-6">
+                        <h3 className="text-lg font-bold mb-3">Admission Process</h3>
+                        <div 
+                          className="prose max-w-none text-gray-700 bg-orange-50 border border-orange-200 rounded-lg p-4"
+                          dangerouslySetInnerHTML={{ __html: college.admission_process }}
+                        />
+                      </div>
                     )}
 
                     {college?.courses && college.courses.filter(c => typeof c === 'object' && c.eligibility && c.selection_criteria).length > 0 && (
