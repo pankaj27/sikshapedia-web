@@ -8,7 +8,7 @@ import json
 import sys
 
 # Backend URL from frontend .env
-BASE_URL = "https://campusportal-13.preview.emergentagent.com/api"
+BASE_URL = "https://eduportal-upgrade.preview.emergentagent.com/api"
 
 # Test credentials
 ADMIN_CREDENTIALS = {
