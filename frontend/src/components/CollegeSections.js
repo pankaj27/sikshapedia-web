@@ -338,6 +338,7 @@ export const PlacementSection = ({ college }) => {
 
 // RANKING SECTION - EXACT same as main page
 export const RankingSection = ({ college }) => {
+  const { year } = useYear();
   return (
     <div>
       <h2 className="text-2xl font-bold mb-3">{college.name} Ranking {year}</h2>
