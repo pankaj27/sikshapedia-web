@@ -241,6 +241,7 @@ export const AdmissionSection = ({ college }) => {
 
 // CUTOFF SECTION - EXACT same as main page
 export const CutoffSection = ({ college }) => {
+  const { year } = useYear();
   if (!college?.cutoff_data || college.cutoff_data.length === 0) return null;
   
   return (
