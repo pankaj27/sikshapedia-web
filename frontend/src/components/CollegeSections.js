@@ -1,14 +1,21 @@
 import React from 'react';
-import { FiGrid, FiMapPin, FiPhone, FiMail, FiGlobe, FiExternalLink } from 'react-icons/fi';
-import { HiOutlineLibrary, HiOutlineSparkles } from 'react-icons/hi';
+import { FiGrid, FiMapPin, FiPhone, FiMail, FiGlobe, FiExternalLink, FiHome, FiActivity, FiHeart, FiCpu, FiTarget, FiServer, FiTv, FiVideo, FiMusic, FiImage, FiPrinter, FiShield, FiPackage, FiCloudRain, FiWind, FiDatabase } from 'react-icons/fi';
+import { HiOutlineLibrary, HiOutlineSparkles, HiOutlineOfficeBuilding, HiOutlineBookOpen, HiOutlineBeaker } from 'react-icons/hi';
 import { 
   MdOutlineSportsBasketball, MdOutlinePool, MdOutlineFitnessCenter, 
   MdOutlineLocalHospital, MdOutlineRestaurant, MdOutlineLocalParking, 
   MdOutlineAtm, MdOutlineTheaters, MdOutlinePark, MdOutlineAir, 
   MdOutlineBed, MdOutlineScience, MdOutlineComputer, MdOutlineWifi, 
-  MdOutlineLocalLaundryService, MdOutlineSecurity, MdOutlineLocalCafe 
+  MdOutlineLocalLaundryService, MdOutlineSecurity, MdOutlineLocalCafe,
+  MdOutlineSportsTennis, MdOutlineSportsVolleyball, MdOutlineSportsCricket,
+  MdOutlineMeetingRoom, MdOutlineEmergency, MdOutlineHealthAndSafety,
+  MdOutlineLocalDining, MdOutlineKitchen, MdOutlineFastfood,
+  MdOutlineApartment, MdOutlineSingleBed, MdOutlineKingBed,
+  MdOutlineSmartDisplay, MdOutlineRouter, MdOutlineCellTower, MdOutlineEventSeat,
+  MdOutlinePiano, MdOutlineVolunteerActivism, MdOutlineCameraOutdoor, MdOutlineGppGood,
+  MdOutlineDirectionsBus, MdOutlineLocalTaxi, MdOutlineSolarPower, MdOutlineForest,
+  MdOutlineLocalFlorist, MdOutlineDry
 } from 'react-icons/md';
-import { FiCpu, FiMonitor, FiTruck, FiSun, FiShield, FiPackage, FiHeart } from 'react-icons/fi';
 import GuestGate from './GuestGate';
 import { Button } from './ui/button';
 import useYear from '../hooks/useYear';
@@ -17,7 +24,94 @@ import useYear from '../hooks/useYear';
 const facilityIconMap = {
   // Library & Academic
   'library': { icon: HiOutlineLibrary, color: 'bg-blue-500', label: 'Library' },
-  'digital library': { icon: MdOutlineComputer, color: 'bg-blue-600', label: 'Digital Library' },
+  'digital library': { icon: HiOutlineBookOpen, color: 'bg-blue-600', label: 'Digital Library' },
+  'e-library': { icon: FiDatabase, color: 'bg-blue-700', label: 'E-Library' },
+  'research labs': { icon: HiOutlineBeaker, color: 'bg-purple-500', label: 'Research Labs' },
+  'computer lab': { icon: MdOutlineComputer, color: 'bg-indigo-500', label: 'Computer Lab' },
+  'science lab': { icon: MdOutlineScience, color: 'bg-violet-500', label: 'Science Lab' },
+  'incubation center': { icon: FiCpu, color: 'bg-violet-600', label: 'Incubation Center' },
+  'seminar hall': { icon: MdOutlineMeetingRoom, color: 'bg-indigo-600', label: 'Seminar Hall' },
+  'conference room': { icon: MdOutlineEventSeat, color: 'bg-slate-600', label: 'Conference Room' },
+  
+  // Sports & Fitness
+  'sports': { icon: MdOutlineSportsBasketball, color: 'bg-orange-500', label: 'Sports' },
+  'sports complex': { icon: MdOutlineSportsTennis, color: 'bg-orange-600', label: 'Sports Complex' },
+  'swimming pool': { icon: MdOutlinePool, color: 'bg-cyan-500', label: 'Swimming Pool' },
+  'gymnasium': { icon: MdOutlineFitnessCenter, color: 'bg-red-500', label: 'Gymnasium' },
+  'gym': { icon: FiActivity, color: 'bg-red-600', label: 'Gym' },
+  'playground': { icon: MdOutlinePark, color: 'bg-green-500', label: 'Playground' },
+  'cricket ground': { icon: MdOutlineSportsCricket, color: 'bg-green-600', label: 'Cricket Ground' },
+  'basketball court': { icon: MdOutlineSportsBasketball, color: 'bg-amber-600', label: 'Basketball Court' },
+  'volleyball court': { icon: MdOutlineSportsVolleyball, color: 'bg-yellow-600', label: 'Volleyball Court' },
+  'tennis court': { icon: MdOutlineSportsTennis, color: 'bg-lime-600', label: 'Tennis Court' },
+  'indoor games': { icon: FiTarget, color: 'bg-teal-600', label: 'Indoor Games' },
+  'yoga center': { icon: FiHeart, color: 'bg-pink-400', label: 'Yoga Center' },
+  
+  // Accommodation
+  'hostel': { icon: MdOutlineApartment, color: 'bg-teal-500', label: 'Hostel' },
+  'hostels': { icon: MdOutlineApartment, color: 'bg-teal-500', label: 'Hostels' },
+  'boys hostel': { icon: MdOutlineSingleBed, color: 'bg-blue-500', label: 'Boys Hostel' },
+  'girls hostel': { icon: MdOutlineKingBed, color: 'bg-pink-500', label: 'Girls Hostel' },
+  'pg accommodation': { icon: FiHome, color: 'bg-emerald-500', label: 'PG Accommodation' },
+  
+  // Food & Dining
+  'cafeteria': { icon: MdOutlineLocalCafe, color: 'bg-amber-500', label: 'Cafeteria' },
+  'canteen': { icon: MdOutlineLocalDining, color: 'bg-amber-600', label: 'Canteen' },
+  'mess': { icon: MdOutlineKitchen, color: 'bg-yellow-600', label: 'Mess' },
+  'food court': { icon: MdOutlineFastfood, color: 'bg-orange-400', label: 'Food Court' },
+  
+  // Healthcare
+  'hospital': { icon: MdOutlineLocalHospital, color: 'bg-red-600', label: 'Hospital' },
+  'medical': { icon: MdOutlineHealthAndSafety, color: 'bg-red-500', label: 'Medical Facility' },
+  'medical facility': { icon: MdOutlineEmergency, color: 'bg-rose-500', label: 'Medical Facility' },
+  'health center': { icon: FiHeart, color: 'bg-rose-600', label: 'Health Center' },
+  'first aid': { icon: MdOutlineEmergency, color: 'bg-red-400', label: 'First Aid' },
+  
+  // Technology & IT
+  'wifi': { icon: MdOutlineWifi, color: 'bg-blue-400', label: 'WiFi Campus' },
+  'wi-fi': { icon: MdOutlineRouter, color: 'bg-blue-400', label: 'WiFi Campus' },
+  'wifi campus': { icon: MdOutlineCellTower, color: 'bg-blue-500', label: 'WiFi Campus' },
+  'it infrastructure': { icon: FiServer, color: 'bg-slate-600', label: 'IT Infrastructure' },
+  'smart classrooms': { icon: MdOutlineSmartDisplay, color: 'bg-indigo-600', label: 'Smart Classrooms' },
+  'projector': { icon: FiTv, color: 'bg-gray-600', label: 'Projector' },
+  'av room': { icon: FiVideo, color: 'bg-purple-600', label: 'AV Room' },
+  
+  // Services
+  'laundry': { icon: MdOutlineDry, color: 'bg-cyan-600', label: 'Laundry' },
+  'parking': { icon: MdOutlineLocalParking, color: 'bg-gray-600', label: 'Parking' },
+  'atm': { icon: MdOutlineAtm, color: 'bg-green-600', label: 'ATM' },
+  'bank': { icon: HiOutlineOfficeBuilding, color: 'bg-emerald-600', label: 'Bank' },
+  'transport': { icon: MdOutlineDirectionsBus, color: 'bg-slate-500', label: 'Transport' },
+  'bus service': { icon: MdOutlineDirectionsBus, color: 'bg-slate-500', label: 'Bus Service' },
+  'shuttle service': { icon: MdOutlineLocalTaxi, color: 'bg-yellow-500', label: 'Shuttle Service' },
+  'stationery': { icon: FiPrinter, color: 'bg-gray-500', label: 'Stationery Shop' },
+  
+  // Recreation & Culture
+  'auditorium': { icon: MdOutlineTheaters, color: 'bg-purple-600', label: 'Auditorium' },
+  'theater': { icon: MdOutlineEventSeat, color: 'bg-purple-500', label: 'Theater' },
+  'cultural center': { icon: HiOutlineSparkles, color: 'bg-pink-600', label: 'Cultural Center' },
+  'music room': { icon: MdOutlinePiano, color: 'bg-rose-500', label: 'Music Room' },
+  'dance studio': { icon: FiMusic, color: 'bg-fuchsia-500', label: 'Dance Studio' },
+  'art gallery': { icon: FiImage, color: 'bg-violet-500', label: 'Art Gallery' },
+  'club activities': { icon: MdOutlineVolunteerActivism, color: 'bg-pink-500', label: 'Club Activities' },
+  
+  // Safety & Security
+  'security': { icon: MdOutlineSecurity, color: 'bg-gray-700', label: '24/7 Security' },
+  '24x7 security': { icon: MdOutlineGppGood, color: 'bg-gray-700', label: '24/7 Security' },
+  'cctv': { icon: MdOutlineCameraOutdoor, color: 'bg-slate-700', label: 'CCTV Surveillance' },
+  'fire safety': { icon: FiShield, color: 'bg-red-700', label: 'Fire Safety' },
+  
+  // Environment
+  'air conditioning': { icon: MdOutlineAir, color: 'bg-sky-500', label: 'Air Conditioning' },
+  'ac': { icon: FiWind, color: 'bg-sky-500', label: 'Air Conditioning' },
+  'solar power': { icon: MdOutlineSolarPower, color: 'bg-yellow-500', label: 'Solar Power' },
+  'green campus': { icon: MdOutlineForest, color: 'bg-green-600', label: 'Green Campus' },
+  'garden': { icon: MdOutlineLocalFlorist, color: 'bg-green-500', label: 'Garden' },
+  'rainwater harvesting': { icon: FiCloudRain, color: 'bg-blue-600', label: 'Rainwater Harvesting' },
+  
+  // Default
+  'default': { icon: FiPackage, color: 'bg-gray-500', label: 'Facility' }
+};
   'research labs': { icon: MdOutlineScience, color: 'bg-purple-500', label: 'Research Labs' },
   'computer lab': { icon: MdOutlineComputer, color: 'bg-indigo-500', label: 'Computer Lab' },
   'incubation center': { icon: FiCpu, color: 'bg-violet-500', label: 'Incubation Center' },
