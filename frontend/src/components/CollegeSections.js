@@ -402,6 +402,7 @@ export const RankingSection = ({ college }) => {
 
 // SCHOLARSHIP SECTION - EXACT same as main page
 export const ScholarshipSection = ({ college }) => {
+  const { year } = useYear();
   if (!college?.scholarships || college.scholarships.length === 0) return null;
   
   return (
