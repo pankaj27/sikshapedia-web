@@ -4283,7 +4283,7 @@ async def update_college_details_section(college_id: str, data: dict, current_us
     
     allowed_fields = [
         'facilities', 'accreditations', 'approvals', 'rankings', 'nirf_ranking',
-        'india_today_ranking', 'outlook_ranking', 'placement_stats', 'placements',
+        'india_today_ranking', 'outlook_ranking', 'placement', 'placement_stats', 'placements',
         'cutoff_data', 'scholarships', 'hostel_info', 'faculty'
     ]
     
