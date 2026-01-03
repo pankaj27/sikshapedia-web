@@ -31,6 +31,7 @@ const facilityIconMap = {
   'research': { icon: FiTarget, color: 'bg-purple-600', label: 'Research' },
   'computer lab': { icon: MdOutlineComputer, color: 'bg-indigo-500', label: 'Computer Lab' },
   'science lab': { icon: MdOutlineScience, color: 'bg-violet-500', label: 'Science Lab' },
+  'science labs': { icon: MdOutlineScience, color: 'bg-violet-500', label: 'Science Labs' },
   'science laboratory': { icon: MdOutlineScience, color: 'bg-violet-500', label: 'Science Laboratory' },
   'laboratory': { icon: HiOutlineBeaker, color: 'bg-violet-600', label: 'Laboratory' },
   'incubation center': { icon: FiCpu, color: 'bg-violet-600', label: 'Incubation Center' },
