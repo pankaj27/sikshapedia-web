@@ -407,7 +407,7 @@ export const ScholarshipSection = ({ college }) => {
   
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-3">{college.name} Scholarships {year + 1}</h2>
+      <h2 className="text-2xl font-bold mb-3">{college.name} Scholarships {year}</h2>
       <p className="text-gray-700 text-sm mb-4">
         {college.name} offers various scholarships to support students financially. The details are mentioned below:
       </p>
