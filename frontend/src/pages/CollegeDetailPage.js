@@ -83,6 +83,7 @@ const facilityIconMap = {
   'gymnasium': { icon: MdOutlineFitnessCenter, color: 'bg-red-500', label: 'Gymnasium' },
   'gym': { icon: FiActivity, color: 'bg-red-600', label: 'Gym' },
   'playground': { icon: MdOutlinePark, color: 'bg-green-500', label: 'Playground' },
+  'sports ground': { icon: MdOutlineSportsCricket, color: 'bg-green-600', label: 'Sports Ground' },
   'cricket ground': { icon: MdOutlineSportsCricket, color: 'bg-green-600', label: 'Cricket Ground' },
   'basketball court': { icon: MdOutlineSportsBasketball, color: 'bg-amber-600', label: 'Basketball Court' },
   'volleyball court': { icon: MdOutlineSportsVolleyball, color: 'bg-yellow-600', label: 'Volleyball Court' },
