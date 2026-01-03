@@ -112,69 +112,6 @@ const facilityIconMap = {
   // Default
   'default': { icon: FiPackage, color: 'bg-gray-500', label: 'Facility' }
 };
-  'research labs': { icon: MdOutlineScience, color: 'bg-purple-500', label: 'Research Labs' },
-  'computer lab': { icon: MdOutlineComputer, color: 'bg-indigo-500', label: 'Computer Lab' },
-  'incubation center': { icon: FiCpu, color: 'bg-violet-500', label: 'Incubation Center' },
-  
-  // Sports & Fitness
-  'sports': { icon: MdOutlineSportsBasketball, color: 'bg-orange-500', label: 'Sports' },
-  'sports complex': { icon: MdOutlineSportsBasketball, color: 'bg-orange-500', label: 'Sports Complex' },
-  'swimming pool': { icon: MdOutlinePool, color: 'bg-cyan-500', label: 'Swimming Pool' },
-  'gymnasium': { icon: MdOutlineFitnessCenter, color: 'bg-red-500', label: 'Gymnasium' },
-  'gym': { icon: MdOutlineFitnessCenter, color: 'bg-red-500', label: 'Gym' },
-  'playground': { icon: MdOutlinePark, color: 'bg-green-500', label: 'Playground' },
-  
-  // Accommodation
-  'hostel': { icon: MdOutlineBed, color: 'bg-teal-500', label: 'Hostel' },
-  'hostels': { icon: MdOutlineBed, color: 'bg-teal-500', label: 'Hostels' },
-  'boys hostel': { icon: MdOutlineBed, color: 'bg-blue-500', label: 'Boys Hostel' },
-  'girls hostel': { icon: MdOutlineBed, color: 'bg-pink-500', label: 'Girls Hostel' },
-  
-  // Food & Dining
-  'cafeteria': { icon: MdOutlineLocalCafe, color: 'bg-amber-500', label: 'Cafeteria' },
-  'canteen': { icon: MdOutlineRestaurant, color: 'bg-amber-600', label: 'Canteen' },
-  'mess': { icon: MdOutlineRestaurant, color: 'bg-yellow-600', label: 'Mess' },
-  'food court': { icon: MdOutlineRestaurant, color: 'bg-orange-400', label: 'Food Court' },
-  
-  // Healthcare
-  'hospital': { icon: MdOutlineLocalHospital, color: 'bg-red-600', label: 'Hospital' },
-  'medical': { icon: MdOutlineLocalHospital, color: 'bg-red-500', label: 'Medical Facility' },
-  'health center': { icon: FiHeart, color: 'bg-rose-500', label: 'Health Center' },
-  
-  // Technology & IT
-  'wifi': { icon: MdOutlineWifi, color: 'bg-blue-400', label: 'WiFi Campus' },
-  'wi-fi': { icon: MdOutlineWifi, color: 'bg-blue-400', label: 'WiFi Campus' },
-  'it infrastructure': { icon: FiMonitor, color: 'bg-slate-600', label: 'IT Infrastructure' },
-  'smart classrooms': { icon: FiMonitor, color: 'bg-indigo-600', label: 'Smart Classrooms' },
-  
-  // Services
-  'laundry': { icon: MdOutlineLocalLaundryService, color: 'bg-cyan-600', label: 'Laundry' },
-  'parking': { icon: MdOutlineLocalParking, color: 'bg-gray-600', label: 'Parking' },
-  'atm': { icon: MdOutlineAtm, color: 'bg-green-600', label: 'ATM' },
-  'bank': { icon: MdOutlineAtm, color: 'bg-emerald-600', label: 'Bank' },
-  'transport': { icon: FiTruck, color: 'bg-slate-500', label: 'Transport' },
-  'bus service': { icon: FiTruck, color: 'bg-slate-500', label: 'Bus Service' },
-  
-  // Recreation & Culture
-  'auditorium': { icon: MdOutlineTheaters, color: 'bg-purple-600', label: 'Auditorium' },
-  'theater': { icon: MdOutlineTheaters, color: 'bg-purple-500', label: 'Theater' },
-  'cultural center': { icon: HiOutlineSparkles, color: 'bg-pink-600', label: 'Cultural Center' },
-  
-  // Safety & Security
-  'security': { icon: MdOutlineSecurity, color: 'bg-gray-700', label: '24/7 Security' },
-  '24x7 security': { icon: MdOutlineSecurity, color: 'bg-gray-700', label: '24/7 Security' },
-  'cctv': { icon: FiShield, color: 'bg-slate-700', label: 'CCTV Surveillance' },
-  
-  // Environment
-  'air conditioning': { icon: MdOutlineAir, color: 'bg-sky-500', label: 'Air Conditioning' },
-  'ac': { icon: MdOutlineAir, color: 'bg-sky-500', label: 'Air Conditioning' },
-  'solar power': { icon: FiSun, color: 'bg-yellow-500', label: 'Solar Power' },
-  'green campus': { icon: MdOutlinePark, color: 'bg-green-600', label: 'Green Campus' },
-  
-  // Default
-  'default': { icon: FiPackage, color: 'bg-gray-500', label: 'Facility' }
-};
-
 // Helper function to get facility icon and color - EXACT SAME as CollegeDetailPage.js
 const getFacilityIcon = (facilityName) => {
   const name = facilityName?.toLowerCase().trim() || '';
