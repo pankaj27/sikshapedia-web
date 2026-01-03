@@ -11,9 +11,7 @@ import {
 import { FiCpu, FiMonitor, FiTruck, FiSun, FiShield, FiPackage, FiHeart } from 'react-icons/fi';
 import GuestGate from './GuestGate';
 import { Button } from './ui/button';
-
-// Current year for dynamic display
-const year = new Date().getFullYear();
+import useYear from '../hooks/useYear';
 
 // Facility icon mapping - EXACT SAME as CollegeDetailPage.js
 const facilityIconMap = {
