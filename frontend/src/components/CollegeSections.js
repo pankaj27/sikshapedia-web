@@ -137,10 +137,11 @@ const getYouTubeEmbedUrl = (url) => {
 // COURSES SECTION - EXACT same as main page (with GuestGate for fee data)
 export const CoursesSection = ({ college }) => {
   if (!college?.courses || college.courses.length === 0) return null;
+  const currentYear = new Date().getFullYear();
   
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-3">{college.name} Courses & Fees {year + 1}</h2>
+      <h2 className="text-2xl font-bold mb-3">{college.name} Courses & Fees {currentYear}</h2>
       <p className="text-gray-700 text-sm mb-4">
         {college.name} offers various programs. The fee structure is mentioned below:
       </p>
