@@ -1338,7 +1338,7 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
               {/* CUTOFF - Menu Tab Content */}
               {college?.cutoff_data && college.cutoff_data.length > 0 && (
                 <section id="cutoff" className="scroll-mt-40">
-                  <h2 className="text-xl sm:text-2xl font-bold mb-3">{college.name} Cutoff {college.cutoff_data[0]?.year || year}</h2>
+                  <h2 className="text-xl sm:text-2xl font-bold mb-3">{college.name} Cutoff {college.cutoff_data[0]?.year || (year - 1)}</h2>
                   <p className="text-gray-700 text-sm mb-4">Latest cutoff ranks for various programs:</p>
                   <div className="overflow-x-auto -mx-4 px-4">
                     <table className="w-full border-collapse border min-w-[400px]">
