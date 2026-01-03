@@ -1672,7 +1672,7 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
                 {/* CUTOFF - Only show if menu enabled AND cutoff data exists */}
                 {isMenuEnabled('cutoff') && college?.cutoff_data && college.cutoff_data.length > 0 && (
                   <section id="cutoff" className={college?.menu_config?.auto_from_toc ? 'hidden' : ''}>
-                    <h2 className="text-xl sm:text-2xl font-bold mb-3">{college.name} Cutoff {year}</h2>
+                    <h2 className="text-xl sm:text-2xl font-bold mb-3">{college.name} Cutoff {year - 1}</h2>
                     <p className="text-gray-700 text-sm mb-4">
                       The cutoff varies for different programs and categories:
                     </p>
