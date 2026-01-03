@@ -2260,6 +2260,7 @@ const CollegeForm = () => {
           }).filter(Boolean),
           rankings: formData.rankings,
           nirf_ranking: formData.nirf_ranking,
+          placement: formData.placement,  // Main placement object
           placement_stats: formData.placement_stats,
           placements: formData.placements,
           cutoff_data: formData.cutoff_data,
