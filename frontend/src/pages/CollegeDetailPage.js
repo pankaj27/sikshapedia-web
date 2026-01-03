@@ -1368,7 +1368,7 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
               {/* PLACEMENT - Menu Tab Content */}
               {college?.placement && (
                 <section id="placement" className="scroll-mt-40">
-                  <h2 className="text-xl sm:text-xl sm:text-2xl font-bold mb-3">{college.name} Placement {new Date().getFullYear()}</h2>
+                  <h2 className="text-xl sm:text-xl sm:text-2xl font-bold mb-3">{college.name} Placement {year}</h2>
                   <p className="text-gray-700 text-sm mb-4">Placement statistics and top recruiters:</p>
                   <GuestGate title="Placement Data">
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-6">
