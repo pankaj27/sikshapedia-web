@@ -9,28 +9,43 @@ import { Link } from './CustomLink';
 export const SidebarSponsoredAd = ({ placementId, title = "Sponsored" }) => {
   const [ads, setAds] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [hasAds, setHasAds] = useState(false);
 
   useEffect(() => {
+    let isMounted = true;
+    const controller = new AbortController();
+    
     const fetchAds = async () => {
       try {
-        const response = await api.get(`/sponsored-ads-multi/${placementId}?limit=3`);
-        const adsData = Array.isArray(response.data) ? response.data : [];
-        setAds(adsData);
-        setHasAds(adsData.length > 0);
+        const response = await api.get(`/sponsored-ads-multi/${placementId}?limit=3`, {
+          signal: controller.signal,
+          timeout: 5000 // 5 second timeout
+        });
+        if (isMounted) {
+          setAds(Array.isArray(response.data) ? response.data : []);
+        }
       } catch (error) {
-        console.error('Error fetching sidebar ads:', error);
-        setAds([]);
-        setHasAds(false);
+        if (isMounted) {
+          console.error('Error fetching sidebar ads:', error);
+          setAds([]);
+        }
       } finally {
-        setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     };
+    
     fetchAds();
+    
+    // Cleanup function
+    return () => {
+      isMounted = false;
+      controller.abort();
+    };
   }, [placementId]);
 
-  // Don't render anything if loading, no ads, or error - completely collapse
-  if (loading || !hasAds || ads.length === 0) return null;
+  // Don't render anything if loading or no ads - completely collapse with no space
+  if (loading || !Array.isArray(ads) || ads.length === 0) return null;
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
