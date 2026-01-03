@@ -1323,7 +1323,7 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
                           <tr key={idx} className="hover:bg-gray-50">
                             <td className="border px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm break-words">{ranking.agency}</td>
                             <td className="border px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm">{ranking.category || '-'}</td>
-                            <td className="border px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm">{ranking.year || new Date().getFullYear()}</td>
+                            <td className="border px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm">{ranking.year || year}</td>
                             <td className="border px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm font-bold text-orange-600">#{ranking.rank}</td>
                           </tr>
                         ))}
