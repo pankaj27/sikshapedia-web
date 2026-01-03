@@ -1268,7 +1268,7 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
               {/* COURSES & FEES - Menu Tab Content */}
               {college?.courses && college.courses.length > 0 && (
                 <section id="courses-fees" className="scroll-mt-40">
-                  <h2 className="text-xl sm:text-2xl font-bold mb-3">{college.name} Courses & Fees {new Date().getFullYear() + 1}</h2>
+                  <h2 className="text-xl sm:text-2xl font-bold mb-3">{college.name} Courses & Fees {year}</h2>
                   <p className="text-gray-700 text-sm mb-4">Fee structure for various courses:</p>
                   <GuestGate title="Fee Details">
                     <div className="overflow-x-auto -mx-4 px-4 mb-6">
