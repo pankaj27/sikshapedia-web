@@ -124,8 +124,8 @@ const facilityIconMap = {
   'parking': { icon: MdOutlineLocalParking, color: 'bg-gray-600', label: 'Parking' },
   'atm': { icon: MdOutlineAtm, color: 'bg-green-600', label: 'ATM' },
   'bank': { icon: HiOutlineOfficeBuilding, color: 'bg-emerald-600', label: 'Bank' },
-  'transport': { icon: MdOutlineDirectionsBus, color: 'bg-slate-500', label: 'Transport' },
-  'bus service': { icon: MdOutlineDirectionsBus, color: 'bg-slate-500', label: 'Bus Service' },
+  'transport': { icon: FiTruck, color: 'bg-slate-500', label: 'Transport' },
+  'bus service': { icon: MdOutlineDirectionsBus, color: 'bg-slate-600', label: 'Bus Service' },
   'shuttle service': { icon: MdOutlineLocalTaxi, color: 'bg-yellow-500', label: 'Shuttle Service' },
   'stationery': { icon: FiPrinter, color: 'bg-gray-500', label: 'Stationery Shop' },
   
