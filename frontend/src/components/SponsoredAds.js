@@ -9,15 +9,19 @@ import { Link } from './CustomLink';
 export const SidebarSponsoredAd = ({ placementId, title = "Sponsored" }) => {
   const [ads, setAds] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [hasAds, setHasAds] = useState(false);
 
   useEffect(() => {
     const fetchAds = async () => {
       try {
         const response = await api.get(`/sponsored-ads-multi/${placementId}?limit=3`);
-        setAds(Array.isArray(response.data) ? response.data : []);
+        const adsData = Array.isArray(response.data) ? response.data : [];
+        setAds(adsData);
+        setHasAds(adsData.length > 0);
       } catch (error) {
         console.error('Error fetching sidebar ads:', error);
-        setAds([]); // Ensure ads is always an array on error
+        setAds([]);
+        setHasAds(false);
       } finally {
         setLoading(false);
       }
@@ -25,7 +29,8 @@ export const SidebarSponsoredAd = ({ placementId, title = "Sponsored" }) => {
     fetchAds();
   }, [placementId]);
 
-  if (loading || !Array.isArray(ads) || ads.length === 0) return null;
+  // Don't render anything if loading, no ads, or error - completely collapse
+  if (loading || !hasAds || ads.length === 0) return null;
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
