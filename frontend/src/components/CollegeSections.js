@@ -189,35 +189,53 @@ export const CoursesSection = ({ college }) => {
 // ADMISSION SECTION - EXACT same as main page (only Admission Dates)
 export const AdmissionSection = ({ college }) => {
   const hasAdmissionDates = college?.admission_dates?.length > 0;
+  const hasAdmissionProcess = college?.admission_process;
+  const currentYear = new Date().getFullYear();
   
-  if (!hasAdmissionDates) return null;
+  if (!hasAdmissionDates && !hasAdmissionProcess) return null;
   
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-3">{college.name} Admission {year + 1}</h2>
+      <h2 className="text-2xl font-bold mb-3">{college.name} Admission {currentYear}</h2>
       <p className="text-gray-700 text-sm mb-4">
         Admission details for {college.name}:
       </p>
 
-      <h3 className="text-xl font-bold mb-3">Admission Dates {year + 1}</h3>
-      <div className="overflow-x-auto mb-6">
-        <table className="w-full border-collapse border">
-          <thead>
-            <tr className="bg-orange-50">
-              <th className="border px-4 py-3 text-left text-sm font-bold">Events</th>
-              <th className="border px-4 py-3 text-left text-sm font-bold">Dates</th>
-            </tr>
-          </thead>
-          <tbody>
-            {college.admission_dates.map((item, idx) => (
-              <tr key={idx} className="hover:bg-gray-50">
-                <td className="border px-4 py-3 text-sm">{item.event || item.title}</td>
-                <td className="border px-4 py-3 text-sm font-semibold">{item.date}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      {/* Important Dates - Show first */}
+      {hasAdmissionDates && (
+        <>
+          <h3 className="text-lg font-bold mb-3">Important Dates</h3>
+          <div className="overflow-x-auto mb-6">
+            <table className="w-full border-collapse border">
+              <thead>
+                <tr className="bg-orange-50">
+                  <th className="border px-4 py-3 text-left text-sm font-bold">Events</th>
+                  <th className="border px-4 py-3 text-left text-sm font-bold">Dates</th>
+                </tr>
+              </thead>
+              <tbody>
+                {college.admission_dates.map((item, idx) => (
+                  <tr key={idx} className="hover:bg-gray-50">
+                    <td className="border px-4 py-3 text-sm">{item.event || item.title}</td>
+                    <td className="border px-4 py-3 text-sm font-semibold">{item.date}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </>
+      )}
+
+      {/* Admission Process */}
+      {hasAdmissionProcess && (
+        <div className="mb-6">
+          <h3 className="text-lg font-bold mb-3">Admission Process</h3>
+          <div 
+            className="prose max-w-none text-gray-700 bg-orange-50 border border-orange-200 rounded-lg p-4"
+            dangerouslySetInnerHTML={{ __html: college.admission_process }}
+          />
+        </div>
+      )}
     </div>
   );
 };
