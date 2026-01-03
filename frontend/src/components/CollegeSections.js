@@ -187,15 +187,15 @@ export const CoursesSection = ({ college }) => {
 
 // ADMISSION SECTION - EXACT same as main page (only Admission Dates)
 export const AdmissionSection = ({ college }) => {
+  const { year } = useYear();
   const hasAdmissionDates = college?.admission_dates?.length > 0;
   const hasAdmissionProcess = college?.admission_process;
-  const currentYear = new Date().getFullYear();
   
   if (!hasAdmissionDates && !hasAdmissionProcess) return null;
   
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-3">{college.name} Admission {currentYear}</h2>
+      <h2 className="text-2xl font-bold mb-3">{college.name} Admission {year}</h2>
       <p className="text-gray-700 text-sm mb-4">
         Admission details for {college.name}:
       </p>
