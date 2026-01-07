@@ -396,16 +396,26 @@ const CourseDetailPage = () => {
                       <div className="bg-gray-50 rounded-lg p-6 border">
                         <h3 className="font-bold text-lg mb-4">Table of Contents</h3>
                         <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-2">
-                          {course.seo_toc.map((section, idx) => (
-                            <a
-                              key={`seo-${idx}`}
-                              href={`#${section.anchor || `seo-section-${idx}`}`}
-                              className="text-left text-sm text-orange-600 hover:underline flex gap-2"
-                            >
-                              <span className="font-semibold flex-shrink-0">{String(idx + 1).padStart(2, '0')}.</span>
-                              <span>{section.title}</span>
-                            </a>
-                          ))}
+                          {course.seo_toc.map((section, idx) => {
+                            const anchorId = section.anchor || `seo-section-${idx}`;
+                            return (
+                              <button
+                                key={`seo-${idx}`}
+                                type="button"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  const element = document.getElementById(anchorId);
+                                  if (element) {
+                                    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                  }
+                                }}
+                                className="text-left text-sm text-orange-600 hover:underline flex gap-2 cursor-pointer"
+                              >
+                                <span className="font-semibold flex-shrink-0">{String(idx + 1).padStart(2, '0')}.</span>
+                                <span>{section.title}</span>
+                              </button>
+                            );
+                          })}
                         </div>
                       </div>
                     )}

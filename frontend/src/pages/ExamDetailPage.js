@@ -333,15 +333,25 @@ const ExamDetailPage = () => {
                   <div className="bg-gray-50 rounded-lg p-4 border">
                     <h3 className="font-bold text-gray-800 mb-3 text-lg">📑 Table of Contents</h3>
                     <nav className="grid grid-cols-1 md:grid-cols-3 gap-x-4 gap-y-1">
-                      {exam.seoToc.map((item, idx) => (
-                        <a
-                          key={idx}
-                          href={`#${item.anchor || item.title?.toLowerCase().replace(/\s+/g, '-')}`}
-                          className="text-blue-600 hover:text-orange-600 text-sm py-1 hover:underline"
-                        >
-                          {idx + 1}. {item.title}
-                        </a>
-                      ))}
+                      {exam.seoToc.map((item, idx) => {
+                        const anchorId = item.anchor || item.title?.toLowerCase().replace(/\s+/g, '-');
+                        return (
+                          <button
+                            key={idx}
+                            type="button"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              const element = document.getElementById(anchorId);
+                              if (element) {
+                                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                              }
+                            }}
+                            className="text-left text-blue-600 hover:text-orange-600 text-sm py-1 hover:underline cursor-pointer"
+                          >
+                            {idx + 1}. {item.title}
+                          </button>
+                        );
+                      })}
                     </nav>
                   </div>
                 )}
