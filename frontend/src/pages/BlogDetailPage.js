@@ -133,22 +133,10 @@ const BlogDetailPage = () => {
                 </div>
               </div>
 
-              <div className="prose max-w-none">
-                {article.content.split('\n').map((paragraph, idx) => {
-                  if (paragraph.startsWith('# ')) {
-                    return <h1 key={idx} className="text-3xl font-bold mt-8 mb-4">{paragraph.replace('# ', '')}</h1>;
-                  } else if (paragraph.startsWith('## ')) {
-                    return <h2 key={idx} className="text-2xl font-bold mt-6 mb-3">{paragraph.replace('## ', '')}</h2>;
-                  } else if (paragraph.startsWith('### ')) {
-                    return <h3 key={idx} className="text-xl font-bold mt-4 mb-2">{paragraph.replace('### ', '')}</h3>;
-                  } else if (paragraph.startsWith('- ')) {
-                    return <li key={idx} className="ml-6 mb-1">{paragraph.replace('- ', '')}</li>;
-                  } else if (paragraph.trim()) {
-                    return <p key={idx} className="mb-4 text-gray-700 leading-relaxed">{paragraph}</p>;
-                  }
-                  return null;
-                })}
-              </div>
+              <div 
+                className="prose max-w-none text-gray-700"
+                dangerouslySetInnerHTML={{ __html: article.content }}
+              />
 
               {article.tags && article.tags.length > 0 && (
                 <div className="mt-8 pt-6 border-t">
