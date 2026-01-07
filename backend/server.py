@@ -127,6 +127,12 @@ app = FastAPI(title="Sikshapedia API", version="2.0.0")
 api_router = APIRouter(prefix="/api")
 security = HTTPBearer()
 
+# Health check endpoint for Kubernetes deployment
+@app.get("/health")
+async def health_check():
+    """Health check endpoint for Kubernetes liveness/readiness probes"""
+    return {"status": "healthy", "timestamp": datetime.now(timezone.utc).isoformat()}
+
 # ============================================
 # Models
 # ============================================
