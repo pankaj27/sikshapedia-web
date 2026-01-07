@@ -594,15 +594,22 @@ const CourseDetailPage = () => {
                   <ul className="space-y-2">
                     {course.description_toc.map((section, idx) => (
                       <li key={idx}>
-                        <a 
-                          href={`#${section.anchor}`} 
-                          className="text-blue-600 hover:text-blue-800 hover:underline text-sm flex items-center gap-2"
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            const element = document.getElementById(section.anchor);
+                            if (element) {
+                              element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                            }
+                          }}
+                          className="text-left text-blue-600 hover:text-blue-800 hover:underline text-sm flex items-center gap-2 cursor-pointer"
                         >
                           <span className="w-5 h-5 bg-blue-100 rounded text-blue-600 flex items-center justify-center text-xs font-medium">
                             {idx + 1}
                           </span>
                           {section.title}
-                        </a>
+                        </button>
                       </li>
                     ))}
                   </ul>
