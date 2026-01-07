@@ -428,13 +428,20 @@ const CollegeSubPage = () => {
                       </h3>
                       <nav className="space-y-1">
                         {currentSection.toc.map((tocItem, tocIndex) => (
-                          <a
+                          <button
                             key={tocIndex}
-                            href={`#${tocItem.anchor}`}
-                            className="block text-sm text-orange-700 hover:text-orange-900 hover:bg-orange-100 px-3 py-1.5 rounded transition-colors"
+                            type="button"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              const element = document.getElementById(tocItem.anchor);
+                              if (element) {
+                                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                              }
+                            }}
+                            className="block w-full text-left text-sm text-orange-700 hover:text-orange-900 hover:bg-orange-100 px-3 py-1.5 rounded transition-colors cursor-pointer"
                           >
                             {tocIndex + 1}. {tocItem.title}
-                          </a>
+                          </button>
                         ))}
                       </nav>
                     </div>
