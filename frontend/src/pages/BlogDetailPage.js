@@ -18,13 +18,48 @@ const BlogDetailPage = () => {
 
   const fetchArticle = async () => {
     try {
-      const response = await api.get(`/articles/${id}`);
-      setArticle(response.data);
+      // Try blogs endpoint first (admin-managed blogs)
+      let articleData = null;
+      try {
+        const blogResponse = await api.get(`/blogs/${id}`);
+        if (blogResponse.data) {
+          articleData = {
+            ...blogResponse.data,
+            author_name: blogResponse.data.author,
+            published_date: blogResponse.data.published_at,
+            read_time: blogResponse.data.read_time || Math.ceil((blogResponse.data.content?.length || 500) / 1000),
+            image: blogResponse.data.featured_image
+          };
+        }
+      } catch (blogError) {
+        console.log('Blog not found, trying articles endpoint...');
+      }
       
-      // Fetch related articles
-      if (response.data.category) {
-        const relatedRes = await api.get(`/articles/category/${response.data.category}?limit=3`);
-        setRelatedArticles(relatedRes.data.filter(a => a.id !== id));
+      // Fallback to articles endpoint
+      if (!articleData) {
+        const response = await api.get(`/articles/${id}`);
+        articleData = response.data;
+      }
+      
+      setArticle(articleData);
+      
+      // Fetch related articles from blogs
+      if (articleData?.category) {
+        try {
+          const relatedRes = await api.get(`/blogs?category=${articleData.category}&limit=4`);
+          const related = (relatedRes.data || [])
+            .filter(a => a.id !== id)
+            .slice(0, 3)
+            .map(blog => ({
+              ...blog,
+              author_name: blog.author,
+              published_date: blog.published_at,
+              image: blog.featured_image
+            }));
+          setRelatedArticles(related);
+        } catch (relatedError) {
+          console.log('Could not fetch related articles');
+        }
       }
     } catch (error) {
       console.error('Error fetching article:', error);
