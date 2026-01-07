@@ -119,13 +119,20 @@ const FallbackPrivacyPage = () => {
         <div className="max-w-5xl mx-auto px-4">
           <div className="flex gap-6 overflow-x-auto py-4 text-sm">
             {defaultSections.map((section) => (
-              <a
+              <button
                 key={section.id}
-                href={`#${section.id}`}
-                className="whitespace-nowrap text-gray-600 hover:text-purple-600 font-medium transition"
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  const element = document.getElementById(section.id);
+                  if (element) {
+                    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  }
+                }}
+                className="whitespace-nowrap text-gray-600 hover:text-purple-600 font-medium transition cursor-pointer"
               >
                 {section.title}
-              </a>
+              </button>
             ))}
           </div>
         </div>
@@ -140,16 +147,23 @@ const FallbackPrivacyPage = () => {
               <h3 className="font-semibold text-gray-900 mb-4">Contents</h3>
               <nav className="space-y-2">
                 {defaultSections.map((section, idx) => (
-                  <a
+                  <button
                     key={section.id}
-                    href={`#${section.id}`}
-                    className="flex items-center gap-2 text-sm text-gray-600 hover:text-purple-600 transition py-1"
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      const element = document.getElementById(section.id);
+                      if (element) {
+                        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                      }
+                    }}
+                    className="flex items-center gap-2 text-sm text-gray-600 hover:text-purple-600 transition py-1 cursor-pointer w-full text-left"
                   >
                     <span className="w-5 h-5 bg-purple-100 text-purple-600 rounded text-xs flex items-center justify-center font-medium">
                       {idx + 1}
                     </span>
                     {section.title}
-                  </a>
+                  </button>
                 ))}
               </nav>
             </div>
