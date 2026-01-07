@@ -1461,14 +1461,22 @@ const DynamicListingPage = () => {
                     <h3 className="font-bold text-lg mb-4">Table of Contents</h3>
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-2">
                       {pageContent.seo_toc.map((section, idx) => (
-                        <a
+                        <button
                           key={`toc-${idx}`}
-                          href={`#${section.anchor || `section-${idx}`}`}
-                          className="text-left text-sm text-orange-600 hover:underline flex gap-2"
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            const targetId = section.anchor || `section-${idx}`;
+                            const targetElement = document.getElementById(targetId);
+                            if (targetElement) {
+                              targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                            }
+                          }}
+                          className="text-left text-sm text-orange-600 hover:underline flex gap-2 cursor-pointer"
                         >
                           <span className="font-semibold flex-shrink-0">{String(idx + 1).padStart(2, '0')}.</span>
                           <span>{section.title}</span>
-                        </a>
+                        </button>
                       ))}
                     </div>
                   </div>
